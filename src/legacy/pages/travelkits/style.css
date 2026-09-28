@@ -1,0 +1,681 @@
+/* Generado por tools/scope_css.mjs — no editar a mano */
+/* =========================================
+   ESTILOS PERSONALIZADOS - KITS TALAPO
+   ========================================= */
+
+/* Movimiento suave al navegar por la página */
+.lg-travelkits {
+    scroll-behavior: smooth;
+}
+
+/* Clase para evitar que el fondo se mueva cuando un modal está abierto */
+.lg-travelkits .no-scroll {
+    overflow: hidden;
+}
+
+/* Puedes añadir aquí más estilos CSS si no deseas usar clases de Tailwind en el futuro */
+
+/* Main Navigation */
+.lg-travelkits .main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 5%;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(28, 110, 107, 0.2);
+    flex-wrap: wrap;
+}
+
+.lg-travelkits .logo {
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #1c6e6b, #0a2540);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lg-travelkits .nav-logo-img {
+    height: 42px; /* Puedes ajustar la altura según prefieras */
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.lg-travelkits .nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.lg-travelkits .nav-links a {
+    text-decoration: none;
+    color: #1A3A4A;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.25s;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.lg-travelkits .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2.5px;
+    background: linear-gradient(90deg, #012a18, #053049);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.lg-travelkits .nav-links a:hover::after {
+    width: 100%;
+}
+
+.lg-travelkits .nav-links a:hover {
+    color: #1C6E6B;
+    transform: translateY(-1px);
+}
+
+/* Botón Ver Perfil */
+.lg-travelkits .btn-sign {
+    background: linear-gradient(105deg, #1C6E6B, #0A2F44);
+    color: white !important;
+    padding: 0.6rem 1.6rem;
+    border-radius: 40px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(28, 110, 107, 0.25);
+}
+
+.lg-travelkits .btn-sign::after {
+    display: none !important;
+}
+
+.lg-travelkits .btn-sign:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -8px rgba(28, 110, 107, 0.4);
+}
+
+/* Estilos para los menús desplegables (Dropdowns) */
+.lg-travelkits .nav-item-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.lg-travelkits .nav-item-dropdown .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background-color: #FFFFFF;
+    min-width: 180px;
+    box-shadow: 0 10px 25px rgba(0, 48, 73, 0.12);
+    border-radius: 12px;
+    padding: 0.6rem 0;
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    z-index: 1100;
+    border: 1px solid rgba(28, 110, 107, 0.1);
+}
+
+.lg-travelkits .nav-item-dropdown .dropdown-menu::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-bottom-color: #FFFFFF;
+}
+
+.lg-travelkits .nav-item-dropdown .dropdown-menu li a {
+    display: block;
+    padding: 0.6rem 1.2rem;
+    color: #1A3A4A;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: left;
+    transition: background 0.2s, color 0.2s;
+}
+
+.lg-travelkits .nav-item-dropdown .dropdown-menu li a::after {
+    display: none;
+}
+
+.lg-travelkits .nav-item-dropdown .dropdown-menu li a:hover {
+    background-color: rgba(28, 110, 107, 0.06);
+    color: #1C6E6B;
+}
+
+.lg-travelkits .nav-item-dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.lg-travelkits .nav-item-dropdown a i {
+    font-size: 0.75rem;
+    margin-left: 4px;
+    transition: transform 0.2s;
+}
+
+.lg-travelkits .nav-item-dropdown:hover > a i {
+    transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+    .lg-travelkits .main-nav {
+        padding: 1rem 5%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+
+    .lg-travelkits .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: #0A2F44;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+    }
+
+    .lg-travelkits .nav-links {
+        display: none; 
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(12px);
+        padding: 1.5rem;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        border-bottom: 1px solid rgba(28, 110, 107, 0.15);
+        gap: 1.2rem;
+        z-index: 999;
+    }
+
+    .lg-travelkits .nav-links.active {
+        display: flex;
+    }
+
+    .lg-travelkits .nav-links a {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem 0;
+        font-size: 1.1rem;
+    }
+
+    .lg-travelkits .btn-sign {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
+    .lg-travelkits .partners-grid {
+        gap: 1rem;
+    }
+
+    .lg-travelkits .partner-card {
+        width: calc(50% - 1rem);
+        height: 60px;
+        padding: 0.6rem 1rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .lg-travelkits .menu-toggle {
+        display: none;
+    }
+}
+
+/* Estilo para el botón de perfil con imagen en el Navbar */
+.lg-travelkits .nav-profile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(105deg, #1C6E6B, #0A2F44);
+    color: white !important;
+    padding: 0.35rem 1rem 0.35rem 0.4rem;
+    border-radius: 40px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(28, 110, 107, 0.25);
+}
+
+.lg-travelkits .nav-profile-badge::after {
+    display: none !important; /* Desactiva la línea inferior por defecto de los links */
+}
+
+.lg-travelkits .nav-profile-img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #E2B13C;
+}
+
+.lg-travelkits .nav-profile-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px -6px rgba(28, 110, 107, 0.4);
+}
+/* Tailwind acotado a .lg-travelkits (sustituye cdn.tailwindcss.com) */
+.lg-travelkits .fixed {
+    position: fixed
+}
+.lg-travelkits .absolute {
+    position: absolute
+}
+.lg-travelkits .relative {
+    position: relative
+}
+.lg-travelkits .inset-0 {
+    inset: 0px
+}
+.lg-travelkits .left-1\/2 {
+    left: 50%
+}
+.lg-travelkits .right-4 {
+    right: 1rem
+}
+.lg-travelkits .top-1\/2 {
+    top: 50%
+}
+.lg-travelkits .top-4 {
+    top: 1rem
+}
+.lg-travelkits .z-10 {
+    z-index: 10
+}
+.lg-travelkits .z-20 {
+    z-index: 20
+}
+.lg-travelkits .z-40 {
+    z-index: 40
+}
+.lg-travelkits .z-50 {
+    z-index: 50
+}
+.lg-travelkits .mx-auto {
+    margin-left: auto;
+    margin-right: auto
+}
+.lg-travelkits .my-12 {
+    margin-top: 3rem;
+    margin-bottom: 3rem
+}
+.lg-travelkits .mb-2 {
+    margin-bottom: 0.5rem
+}
+.lg-travelkits .mb-3 {
+    margin-bottom: 0.75rem
+}
+.lg-travelkits .mb-4 {
+    margin-bottom: 1rem
+}
+.lg-travelkits .mb-6 {
+    margin-bottom: 1.5rem
+}
+.lg-travelkits .mb-8 {
+    margin-bottom: 2rem
+}
+.lg-travelkits .mt-2 {
+    margin-top: 0.5rem
+}
+.lg-travelkits .inline-block {
+    display: inline-block
+}
+.lg-travelkits .flex {
+    display: flex
+}
+.lg-travelkits .grid {
+    display: grid
+}
+.lg-travelkits .hidden {
+    display: none
+}
+.lg-travelkits .h-16 {
+    height: 4rem
+}
+.lg-travelkits .h-48 {
+    height: 12rem
+}
+.lg-travelkits .h-8 {
+    height: 2rem
+}
+.lg-travelkits .h-80 {
+    height: 20rem
+}
+.lg-travelkits .h-\[80vh\] {
+    height: 80vh
+}
+.lg-travelkits .h-full {
+    height: 100%
+}
+.lg-travelkits .max-h-\[90vh\] {
+    max-height: 90vh
+}
+.lg-travelkits .w-1\/5 {
+    width: 20%
+}
+.lg-travelkits .w-11\/12 {
+    width: 91.666667%
+}
+.lg-travelkits .w-4\/5 {
+    width: 80%
+}
+.lg-travelkits .w-8 {
+    width: 2rem
+}
+.lg-travelkits .w-full {
+    width: 100%
+}
+.lg-travelkits .max-w-2xl {
+    max-width: 42rem
+}
+.lg-travelkits .max-w-4xl {
+    max-width: 56rem
+}
+.lg-travelkits .max-w-5xl {
+    max-width: 64rem
+}
+.lg-travelkits .max-w-6xl {
+    max-width: 72rem
+}
+.lg-travelkits .-translate-x-1\/2 {
+    --tw-translate-x: -50%;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+.lg-travelkits .-translate-y-1\/2 {
+    --tw-translate-y: -50%;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+.lg-travelkits .transform {
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+.lg-travelkits .cursor-pointer {
+    cursor: pointer
+}
+.lg-travelkits .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr))
+}
+.lg-travelkits .flex-col {
+    flex-direction: column
+}
+.lg-travelkits .items-center {
+    align-items: center
+}
+.lg-travelkits .justify-center {
+    justify-content: center
+}
+.lg-travelkits .gap-10 {
+    gap: 2.5rem
+}
+.lg-travelkits .gap-2 {
+    gap: 0.5rem
+}
+.lg-travelkits .gap-4 {
+    gap: 1rem
+}
+.lg-travelkits .gap-8 {
+    gap: 2rem
+}
+.lg-travelkits .overflow-hidden {
+    overflow: hidden
+}
+.lg-travelkits .rounded-2xl {
+    border-radius: 1rem
+}
+.lg-travelkits .rounded-full {
+    border-radius: 9999px
+}
+.lg-travelkits .rounded-lg {
+    border-radius: 0.5rem
+}
+.lg-travelkits .rounded-xl {
+    border-radius: 0.75rem
+}
+.lg-travelkits .border-2 {
+    border-width: 2px
+}
+.lg-travelkits .border-t-4 {
+    border-top-width: 4px
+}
+.lg-travelkits .border-talapoBlue {
+    --tw-border-opacity: 1;
+    border-color: rgb(0 85 165 / var(--tw-border-opacity, 1))
+}
+.lg-travelkits .border-transparent {
+    border-color: transparent
+}
+.lg-travelkits .bg-black\/40 {
+    background-color: rgb(0 0 0 / 0.4)
+}
+.lg-travelkits .bg-black\/60 {
+    background-color: rgb(0 0 0 / 0.6)
+}
+.lg-travelkits .bg-blue-50 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1))
+}
+.lg-travelkits .bg-slate-100 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(241 245 249 / var(--tw-bg-opacity, 1))
+}
+.lg-travelkits .bg-slate-50 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(248 250 252 / var(--tw-bg-opacity, 1))
+}
+.lg-travelkits .bg-talapoBlue {
+    --tw-bg-opacity: 1;
+    background-color: rgb(0 85 165 / var(--tw-bg-opacity, 1))
+}
+.lg-travelkits .bg-white {
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1))
+}
+.lg-travelkits .object-cover {
+    object-fit: cover
+}
+.lg-travelkits .p-6 {
+    padding: 1.5rem
+}
+.lg-travelkits .p-8 {
+    padding: 2rem
+}
+.lg-travelkits .px-10 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem
+}
+.lg-travelkits .px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem
+}
+.lg-travelkits .px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem
+}
+.lg-travelkits .py-12 {
+    padding-top: 3rem;
+    padding-bottom: 3rem
+}
+.lg-travelkits .py-16 {
+    padding-top: 4rem;
+    padding-bottom: 4rem
+}
+.lg-travelkits .py-20 {
+    padding-top: 5rem;
+    padding-bottom: 5rem
+}
+.lg-travelkits .py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem
+}
+.lg-travelkits .text-left {
+    text-align: left
+}
+.lg-travelkits .text-center {
+    text-align: center
+}
+.lg-travelkits .text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem
+}
+.lg-travelkits .text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem
+}
+.lg-travelkits .text-5xl {
+    font-size: 3rem;
+    line-height: 1
+}
+.lg-travelkits .text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem
+}
+.lg-travelkits .text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem
+}
+.lg-travelkits .text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem
+}
+.lg-travelkits .font-bold {
+    font-weight: 700
+}
+.lg-travelkits .font-extrabold {
+    font-weight: 800
+}
+.lg-travelkits .text-slate-100 {
+    --tw-text-opacity: 1;
+    color: rgb(241 245 249 / var(--tw-text-opacity, 1))
+}
+.lg-travelkits .text-slate-600 {
+    --tw-text-opacity: 1;
+    color: rgb(71 85 105 / var(--tw-text-opacity, 1))
+}
+.lg-travelkits .text-slate-800 {
+    --tw-text-opacity: 1;
+    color: rgb(30 41 59 / var(--tw-text-opacity, 1))
+}
+.lg-travelkits .text-slate-900 {
+    --tw-text-opacity: 1;
+    color: rgb(15 23 42 / var(--tw-text-opacity, 1))
+}
+.lg-travelkits .text-talapoBlue {
+    --tw-text-opacity: 1;
+    color: rgb(0 85 165 / var(--tw-text-opacity, 1))
+}
+.lg-travelkits .text-white {
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+}
+.lg-travelkits .opacity-0 {
+    opacity: 0
+}
+.lg-travelkits .opacity-100 {
+    opacity: 1
+}
+.lg-travelkits .shadow-2xl {
+    --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+.lg-travelkits .shadow-lg {
+    --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+.lg-travelkits .shadow-md {
+    --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+.lg-travelkits .shadow-sm {
+    --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+.lg-travelkits .transition {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms
+}
+.lg-travelkits .transition-opacity {
+    transition-property: opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms
+}
+.lg-travelkits .duration-1000 {
+    transition-duration: 1000ms
+}
+.lg-travelkits .hover\:-translate-y-1:hover {
+    --tw-translate-y: -0.25rem;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+}
+.lg-travelkits .hover\:border-slate-300:hover {
+    --tw-border-opacity: 1;
+    border-color: rgb(203 213 225 / var(--tw-border-opacity, 1))
+}
+.lg-travelkits .hover\:bg-slate-200:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgb(226 232 240 / var(--tw-bg-opacity, 1))
+}
+.lg-travelkits .hover\:bg-talapoLightBlue:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgb(51 133 214 / var(--tw-bg-opacity, 1))
+}
+.lg-travelkits .hover\:shadow-xl:hover {
+    --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+}
+@media (min-width: 768px) {
+    .lg-travelkits .md\:w-1\/2 {
+        width: 50%
+    }
+    .lg-travelkits .md\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr))
+    }
+    .lg-travelkits .md\:flex-row {
+        flex-direction: row
+    }
+    .lg-travelkits .md\:text-2xl {
+        font-size: 1.5rem;
+        line-height: 2rem
+    }
+    .lg-travelkits .md\:text-4xl {
+        font-size: 2.25rem;
+        line-height: 2.5rem
+    }
+    .lg-travelkits .md\:text-7xl {
+        font-size: 4.5rem;
+        line-height: 1
+    }
+}

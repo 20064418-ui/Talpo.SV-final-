@@ -1,0 +1,515 @@
+/* Generado por tools/scope_css.mjs — no editar a mano */
+.lg-conversiones, .lg-conversiones * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.lg-conversiones {
+    /* Fondo Premium inspirado en los paisajes, volcanes y atardeceres de El Salvador */
+    background: linear-gradient(rgba(1, 5, 36, 0.867), rgba(4, 12, 73, 0.878)), url("/assets/img/catedral.jpg") no-repeat center center/cover;
+    background-attachment: fixed;
+    color: #1f2937;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================
+   ESTILOS NAVBAR 
+   ========================================== */
+.lg-conversiones .main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 5%;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(28, 110, 107, 0.2);
+    flex-wrap: wrap;
+}
+
+.lg-conversiones .logo {
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #1c6e6b, #0a2540);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lg-conversiones .nav-logo-img {
+    height: 42px; /* Puedes ajustar la altura según prefieras */
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.lg-conversiones .nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.lg-conversiones .nav-links a {
+    text-decoration: none;
+    color: #1A3A4A;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.25s;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.lg-conversiones .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2.5px;
+    background: linear-gradient(90deg, #012a18, #053049);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.lg-conversiones .nav-links a:hover::after {
+    width: 100%;
+}
+
+.lg-conversiones .nav-links a:hover {
+    color: #1C6E6B;
+    transform: translateY(-1px);
+}
+
+/* Botón Ver Perfil */
+.lg-conversiones .btn-sign {
+    background: linear-gradient(105deg, #1C6E6B, #0A2F44);
+    color: white !important;
+    padding: 0.6rem 1.6rem;
+    border-radius: 40px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(28, 110, 107, 0.25);
+}
+
+.lg-conversiones .btn-sign::after {
+    display: none !important;
+}
+
+.lg-conversiones .btn-sign:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -8px rgba(28, 110, 107, 0.4);
+}
+
+/* Estilos para los menús desplegables (Dropdowns) */
+.lg-conversiones .nav-item-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.lg-conversiones .nav-item-dropdown .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background-color: #FFFFFF;
+    min-width: 180px;
+    box-shadow: 0 10px 25px rgba(0, 48, 73, 0.12);
+    border-radius: 12px;
+    padding: 0.6rem 0;
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    z-index: 1100;
+    border: 1px solid rgba(28, 110, 107, 0.1);
+}
+
+.lg-conversiones .nav-item-dropdown .dropdown-menu::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-bottom-color: #FFFFFF;
+}
+
+.lg-conversiones .nav-item-dropdown .dropdown-menu li a {
+    display: block;
+    padding: 0.6rem 1.2rem;
+    color: #1A3A4A;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: left;
+    transition: background 0.2s, color 0.2s;
+}
+
+.lg-conversiones .nav-item-dropdown .dropdown-menu li a::after {
+    display: none;
+}
+
+.lg-conversiones .nav-item-dropdown .dropdown-menu li a:hover {
+    background-color: rgba(28, 110, 107, 0.06);
+    color: #1C6E6B;
+}
+
+.lg-conversiones .nav-item-dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.lg-conversiones .nav-item-dropdown a i {
+    font-size: 0.75rem;
+    margin-left: 4px;
+    transition: transform 0.2s;
+}
+
+.lg-conversiones .nav-item-dropdown:hover > a i {
+    transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+    .lg-conversiones .main-nav {
+        padding: 1rem 5%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+
+    .lg-conversiones .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: #0A2F44;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+    }
+
+    .lg-conversiones .nav-links {
+        display: none; 
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(12px);
+        padding: 1.5rem;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        border-bottom: 1px solid rgba(28, 110, 107, 0.15);
+        gap: 1.2rem;
+        z-index: 999;
+    }
+
+    .lg-conversiones .nav-links.active {
+        display: flex;
+    }
+
+    .lg-conversiones .nav-links a {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem 0;
+        font-size: 1.1rem;
+    }
+
+    .lg-conversiones .btn-sign {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+
+    .lg-conversiones .partners-grid {
+        gap: 1rem;
+    }
+
+    .lg-conversiones .partner-card {
+        width: calc(50% - 1rem);
+        height: 60px;
+        padding: 0.6rem 1rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .lg-conversiones .menu-toggle {
+        display: none;
+    }
+}
+
+/* Estilo para el botón de perfil con imagen en el Navbar */
+.lg-conversiones .nav-profile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(105deg, #1C6E6B, #0A2F44);
+    color: white !important;
+    padding: 0.35rem 1rem 0.35rem 0.4rem;
+    border-radius: 40px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(28, 110, 107, 0.25);
+}
+
+.lg-conversiones .nav-profile-badge::after {
+    display: none !important; /* Desactiva la línea inferior por defecto de los links */
+}
+
+.lg-conversiones .nav-profile-img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #E2B13C;
+}
+
+.lg-conversiones .nav-profile-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px -6px rgba(28, 110, 107, 0.4);
+}
+
+/* ==========================================
+   ESTILOS CONTENIDO / CONVERSOR
+   ========================================== */
+.lg-conversiones .page-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.lg-conversiones .main-container {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(10, 47, 68, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.lg-conversiones h1 {
+    text-align: center;
+    color: #0A2F44;
+    margin-bottom: 2px;
+    font-size: 26px;
+}
+
+.lg-conversiones .subtitle {
+    text-align: center;
+    color: #4b5563;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.lg-conversiones .input-group {
+    margin-bottom: 20px;
+}
+
+.lg-conversiones label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #1A3A4A;
+}
+
+.lg-conversiones input, .lg-conversiones select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid rgba(28, 110, 107, 0.3);
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background-color: #fff;
+    color: #1f2937;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.lg-conversiones input:focus, .lg-conversiones select:focus {
+    border-color: #1C6E6B;
+    box-shadow: 0 0 0 3px rgba(28, 110, 107, 0.15);
+}
+
+.lg-conversiones .currency-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.lg-conversiones .currency-select {
+    flex: 1;
+}
+
+.lg-conversiones .btn-swap {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #2563eb;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    margin-bottom: 2px;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.lg-conversiones .btn-swap:hover {
+    background: #dbeafe;
+    transform: rotate(180deg);
+}
+
+.lg-conversiones .btn-convert {
+    width: 100%;
+    background: linear-gradient(105deg, #1C6E6B, #0A2F44);
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(28, 110, 107, 0.2);
+}
+
+.lg-conversiones .btn-convert:hover { 
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(28, 110, 107, 0.3);
+}
+
+.lg-conversiones .result-box {
+    display: none;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    padding: 20px;
+    background-color: rgba(240, 253, 244, 0.9);
+    border: 1px dashed #22c55e;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.lg-conversiones .result-title {
+    font-size: 13px;
+    color: #166534;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+}
+
+.lg-conversiones .result-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #14532d;
+}
+
+.lg-conversiones .result-rate {
+    font-size: 12px;
+    color: #15803d;
+    margin-top: 5px;
+}
+
+/* ==========================================
+   SECTOR: PALABRAS EN NÁHUAT (ABAJO)
+   ========================================== */
+.lg-conversiones .nahuat-section {
+    margin-top: 15px;
+    border-top: 1px solid rgba(28, 110, 107, 0.15);
+    padding-top: 20px;
+}
+
+.lg-conversiones .nahuat-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0A2F44;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lg-conversiones .nahuat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.lg-conversiones .nahuat-card {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(28, 110, 107, 0.1);
+    padding: 10px 14px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.lg-conversiones .nahuat-card:hover {
+    background: #ffffff;
+    border-color: #1C6E6B;
+    transform: translateY(-1px);
+}
+
+.lg-conversiones .word-nawat {
+    color: #1C6E6B;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.lg-conversiones .word-es {
+    color: #6b7280;
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+@media (max-width: 600px) {
+    .lg-conversiones .currency-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .lg-conversiones .currency-select {
+        width: 100%;
+    }
+    .lg-conversiones .btn-swap {
+        margin-bottom: 5px;
+        transform: rotate(90deg);
+    }
+    .lg-conversiones .btn-swap:hover {
+        transform: rotate(270deg);
+    }
+    .lg-conversiones .nahuat-grid {
+        grid-template-columns: 1fr;
+    }
+}

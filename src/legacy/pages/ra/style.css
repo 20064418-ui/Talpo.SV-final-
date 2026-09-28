@@ -1,0 +1,62 @@
+/* Generado por tools/scope_css.mjs — no editar a mano */
+
+        .lg-ra, .lg-ra * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        .lg-ra, .lg-ra {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        /* Contenedor del mapa en pantalla completa */
+        .lg-ra .map-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        .lg-ra iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        /* Interfaz flotante superior */
+        .lg-ra .overlay-maps {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(0, 47, 108, 0.9); /* Azul El Salvador */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            text-align: center;
+            width: 85%;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        .lg-ra .overlay-maps h2 { margin: 0 0 5px 0; font-size: 1.2rem; }
+        .lg-ra .overlay-maps p { margin: 0 0 10px 0; font-size: 0.8rem; opacity: 0.9; }
+        .lg-ra .btn-regresar {
+            display: inline-block;
+            background-color: #01061e; /* Negro */
+            color: white;
+            padding: 6px 18px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+    
+/* Ajuste de integración: tools/overrides/ra.css */
+/* RA: el original usaba html/body al 100% de alto. Dentro de la app el Street View
+   ocupa la pantalla completa debajo del navbar, y la tarjeta flotante queda sobre él. */
+.lg-ra { position: relative; height: calc(100vh - 83px); height: calc(100dvh - 83px); min-height: 420px; overflow: hidden; }
+.lg-ra .map-container { position: absolute; inset: 0; }
+.lg-ra .overlay-maps { position: absolute; }

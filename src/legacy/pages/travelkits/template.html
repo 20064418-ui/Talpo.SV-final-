@@ -1,0 +1,147 @@
+<header class="relative h-[80vh] w-full overflow-hidden bg-talapoBlue">
+<div class="relative h-full w-full" id="carousel">
+<div class="carousel-item absolute inset-0 transition-opacity duration-1000 opacity-100 flex items-center justify-center text-center px-4">
+<div class="absolute inset-0 bg-black/40 z-10"></div>
+<img alt="Hero 1" class="absolute inset-0 w-full h-full object-cover" src="/assets/img/tours/concepciondeataco.jpg"/>
+<div class="relative z-20 text-white max-w-2xl">
+<h1 class="text-5xl md:text-7xl font-extrabold mb-4">Enjoy Talapo.sv</h1>
+<p class="text-xl md:text-2xl text-slate-100">Elevate your travel experience with Talapo.</p>
+</div>
+</div>
+<div class="carousel-item absolute inset-0 transition-opacity duration-1000 opacity-0 flex items-center justify-center text-center px-4">
+<div class="absolute inset-0 bg-black/40 z-10"></div>
+<img alt="Hero 2" class="absolute inset-0 w-full h-full object-cover" src="/assets/img/index/catedral.jpg"/>
+<div class="relative z-20 text-white max-w-2xl">
+<h1 class="text-5xl md:text-7xl font-extrabold mb-4">Kit Talapo</h1>
+<p class="text-xl md:text-2xl text-slate-100">Everything you need in one place.</p>
+</div>
+</div>
+<div class="carousel-item absolute inset-0 transition-opacity duration-1000 opacity-0 flex items-center justify-center text-center px-4">
+<div class="absolute inset-0 bg-black/40 z-10"></div>
+<img alt="Hero 3" class="absolute inset-0 w-full h-full object-cover" src="/assets/img/index/volcan.jpg"/>
+<div class="relative z-20 text-white max-w-2xl">
+<h1 class="text-5xl md:text-7xl font-extrabold mb-4">Sustainable Design</h1>
+<p class="text-xl md:text-2xl text-slate-100">Elegance in every detail.</p>
+</div>
+</div>
+</div>
+</header>
+
+<section class="py-16 px-6 text-center max-w-4xl mx-auto">
+<h2 class="text-3xl md:text-4xl font-bold text-talapoBlue mb-4">Introducing our Talapo Kits.</h2>
+<p class="text-slate-600 text-lg">An exclusive selection of personal care and travel products.</p>
+</section>
+
+<section class="py-12 px-6 max-w-6xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+<div class="bg-white rounded-2xl shadow-md border-t-4 border-talapoBlue overflow-hidden text-center hover:shadow-xl transition cursor-pointer" onclick="openModal('modal1')">
+<div class="h-48 overflow-hidden bg-slate-100">
+<img alt="Cuidado e Higiene" class="w-full h-full object-cover" src="/assets/img/travelkits/bolsa1.jpg"/>
+</div>
+<div class="p-6">
+<h4 class="text-xl font-bold mb-2 text-slate-800">Bag Talapo's</h4>
+<span class="text-talapoBlue text-sm font-bold mt-2 inline-block">View product</span>
+</div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-md border-t-4 border-talapoBlue overflow-hidden text-center hover:shadow-xl transition cursor-pointer" onclick="openModal('modal2')">
+<div class="h-48 overflow-hidden bg-slate-100">
+<img alt="Cuidado Facial y Piel" class="w-full h-full object-cover" src="/assets/img/travelkits/alcohol1.jpg"/>
+</div>
+<div class="p-6">
+<h4 class="text-xl font-bold mb-2 text-slate-800">Alcohol Talapo's</h4>
+<span class="text-talapoBlue text-sm font-bold mt-2 inline-block">View product</span>
+</div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-md border-t-4 border-talapoBlue overflow-hidden text-center hover:shadow-xl transition cursor-pointer" onclick="openModal('modal3')">
+<div class="h-48 overflow-hidden bg-slate-100">
+<img alt="Accesorios Premium" class="w-full h-full object-cover" src="/assets/img/travelkits/medicine1.jpg"/>
+</div>
+<div class="p-6">
+<h4 class="text-xl font-bold mb-2 text-slate-800">Medicine Talapo's</h4>
+<span class="text-talapoBlue text-sm font-bold mt-2 inline-block">View product</span>
+</div>
+</div>
+</div>
+</section>
+
+<section class="py-16 px-6 bg-blue-50 my-12">
+<div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-10">
+<div class="w-full md:w-1/2">
+<img alt="Caja Talapo" class="rounded-2xl shadow-lg w-full h-80 object-cover" src="/assets/img/travelkits/cajita.jpg"/>
+</div>
+<div class="w-full md:w-1/2 text-left">
+<h3 class="text-3xl font-bold text-talapoBlue mb-4">Look at the Talapo box.</h3>
+<p class="text-slate-600 text-lg mb-6">Your kit comes in a luxury case with compartments, designed to last and to organize your essentials with elegance and sustainability.</p>
+</div>
+</div>
+</section>
+
+<section class="py-20 px-6 text-center bg-white">
+<div class="max-w-2xl mx-auto">
+<h3 class="text-3xl font-bold text-slate-800 mb-6">Ready to become part of the community?</h3>
+<a class="inline-block bg-talapoBlue hover:bg-talapoLightBlue text-white font-bold text-xl px-10 py-4 rounded-full shadow-lg transition transform hover:-translate-y-1" href="/planes">
+                Join the plan
+            </a>
+</div>
+</section>
+
+
+
+
+<div class="fixed inset-0 bg-black/60 z-40 hidden" id="modalOverlay" onclick="closeModals()"></div>
+
+<div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-4xl bg-white rounded-2xl shadow-2xl z-50 hidden flex flex-col md:flex-row overflow-hidden max-h-[90vh]" id="modal1">
+<button class="absolute top-4 right-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full w-8 h-8 flex items-center justify-center font-bold z-10" onclick="closeModals()">✕</button>
+<div class="w-full md:w-1/2 p-6 flex gap-4 bg-slate-50">
+<div class="flex flex-col gap-2 w-1/5">
+<img class="cursor-pointer border-2 border-talapoBlue rounded-lg w-full h-16 object-cover" onclick="changeImage('mainImg1', this.src)" src="/assets/img/travelkits/bolsa1.jpg"/>
+<img class="cursor-pointer border-2 border-transparent hover:border-slate-300 rounded-lg w-full h-16 object-cover" onclick="changeImage('mainImg1', this.src)" src="/assets/img/travelkits/bolsa2.jpg"/>
+<img class="cursor-pointer border-2 border-transparent hover:border-slate-300 rounded-lg w-full h-16 object-cover" onclick="changeImage('mainImg1', this.src)" src="/assets/img/travelkits/bolsa3.jpg"/>
+</div>
+<div class="w-4/5">
+<img class="w-full h-full object-cover rounded-xl shadow-sm" id="mainImg1" src="/assets/img/travelkits/bolsa1.jpg"/>
+</div>
+</div>
+<div class="w-full md:w-1/2 p-8 flex flex-col justify-center">
+<h2 class="text-3xl font-extrabold text-slate-900 mb-3">Set "Talapo's Bag"</h2>
+<p class="text-2xl font-bold text-talapoBlue mb-8">$3.53</p>
+</div>
+</div>
+
+<div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-4xl bg-white rounded-2xl shadow-2xl z-50 hidden flex flex-col md:flex-row overflow-hidden max-h-[90vh]" id="modal2">
+<button class="absolute top-4 right-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full w-8 h-8 flex items-center justify-center font-bold z-10" onclick="closeModals()">✕</button>
+<div class="w-full md:w-1/2 p-6 flex gap-4 bg-slate-50">
+<div class="flex flex-col gap-2 w-1/5">
+<img class="cursor-pointer border-2 border-talapoBlue rounded-lg w-full h-16 object-cover" onclick="changeImage('mainImg2', this.src)" src="/assets/img/travelkits/alcohol1.jpg"/>
+<img class="cursor-pointer border-2 border-transparent hover:border-slate-300 rounded-lg w-full h-16 object-cover" onclick="changeImage('mainImg2', this.src)" src="/assets/img/travelkits/alcohol2.jpg"/>
+<img class="cursor-pointer border-2 border-transparent hover:border-slate-300 rounded-lg w-full h-16 object-cover" onclick="changeImage('mainImg2', this.src)" src="/assets/img/travelkits/alcohol3.jpg"/>
+</div>
+<div class="w-4/5">
+<img class="w-full h-full object-cover rounded-xl shadow-sm" id="mainImg2" src="/assets/img/travelkits/alcohol1.jpg"/>
+</div>
+</div>
+<div class="w-full md:w-1/2 p-8 flex flex-col justify-center">
+<h2 class="text-3xl font-extrabold text-slate-900 mb-3">Set "Alcohol Talapo's"</h2>
+<p class="text-2xl font-bold text-talapoBlue mb-8">$2.50</p>
+</div>
+</div>
+
+<div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-4xl bg-white rounded-2xl shadow-2xl z-50 hidden flex flex-col md:flex-row overflow-hidden max-h-[90vh]" id="modal3">
+<button class="absolute top-4 right-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full w-8 h-8 flex items-center justify-center font-bold z-10" onclick="closeModals()">✕</button>
+<div class="w-full md:w-1/2 p-6 flex gap-4 bg-slate-50">
+<div class="flex flex-col gap-2 w-1/5">
+<img class="cursor-pointer border-2 border-talapoBlue rounded-lg w-full h-16 object-cover" onclick="changeImage('mainImg3', this.src)" src="/assets/img/travelkits/medicine1.jpg"/>
+<img class="cursor-pointer border-2 border-transparent hover:border-slate-300 rounded-lg w-full h-16 object-cover" onclick="changeImage('mainImg3', this.src)" src="/assets/img/travelkits/medicine2.jpg"/>
+</div>
+<div class="w-4/5">
+<img class="w-full h-full object-cover rounded-xl shadow-sm" id="mainImg3" src="/assets/img/travelkits/medicine1.jpg"/>
+</div>
+</div>
+<div class="w-full md:w-1/2 p-8 flex flex-col justify-center">
+<h2 class="text-3xl font-extrabold text-slate-900 mb-3">Set "Medicine Talapo's"</h2>
+<p class="text-2xl font-bold text-talapoBlue mb-8">$2.00</p>
+</div>
+</div>

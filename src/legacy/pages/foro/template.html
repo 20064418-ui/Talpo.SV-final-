@@ -1,0 +1,44 @@
+<header class="forum-hero">
+<div class="talapo-badge"><i class="fas fa-star"></i> Verified Ecosystem by Talapo.sv</div>
+<h1>Traveler Community</h1>
+<p>Share your experience, see what other travelers have discovered, and plan your next route through El Salvador.</p>
+</header>
+<main class="forum-main">
+
+<section class="create-post-card">
+<h2 class="section-heading"><i class="fas fa-pen"></i> Share Your Experience</h2>
+<form id="createPostForm">
+<div class="form-group">
+<label for="postTitle">Title *</label>
+<input id="postTitle" maxlength="120" placeholder="E.g. Amazing sunset at El Tunco" required="" type="text"/>
+</div>
+<div class="form-grid-2">
+<div class="form-group">
+<label for="postDestination">Place / Department *</label>
+<select id="postDestination" required=""></select>
+</div>
+<div class="form-group">
+<label for="postImage">Photo (optional)</label>
+<input accept="image/*" id="postImage" type="file"/>
+</div>
+</div>
+<div class="form-group">
+<label for="postBody">Review / Description *</label>
+<textarea id="postBody" maxlength="600" placeholder="Tell us about your experience..." required="" rows="3"></textarea>
+</div>
+<img alt="Image preview" class="image-preview" hidden="" id="imagePreview"/>
+<button class="btn-plan" type="submit"><i class="fas fa-paper-plane"></i> Post</button>
+</form>
+</section>
+
+<section class="feed-section">
+<div class="feed-toolbar">
+<h2 class="section-heading"><i class="fas fa-stream"></i> Recent Posts</h2>
+<div aria-label="Sort posts" class="sort-toggle" id="sortToggle" role="group">
+<button class="sort-btn is-active" data-sort="recientes">Most Recent</button>
+<button class="sort-btn" data-sort="popularidad">Most Popular</button>
+</div>
+</div>
+<div class="feed-list" id="feedList"></div>
+</section>
+</main>

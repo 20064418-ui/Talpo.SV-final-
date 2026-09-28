@@ -1,0 +1,480 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  background: #F8FBFE;
+  color: #13294B;
+  scroll-behavior: smooth;
+  background: linear-gradient(rgba(1, 5, 36, 0), rgba(4, 12, 73, 0)), url("/assets/img/TuristicAttractions/fondo.png") no-repeat center center/cover;
+}
+
+
+
+.main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 5%;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(28, 110, 107, 0.2);
+    flex-wrap: wrap;
+}
+
+
+.logo {
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #1c6e6b, #0a2540);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-logo-img {
+    height: 42px; /* Puedes ajustar la altura según prefieras */
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #1A3A4A;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.25s;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2.5px;
+    background: linear-gradient(90deg, #012a18, #053049);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.nav-links a:hover {
+    color: #1C6E6B;
+    transform: translateY(-1px);
+}
+
+.btn-sign {
+    background: linear-gradient(105deg, #1C6E6B, #0A2F44);
+    color: white;
+    padding: 0.6rem 1.6rem;
+    border-radius: 40px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(28, 110, 107, 0.25);
+}
+
+.btn-sign:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -8px rgba(28, 110, 107, 0.4);
+}
+
+/* ==========================================================================
+   ESTILOS PARA LOS MENÚS DESPLEGABLES (DROPDOWNS)
+   ========================================================================== */
+
+/* Contenedor relativo para posicionar el dropdown */
+.nav-item-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Estilo para la cajita flotante del menú descuidado */
+.nav-item-dropdown .dropdown-menu {
+    position: absolute;
+    top: 100%; /* Se posiciona justo debajo del texto */
+    left: 50%;
+    transform: translateX(-50%) translateY(10px); /* Centrado y un poco abajo */
+    background-color: #FFFFFF;
+    min-width: 180px;
+    box-shadow: 0 10px 25px rgba(0, 48, 73, 0.12);
+    border-radius: 12px;
+    padding: 0.6rem 0;
+    list-style: none;
+    
+    /* Efecto oculto inicial con transición suave */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    z-index: 1100;
+    border: 1px solid rgba(28, 110, 107, 0.1);
+}
+
+/* Pequeña flecha sutil decorativa en el dropdown */
+.nav-item-dropdown .dropdown-menu::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-bottom-color: #FFFFFF;
+}
+
+/* Enlaces dentro del dropdown */
+.nav-item-dropdown .dropdown-menu li a {
+    display: block;
+    padding: 0.6rem 1.2rem;
+    color: #1A3A4A;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: left;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* Quitar la línea animada de los links principales en los links internos */
+.nav-item-dropdown .dropdown-menu li a::after {
+    display: none;
+}
+
+/* Hover en los elementos de la lista */
+.nav-item-dropdown .dropdown-menu li a:hover {
+    background-color: rgba(28, 110, 107, 0.06);
+    color: #1C6E6B;
+}
+
+/* ¡EL TRUCO! Mostrar el menú al pasar el mouse por encima del contenedor */
+.nav-item-dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0); /* Sube suavemente */
+}
+
+/* Icono de flechita al lado del menú */
+.nav-item-dropdown a i {
+    font-size: 0.75rem;
+    margin-left: 4px;
+    transition: transform 0.2s;
+}
+
+/* Rotar la flechita cuando el menú esté activo */
+.nav-item-dropdown:hover > a i {
+    transform: rotate(180deg);
+}
+
+/* LAYOUT */
+.app {
+  display: flex;
+  height: 100vh;
+}
+
+/* IZQUIERDA */
+.carousel {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1500px;
+  overflow: hidden;
+}
+
+/* TRACK */
+.track {
+  position: relative;
+  width: 350px;
+  height: 500px;
+}
+
+/* TARJETAS */
+.card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  opacity: 0;
+}
+
+/* IMAGEN */
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+}
+
+/* POSICIONES (efecto detrás) */
+.card.active {
+  transform: translateX(0) scale(1);
+  opacity: 1;
+  z-index: 5;
+}
+
+.card.next {
+  transform: translateX(80px) scale(0.9);
+  opacity: 0.6;
+  z-index: 3;
+}
+
+.card.prev {
+  transform: translateX(-80px) scale(0.9);
+  opacity: 0.6;
+  z-index: 3;
+}
+
+.card.hidden {
+  transform: translateX(0) scale(0.8);
+  opacity: 0;
+  z-index: 1;
+}
+
+/* DERECHA */
+.info {
+  width: 50%;
+  padding: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.info h1 {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 48px;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+  color: hwb(0 100% 0% / 0.995);
+  -webkit-text-stroke: 1px rgba(1, 46, 80, 0);
+
+  display: inline-block;
+  width: fit-content;
+
+  background: rgba(19, 44, 67, 0.723);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  padding: 15px 25px;
+  border-radius: 20px;
+
+  border: 1px solid rgba(5, 78, 124, 0);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.744);
+}
+
+.rating{
+  color: #FFD700;
+
+  display: inline-block;
+  width: fit-content;
+  background:  rgba(19, 44, 67, 0.723);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(4, 77, 125, 0);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+.desc {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #e5e7eb;
+  max-width: 400px;
+  line-height: 2;
+  font-size: 20px;
+
+  background: rgba(19, 44, 67, 0.723);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  padding: 20px;
+  border-radius: 20px;
+
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+/* BOTONES PRO */
+.controls {
+  margin-top: 30px;
+}
+
+.controls button {
+  background: transparent;
+  border: 1px solid #051945;
+  color: rgb(210, 206, 224);
+  font-size: 24px;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.controls button:hover {
+  background: white;
+  color: black;
+  border-color: white;
+}
+
+/* ==========================================================================
+   MEDIA QUERIES EXCLUSIVOS PARA TELÉFONOS (MÁXIMO 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .main-nav {
+        padding: 1rem 5%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+
+    /* Estilo del botón hamburguesa */
+    .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: #0A2F44;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        transition: transform 0.2s;
+    }
+
+    .menu-toggle:active {
+        transform: scale(0.9);
+    }
+
+    /* Menú oculto por defecto en teléfonos */
+    .nav-links {
+        display: none; 
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(12px);
+        padding: 1.5rem;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        border-bottom: 1px solid rgba(28, 110, 107, 0.15);
+        gap: 1.2rem;
+        z-index: 999;
+    }
+
+    .nav-links.active {
+        display: flex;
+        animation: slideDown 0.3s ease forwards;
+    }
+
+    .nav-links a {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem 0;
+        font-size: 1.1rem;
+    }
+
+    .btn-sign {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    /* Grilla de partners en celular */
+    .partners-grid {
+        gap: 1rem;
+    }
+
+    .partner-card {
+        width: calc(50% - 1rem); /* Distribuye simétricamente de 2 en 2 en móviles */
+        height: 60px;
+        padding: 0.6rem 1rem;
+    }
+}
+
+/* Adaptabilidad Responsiva */
+@media (max-width: 768px) {
+    .carousel-container { height: 450px; }
+    .card { width: 160px; height: 220px; }
+    .card.prev { transform: translateX(-90px) scale(0.85); }
+    .card.next { transform: translateX(90px) scale(0.85); }
+    .card.out-left, .card.out-right { opacity: 0; }
+    .prev-btn { left: 0px; }
+    .next-btn { right: 0px; }
+}
+
+/* Ocultar botón de menú en pantallas grandes de PC */
+@media (min-width: 769px) {
+    .menu-toggle {
+        display: none;
+    }
+}
+
+/* Animación de cortina para el menú móvil */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilo para el botón de perfil con imagen en el Navbar */
+.nav-profile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(105deg, #1C6E6B, #0A2F44);
+    color: white !important;
+    padding: 0.35rem 1rem 0.35rem 0.4rem;
+    border-radius: 40px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(28, 110, 107, 0.25);
+}
+
+.nav-profile-badge::after {
+    display: none !important; /* Desactiva la línea inferior por defecto de los links */
+}
+
+.nav-profile-img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #E2B13C;
+}
+
+.nav-profile-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px -6px rgba(28, 110, 107, 0.4);
+}

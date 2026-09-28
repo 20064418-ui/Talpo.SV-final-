@@ -1,0 +1,54 @@
+<div id="google_translate_element" style="display:none;"></div>
+<div class="page-content">
+<div class="translator-container">
+<h1>Profesional Translator</h1>
+<p class="subtitle">Supports long texts, entire paragraphs, and instant global translation.</p>
+<div class="languages-header">
+<select class="lang-select" id="sourceLang">
+<option selected="" value="es">Español</option>
+<option value="en">Inglés (English)</option>
+<option value="fr">Francés</option>
+<option value="de">Alemán</option>
+<option value="it">Italiano</option>
+<option value="pt">Portugués</option>
+</select>
+<button class="btn-swap-lang" id="btnSwapLang" title="Invertir idiomas">
+<i class="fas fa-exchange-alt"></i>
+</button>
+<select class="lang-select" id="targetLang">
+<option value="es">Español</option>
+<option selected="" value="en">Inglés (English)</option>
+<option value="fr">Francés</option>
+<option value="de">Alemán</option>
+<option value="it">Italiano</option>
+<option value="pt">Portugués</option>
+</select>
+</div>
+<div class="translation-grid">
+<div class="text-box-wrapper">
+<textarea id="sourceText" maxlength="5000" placeholder="Paste or write long paragraphs here to translate ..."></textarea>
+<div class="box-footer">
+<span class="char-count" id="charCount">0 / 5000</span>
+<button class="action-btn" id="btnClear" title="Clear text">
+<i class="fas fa-trash-alt"></i>
+</button>
+</div>
+</div>
+<div class="text-box-wrapper output-wrapper">
+<div class="output-area placeholder" id="targetText">The translation of your paragraph will appear here when you press the button...</div>
+<div class="box-footer">
+<span class="status-msg" id="statusMsg"></span>
+<button class="action-btn" id="btnCopy" title="Copy translation">
+<i class="far fa-copy"></i>
+</button>
+</div>
+</div>
+</div>
+<button class="btn-translate" id="btnTranslate">
+<i class="fas fa-language"></i> Translate Full Paragraph
+            </button>
+<div class="info-footer">
+<p><i class="fas fa-shield-alt"></i> Optimized Processing: Capacity of up to 5,000 characters per request with integrated intelligent translation.</p>
+</div>
+</div>
+</div>

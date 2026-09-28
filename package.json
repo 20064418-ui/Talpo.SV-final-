@@ -1,0 +1,28 @@
+{
+  "name": "talapo-sv",
+  "version": "2.0.0",
+  "description": "Talapo.SV — plataforma de turismo de El Salvador (Vue 3 + InsForge)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "port:legacy": "python3 tools/port_legacy.py ../talapo-original . && node tools/scope_css.mjs",
+    "setup:insforge": "node tools/setup-insforge.mjs"
+  },
+  "dependencies": {
+    "@insforge/sdk": "^1.5.2",
+    "leaflet": "^1.9.4",
+    "pinia": "^4.0.3",
+    "vue": "^3.5.43",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.9",
+    "postcss": "^8.5.28",
+    "postcss-prefix-selector": "^2.2.1",
+    "tailwindcss": "^3.4.19",
+    "vite": "^8.3.1"
+  },
+  "private": true,
+  "type": "module"
+}

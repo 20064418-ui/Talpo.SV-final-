@@ -1,0 +1,11 @@
+{
+  ">Rutas &amp; Buses<": ">Routes &amp; Buses<",
+  ">Recorrido<": ">Route<",
+  "Ver recorrido en mapa": "View route on map",
+  "\"No se pudo calcular la ruta sobre calles reales en este momento; se muestra una línea aproximada entre los puntos de referencia.\"": "\"We couldn't calculate the route on real streets right now; an approximate line between reference points is shown.\"",
+  "\"Cargando el recorrido real…\"": "\"Loading the real route…\"",
+  "\"Calculando el recorrido sobre calles reales…\"": "\"Calculating the route on real streets…\"",
+  "\"Inicio del recorrido\"": "\"Route start\"",
+  "\"Fin del recorrido\"": "\"Route end\"",
+  "· Zona ${dep.zona} · ${dep.municipios} municipios / ${dep.distritos} distritos · ${totalRutas(dep)} rutas registradas en Cartorux, ${completas.size} con ficha completa (recorrido, tarifa y mapa) arriba": "· ${dep.zona} zone · ${dep.municipios} municipalities / ${dep.distritos} districts · ${totalRutas(dep)} routes registered in Cartorux, ${completas.size} with full details (route, fare and map) above"
+}

@@ -1,0 +1,68 @@
+<div class="page-content">
+<div class="main-container">
+<h1>Currency Calculator</h1>
+<p class="subtitle">Convert amounts instantly to plan your travel expenses</p>
+<form id="converterForm">
+<div class="input-group">
+<label for="amount">Amount to Convert</label>
+<input id="amount" min="0.01" placeholder="Ej. 100" required="" step="any" type="number"/>
+</div>
+<div class="currency-row">
+<div class="input-group currency-select">
+<label for="fromCurrency">From (Source Currency)</label>
+<select id="fromCurrency" required="">
+<option selected="" value="USD">USD - American Dollar</option>
+<option value="EUR">EUR - Euro</option>
+<option value="MXN">MXN - Mexican Peso</option>
+<option value="COP">COP - Peso Colombiano</option>
+<option value="ARS">ARS - Peso Argentino</option>
+<option value="PEN">PEN - Sol Peruano</option>
+<option value="CRC">CRC - Colón Costarricense</option>
+</select>
+</div>
+<button class="btn-swap" id="btnSwap" title="Invertir monedas" type="button">⇄</button>
+<div class="input-group currency-select">
+<label for="toCurrency">To (Target Currency)</label>
+<select id="toCurrency" required="">
+<option value="USD">USD - American Dollar</option>
+<option selected="" value="EUR">EUR - Euro</option>
+<option value="MXN">MXN - Mexican Peso</option>
+<option value="COP">COP - Peso Colombiano</option>
+<option value="ARS">ARS - Peso Argentino</option>
+<option value="PEN">PEN - Sol Peruano</option>
+<option value="CRC">CRC - Colón Costarricense</option>
+</select>
+</div>
+</div>
+<button class="btn-convert" type="submit">Calculate Conversion</button>
+</form>
+<div class="result-box" id="resultBox">
+<div class="result-title">Conversion Successful</div>
+<div class="result-value" id="resultValue">0.00</div>
+<div class="result-rate" id="resultRate">Exchange rate: 1 = 1</div>
+</div>
+<div class="nahuat-section">
+<div class="nahuat-title">
+<i class="fas fa-heart text-xs" style="color: #1C6E6B;"></i> Neologisms and Beautiful Words in Náhuat
+                </div>
+<div class="nahuat-grid">
+<div class="nahuat-card">
+<div class="word-nawat">Shuchit</div>
+<div class="word-es">Flower</div>
+</div>
+<div class="nahuat-card">
+<div class="word-nawat">Tunaltzin</div>
+<div class="word-es">Dearest Sun / Day</div>
+</div>
+<div class="nahuat-card">
+<div class="word-nawat">Metztli</div>
+<div class="word-es">Moon</div>
+</div>
+<div class="nahuat-card">
+<div class="word-nawat">Yultaketzalis</div>
+<div class="word-es">Words of the Heart</div>
+</div>
+</div>
+</div>
+</div>
+</div>

@@ -1,0 +1,377 @@
+/* CSS ORIGINAL de l.css acotado a .pg-login (generado) */
+/* --- VARIABLES Y RESET --- */
+.pg-login {
+    --dark-blue: #003049;
+    --accent-yellow: #fcbf49;
+    --accent-orange: #f77f00;
+    --soft-blue: #f8f9fa;
+    --text-gray: #666;
+    --white: #ffffff;
+}
+
+.pg-login, .pg-login * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.pg-login {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--white);
+    overflow-x: hidden;
+}
+
+.pg-login .main-container {
+    display: flex;
+    min-height: 100vh;
+    transition: transform 300ms ease-in-out 0s;
+    align-items: center; /* NUEVO: Centra verticalmente ambos paneles */
+}
+
+/* --- SECCIÓN IZQUIERDA (INFO) --- */
+.pg-login .info-section {
+    flex: 1.2;
+    background: linear-gradient(135deg, #003049 0%, #001a2c 100%);
+    color: var(--white);
+    padding: 80px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    border-radius: 100px;
+    width: 100%;
+    height: 100%;
+    left: 75px;
+    margin-top: 10px;
+    transition: all 1.3s ease-out;
+}
+
+.pg-login .info-content {
+    max-width: 600px;
+}
+
+.pg-login .info-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+
+.pg-login .gradient-text {
+    color: var(--accent-yellow);
+}
+
+.pg-login .tagline {
+    font-size: 1.2rem;
+    color: var(--accent-yellow);
+    font-weight: 600;
+    border-left: 4px solid var(--accent-yellow);
+    padding-left: 15px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.pg-login .description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: 40px;
+}
+
+/* Grilla de Imágenes */
+.pg-login .image-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin: 40px 0;
+}
+
+.pg-login .image-grid img {
+    width: 100%;
+    border-radius: 12px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.pg-login .image-grid img:hover {
+    transform: translateY(-5px);
+}
+
+/* Estadísticas */
+.pg-login .stats-row {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 30px;
+    gap: 20px;
+}
+
+.pg-login .stat-item strong {
+    font-size: 1.8rem;
+    color: var(--accent-yellow);
+    display: block;
+}
+
+.pg-login .stat-item span {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* --- SECCIÓN DERECHA (LOGIN/REGISTRO) --- */
+.pg-login .login-section {
+    flex: 1;
+    background: var(--white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 60px; /* MODIFICADO: reducido padding vertical de 60px a 40px */
+}
+
+.pg-login .login-box {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.pg-login .talapo-logo {
+    width: 180px; /* MODIFICADO: reducido de 220px a 180px */
+    margin-bottom: 20px; /* MODIFICADO: reducido de 30px a 20px */
+}
+
+.pg-login .login-box h2 {
+    font-size: 2rem; /* MODIFICADO: ligeramente reducido de 2.2rem */
+    color: var(--dark-blue);
+    margin-bottom: 5px; /* MODIFICADO: reducido de 10px */
+}
+
+.pg-login .login-box p {
+    color: var(--text-gray);
+    margin-bottom: 20px; /* MODIFICADO: reducido de 30px */
+    font-size: 0.9rem;
+}
+
+/* Formulario */
+.pg-login form {
+    text-align: left;
+}
+
+.pg-login .form-group {
+    margin-bottom: 15px; /* MODIFICADO: reducido de 20px */
+}
+
+.pg-login label {
+    display: block;
+    margin-bottom: 6px; /* MODIFICADO: reducido de 8px */
+    font-weight: 600;
+    color: var(--dark-blue);
+    font-size: 0.85rem; /* MODIFICADO: ligeramente reducido */
+}
+
+.pg-login input {
+    width: 100%;
+    padding: 12px; /* MODIFICADO: reducido de 14px */
+    border: 1.5px solid #eee;
+    border-radius: 10px;
+    background-color: var(--soft-blue);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.pg-login input:focus {
+    outline: none;
+    border-color: var(--dark-blue);
+    background-color: var(--white);
+    box-shadow: 0 0 0 4px rgba(0, 48, 73, 0.05);
+}
+
+.pg-login .btn-login {
+    width: 100%;
+    padding: 14px; /* MODIFICADO: reducido de 16px */
+    background: linear-gradient(to right, var(--dark-blue), #1a5a7a);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.pg-login .btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 48, 73, 0.2);
+}
+
+/* Footer del Login */
+.pg-login .login-footer {
+    margin-top: 20px; /* MODIFICADO: reducido de 30px */
+    font-size: 0.85rem;
+}
+
+.pg-login .login-footer a {
+    text-decoration: none;
+    color: var(--dark-blue);
+    font-weight: 600;
+}
+
+.pg-login .login-footer a:hover {
+    text-decoration: underline;
+}
+
+.pg-login .divider {
+    margin: 0 8px;
+    color: #ccc;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1100px) {
+    .pg-login .info-section {
+        padding: 40px;
+    }
+    .pg-login .info-content h1 {
+        font-size: 2.5rem;
+    }
+    .pg-login .login-section {
+        padding: 30px 40px; /* MODIFICADO: ajuste responsive */
+    }
+}
+
+@media (max-width: 900px) {
+    .pg-login .main-container {
+        flex-direction: column;
+    }
+    
+    .pg-login .info-section {
+        flex: none;
+        padding: 60px 40px;
+        text-align: center;
+        left: 0; /* MODIFICADO: resetear left en mobile */
+        margin-top: 0; /* MODIFICADO: resetear margin en mobile */
+        border-radius: 0 0 50px 50px; /* MODIFICADO: mejor aspecto en mobile */
+    }
+
+    .pg-login .tagline {
+        border-left: none;
+        border-bottom: 3px solid var(--accent-yellow);
+        display: inline-block;
+        padding: 0 0 5px 0;
+    }
+
+    .pg-login .image-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pg-login .login-section {
+        padding: 40px 20px; /* MODIFICADO: mejor padding en mobile */
+    }
+    
+    .pg-login .login-box {
+        max-width: 100%;
+    }
+    
+    .pg-login .talapo-logo {
+        width: 150px; /* MODIFICADO: logo más pequeño en mobile */
+    }
+}
+
+/* --- FOOTER GENERAL --- */
+.pg-login .footer {
+    background: #000B21;
+    color: #9CA3AF;
+    padding: 3.5rem 0 1.5rem;
+    margin-top: auto;
+}
+
+.pg-login .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.pg-login .footer-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 2fr;
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+
+.pg-login .footer-brand h3 {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 0.5rem;
+    font-weight: 800;
+    text-transform: lowercase;
+}
+
+.pg-login .footer-brand p {
+    margin-bottom: 1rem;
+    font-size: 0.88rem;
+}
+
+.pg-login .footer-social {
+    display: flex;
+    gap: 1.2rem;
+}
+
+.pg-login .footer-social a {
+    color: #9CA3AF;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+}
+
+.pg-login .footer-social a:hover {
+    color: white;
+}
+
+.pg-login .footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.pg-login .footer-col h4 {
+    color: white;
+    margin-bottom: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.pg-login .footer-col a {
+    display: block;
+    color: #9CA3AF;
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+}
+
+.pg-login .footer-col a:hover {
+    color: white;
+}
+
+.pg-login .footer-bottom {
+    text-align: center;
+    padding-top: 1.2rem;
+    border-top: 1px solid #1F2937;
+    font-size: 0.8rem;
+    color: #6B7280;
+}
+
+@media (max-width: 900px) {
+    .pg-login .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .pg-login .footer-links {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

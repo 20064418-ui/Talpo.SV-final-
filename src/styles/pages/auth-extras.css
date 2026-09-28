@@ -1,0 +1,35 @@
+/* Piezas nuevas de login/registro con la MISMA estética original (paleta de login.css) */
+.pg-auth .form-message { padding: 12px 15px; border-radius: 10px; margin-bottom: 20px; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; font-weight: 500; animation: authSlideIn 0.3s ease-out; }
+.pg-auth .form-message.error { background: #ffebee; color: #c62828; border-left: 4px solid #c62828; }
+.pg-auth .form-message.success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+.pg-auth .form-message.warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+@keyframes authSlideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+.pg-auth .social-login { margin: 4px 0 18px; text-align: center; }
+.pg-auth .social-login .social-title { font-size: 0.85rem; color: var(--text-gray); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.pg-auth .social-login .social-title::before, .pg-auth .social-login .social-title::after { content: ''; flex: 1; height: 1px; background: #e0e0e0; }
+.pg-auth .social-icons { display: flex; justify-content: center; gap: 16px; }
+.pg-auth .social-icon {
+  width: 56px; height: 56px; border-radius: 50%; border: 2px solid #eee; background: var(--white);
+  display: flex; align-items: center; justify-content: center; font-size: 1.35rem; cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 48, 73, 0.12);
+  transition: transform .25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow .25s ease, border-color .25s ease;
+}
+.pg-auth .social-icon:hover { transform: translateY(-4px) scale(1.08); box-shadow: 0 12px 24px rgba(0, 48, 73, 0.2); }
+.pg-auth .social-icon.google { color: #DB4437; } .pg-auth .social-icon.google:hover { border-color: #DB4437; }
+.pg-auth .social-icon.github { color: #181717; } .pg-auth .social-icon.github:hover { border-color: #181717; }
+.pg-auth .social-icon.facebook { color: #1877F2; } .pg-auth .social-icon.facebook:hover { border-color: #1877F2; }
+.pg-auth .social-icon:disabled { opacity: .6; cursor: wait; }
+.pg-auth .btn-login:disabled { opacity: .7; cursor: wait; }
+.pg-auth .pass-wrap { position: relative; }
+.pg-auth .pass-wrap button { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: 0; color: var(--text-gray); cursor: pointer; }
+
+/* Transición de entrada de los dos paneles */
+.pg-auth .info-section { animation: authPanelL .6s cubic-bezier(.2,.7,.2,1) both; }
+.pg-auth .login-box { animation: authPanelR .6s .1s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes authPanelL { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+@keyframes authPanelR { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+
+.pg-auth .verify-help { font-size: 0.85rem; color: var(--text-gray); margin-top: 16px; line-height: 1.6; text-align: center; }
+.pg-auth .link-inline { background: none; border: 0; padding: 0; color: var(--orange, #E46D5C); font: inherit; font-weight: 700; cursor: pointer; text-decoration: underline; }
+.pg-auth .link-inline:disabled { color: var(--text-gray); cursor: default; text-decoration: none; }

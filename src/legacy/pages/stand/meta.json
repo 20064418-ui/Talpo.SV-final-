@@ -1,0 +1,19 @@
+{
+  "name": "stand",
+  "title": "Talapo.SV - Picture Stands",
+  "fonts": [
+    "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap"
+  ],
+  "externals": [
+    {
+      "type": "css",
+      "src": "https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css"
+    },
+    {
+      "type": "js",
+      "src": "https://cdn.jsdelivr.net/npm/ol@v8.2.0/dist/ol.js"
+    }
+  ],
+  "globals": [],
+  "tailwind": false
+}

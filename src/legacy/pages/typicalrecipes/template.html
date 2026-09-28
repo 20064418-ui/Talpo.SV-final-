@@ -1,0 +1,152 @@
+<section class="hero" id="heroSlider">
+<div class="hero-content">
+<span class="tagline">TASTE THE REAL EL SALVADOR</span>
+<h1>A bite of tradition,<br/>a taste of <span>El Salvador</span>.</h1>
+<p>Discover authentic flavors passed down through generations and loved around the world.</p>
+<button class="btn-primary" onclick="scrollToRecipes()">Explore Recipes</button>
+</div>
+<div class="hero-image">
+<img alt="Pupusa" class="main-dish-img" id="rotatingPlate" onclick="spinPlate()" src="/assets/img/TypicalRecipes/plato.png"/>
+</div>
+</section>
+<section class="tips-section">
+<span class="section-tag">COOKING TIPS</span>
+<h2>Everything you need for the <span class="highlight">perfect recipe.</span></h2>
+<div class="tips-grid">
+<div class="tip-card">
+<h3>Detailed Ingredient Lists</h3>
+<p>Get complete ingredient lists with exact measurements and quantities for every recipe, making shopping easier and helping you prepare everything correctly before you start cooking.</p>
+</div>
+<div class="tip-card">
+<h3>Step-by-Step Instructions</h3>
+<p>Follow clear and simple instructions that guide you through every stage of cooking, making traditional Salvadoran dishes easier to prepare.</p>
+</div>
+<div class="tip-card">
+<h3>Prep &amp; Timing</h3>
+<p>Chop, measure, and organize all your ingredients before turning on the stove to save time and avoid stress.</p>
+</div>
+</div>
+</section>
+<section class="recipes-carousel-section" id="recipesSection">
+<div class="section-header">
+<div>
+<span class="section-tag">POPULAR DISHES</span>
+<h2>Our Traditional <span class="highlight">Recipes</span></h2>
+</div>
+<button class="btn-secondary" id="toggleViewBtn" onclick="showAllRecipesExtended()">View all recipes</button>
+</div>
+<div id="htmlRecipeImages" style="display: none;">
+<img alt="Panes con pollo" data-img-id="1" src="/assets/img/TypicalRecipes/Panes con pollo salvadoreños.jpg"/>
+<img alt="Pupusas Revueltas" data-img-id="2" src="/assets/img/TypicalRecipes/revueltas.jpg"/>
+<img alt="Pupusas de Ayote" data-img-id="3" src="/assets/img/TypicalRecipes/pupusas-de-ayote.jpg"/>
+<img alt="Tamales de Gallina" data-img-id="4" src="/assets/img/TypicalRecipes/tamal d pollo.png"/>
+<img alt="Tamales de Pisque" data-img-id="5" src="/assets/img/TypicalRecipes/Tamal Pisque _ Sabor Latino.png"/>
+<img alt="Yuca Frita" data-img-id="6" src="/assets/img/TypicalRecipes/yuca frita.jpg"/>
+<img alt="Empanadas" data-img-id="7" src="/assets/img/TypicalRecipes/Empanadas🇸🇻.jpg"/>
+<img alt="Pastelitos" data-img-id="8" src="/assets/img/TypicalRecipes/Pastelitos salvadoreños.jpg"/>
+<img alt="Riguas" data-img-id="9" src="/assets/img/TypicalRecipes/riguas.jpg"/>
+<img alt="Chilaquilas" data-img-id="10" src="/assets/img/TypicalRecipes/chilaquilas.jpg"/>
+<img alt="Sopa de Pata" data-img-id="11" src="/assets/img/TypicalRecipes/sopa d pata.jpg"/>
+<img alt="Sopa de Gallina India" data-img-id="12" src="/assets/img/TypicalRecipes/sopa d gallina.png"/>
+<img alt="Mariscada" data-img-id="13" src="/assets/img/TypicalRecipes/mariscada.jpg"/>
+<img alt="Sopa de Frijoles" data-img-id="14" src="/assets/img/TypicalRecipes/sopa d frijoles.jpg"/>
+<img alt="Quesadilla" data-img-id="15" src="/assets/img/TypicalRecipes/quesadilla.jpg"/>
+<img alt="Nuegados" data-img-id="16" src="/assets/img/TypicalRecipes/nuegados.jpg"/>
+<img alt="Canoas" data-img-id="17" src="/assets/img/TypicalRecipes/Canoas de Platanos - Recetas Salvadoreñas.jpg"/>
+<img alt="Atol de Elote" data-img-id="18" src="/assets/img/TypicalRecipes/atol.jpg"/>
+<img alt="Chicha" data-img-id="19" src="/assets/img/TypicalRecipes/chicha.jpg"/>
+<img alt="Horchata" data-img-id="20" src="/assets/img/TypicalRecipes/horchata.jpg"/>
+<img alt="Fresco de ensalada" data-img-id="21" src="/assets/img/TypicalRecipes/ensalada.jpg"/>
+<img alt="Chocobananos" data-img-id="22" src="/assets/img/TypicalRecipes/chocos.jpg"/>
+<img alt="Arroz con leche" data-img-id="23" src="/assets/img/TypicalRecipes/arroz con leche.jpg"/>
+<img alt="Atol Chuco" data-img-id="24" src="/assets/img/TypicalRecipes/chuco.jpg"/>
+<img alt="Torrejas" data-img-id="25" src="/assets/img/TypicalRecipes/torrejas.jpg"/>
+</div>
+<div class="carousel-container" id="carouselWrapper">
+<button class="carousel-btn prev" onclick="moveCarousel(-1)">❮</button>
+<div class="carousel-track-container">
+<div class="carousel-track" id="carouselTrack">
+</div>
+</div>
+<button class="carousel-btn next" onclick="moveCarousel(1)">❯</button>
+</div>
+<div id="allRecipesGrid" style="display: none; margin-top: 20px;">
+<div class="grid-container" id="gridContainer">
+</div>
+</div>
+</section>
+<section class="challenge-section">
+<span class="section-tag">CHOOSE YOUR CHALLENGE</span>
+<h2>Recipes by <span class="highlight">difficulty</span></h2>
+<div class="challenge-grid">
+<div class="challenge-col">
+<div class="col-header">
+<div>
+<h3>Easy &amp; Fast</h3>
+<p>Perfect for beginners</p>
+</div>
+</div>
+<p class="col-desc">Simple traditional recipes requiring basic kitchen tools and short prep times.</p>
+<button class="btn-col btn-easy" onclick="filterDifficulty('easy')">Easy</button>
+<div id="list-easy"></div>
+</div>
+<div class="challenge-col">
+<div class="col-header">
+<div>
+<h3>Medium Ground</h3>
+<p>Requires basic skills</p>
+</div>
+</div>
+<p class="col-desc">Requires a bit of patience and subtle techniques like dough shaping.</p>
+<button class="btn-col btn-medium" onclick="filterDifficulty('medium')">Medium</button>
+<div id="list-medium"></div>
+</div>
+<div class="challenge-col">
+<div class="col-header">
+<div>
+<h3>Master Chef</h3>
+<p>For culinary experts</p>
+</div>
+</div>
+<p class="col-desc">For culinary enthusiasts. Advanced dishes with complex processes and longer preparation times.</p>
+<button class="btn-col btn-difficult" onclick="filterDifficulty('difficult')">Difficult</button>
+<div id="list-difficult"></div>
+</div>
+</div>
+</section>
+<div class="modal" id="recipeModal">
+<div class="modal-content">
+<span class="close-modal" onclick="closeModal()">×</span>
+<div id="modalBody"></div>
+</div>
+</div>
+<section class="video-recipes-section">
+<span class="section-tag">LEARN VISUALLY</span>
+<h2>Watch &amp; <span class="highlight">Cook Along</span></h2>
+<div class="video-grid">
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube-nocookie.com/embed/e1spHsInLIQ" title="How to make authentic Salvadoran pupusas" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+</div>
+<div class="video-info">
+<h4>Mastering Pupusas</h4>
+<p>Watch the authentic technique for shaping and filling the perfect Salvadoran pupusa without breaking the dough.</p>
+</div>
+</div>
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube-nocookie.com/embed/y8__yWiPSYo" title="How to make Salvadoran panes con pollo" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+</div>
+<div class="video-info">
+<h4>The Secret to Perfect Panes con Pollo</h4>
+<p>Learn how to toast the traditional 'relajo' seed mix and build the legendary Salvadoran chicken sub.</p>
+</div>
+</div>
+</div>
+</section>
+<footer class="footer-banner">
+<div class="footer-content">
+<h2>More than recipes,<br/>it's <span class="highlight">our culture.</span></h2>
+<p>Explore the authentic flavors of El Salvador and bring a piece of our country to your table.</p>
+</div>
+</footer>

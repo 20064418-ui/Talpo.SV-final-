@@ -1,0 +1,55 @@
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        /* Contenedor del mapa en pantalla completa */
+        .map-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        /* Interfaz flotante superior */
+        .overlay-maps {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(0, 47, 108, 0.9); /* Azul El Salvador */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            text-align: center;
+            width: 85%;
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        .overlay-maps h2 { margin: 0 0 5px 0; font-size: 1.2rem; }
+        .overlay-maps p { margin: 0 0 10px 0; font-size: 0.8rem; opacity: 0.9; }
+        .btn-regresar {
+            display: inline-block;
+            background-color: #01061e; /* Negro */
+            color: white;
+            padding: 6px 18px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+    

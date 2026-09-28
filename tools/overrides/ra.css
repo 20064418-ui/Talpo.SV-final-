@@ -1,0 +1,5 @@
+/* RA: el original usaba html/body al 100% de alto. Dentro de la app el Street View
+   ocupa la pantalla completa debajo del navbar, y la tarjeta flotante queda sobre él. */
+.lg-ra { position: relative; height: calc(100vh - 83px); height: calc(100dvh - 83px); min-height: 420px; overflow: hidden; }
+.lg-ra .map-container { position: absolute; inset: 0; }
+.lg-ra .overlay-maps { position: absolute; }

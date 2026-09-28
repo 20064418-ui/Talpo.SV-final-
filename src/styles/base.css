@@ -1,0 +1,64 @@
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+/* Igual que el <style> interno de main.html (sobrescribía a main.css) */
+body { margin: 0; font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+.app-main { min-height: calc(100vh - var(--nav-h)); }
+.skip-link { position: absolute; left: -999px; top: 8px; z-index: 2000; background: var(--ink-900); color: #fff; padding: .6rem 1rem; border-radius: var(--radius-s); }
+.skip-link:focus { left: 8px; }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* ===== Utilidades SOLO para las páginas nuevas (Contests, Itineraries, paneles del pasaporte).
+   Van dentro de .tp para no tocar el diseño original de las demás páginas. ===== */
+.tp { font-family: var(--font-body); line-height: 1.6; color: var(--ink-900); }
+.tp h1, .tp h2, .tp h3, .tp h4 { font-family: var(--font-display); line-height: 1.15; margin: 0 0 .5em; }
+.tp p { margin: 0 0 1em; }
+.tp img { max-width: 100%; }
+.tp .wrap, .tp.wrap { width: min(100% - 2.5rem, var(--wrap)); margin-inline: auto; }
+.tp .section, .tp.section { padding-block: clamp(3rem, 6vw, 6rem); }
+.tp .btn, .tp.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+  padding: .8rem 1.3rem; border-radius: 999px; border: 1.5px solid transparent;
+  font-weight: 700; text-decoration: none; cursor: pointer; line-height: 1.1;
+  transition: background .2s, color .2s, border-color .2s, transform .15s;
+}
+.tp .btn:active { transform: translateY(1px); }
+.tp .btn:disabled { opacity: .55; cursor: not-allowed; }
+.tp .btn-primary, .tp.btn-primary { background: var(--coral-500); color: #fff; }
+.tp .btn-primary:hover { background: var(--coral-600); }
+.tp .btn-dark, .tp.btn-dark { background: var(--ink-900); color: #fff; }
+.tp .btn-dark:hover { background: var(--ink-700); }
+.tp .btn-ghost, .tp.btn-ghost { background: transparent; color: var(--ink-900); border-color: var(--line); }
+.tp .btn-ghost:hover { border-color: var(--ink-900); }
+.tp .btn-light, .tp.btn-light { background: #fff; color: var(--ink-900); }
+.tp .btn-sm, .tp.btn-sm { padding: .5rem .9rem; font-size: var(--step--1); }
+.tp .field, .tp.field { display: grid; gap: .35rem; margin-bottom: 1rem; }
+.tp .field label { font-weight: 600; font-size: var(--step--1); }
+.tp .input, .tp.input {
+  width: 100%; padding: .75rem .9rem; border: 1.5px solid var(--line); border-radius: var(--radius-s);
+  background: #fff; transition: border-color .2s;
+}
+.tp .input:focus { border-color: var(--teal-500); outline: none; box-shadow: 0 0 0 3px var(--turq-100); }
+.tp .form-error, .tp.form-error { background: #fdecea; color: #9b2c1f; border-left: 4px solid var(--coral-500); padding: .7rem .9rem; border-radius: var(--radius-s); font-size: var(--step--1); margin-bottom: 1rem; }
+.tp .form-ok, .tp.form-ok { background: var(--turq-100); color: var(--teal-700); border-left: 4px solid var(--teal-500); padding: .7rem .9rem; border-radius: var(--radius-s); font-size: var(--step--1); margin-bottom: 1rem; }
+.tp .card, .tp.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-m); }
+.tp .kicker, .tp.kicker { font-weight: 700; color: var(--teal-700); font-size: var(--step--1); margin-bottom: .6rem; display: block; }
+.tp .muted, .tp.muted { color: var(--ink-500); }
+.tp .section-head, .tp.section-head { max-width: 62ch; margin-bottom: 2.2rem; }
+.tp .section-head h2 { font-size: var(--step-3); }
+
+/* ===== Transiciones (agregadas sin cambiar el diseño de ninguna página) ===== */
+.page-enter-active { transition: opacity .35s ease, transform .35s cubic-bezier(.2,.7,.2,1); }
+.page-leave-active { transition: opacity .18s ease; }
+.page-enter-from { opacity: 0; transform: translateY(14px); }
+.page-leave-to { opacity: 0; }
+
+/* Aparición suave al hacer scroll (la aplica LegacyPage/las vistas con la clase .reveal) */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+.reveal.is-visible { opacity: 1; transform: none; }
+
+/* Barra de progreso fina arriba mientras carga una página */
+.route-progress { position: fixed; top: 0; left: 0; height: 3px; z-index: 10000; background: linear-gradient(90deg, #1C6E6B, #E46D5C); transition: width .3s ease, opacity .4s ease; pointer-events: none; }

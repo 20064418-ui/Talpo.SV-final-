@@ -1,0 +1,427 @@
+/* =========================================================
+   1) PALETA DE COLORES — EDITA AQUÍ (son los mismos tokens que hoteles.css)
+   ========================================================= */
+:root {
+    --talapo-primary: #0a2540;
+    --talapo-teal: #1c6e6b;
+    --talapo-light: #f0f4f8;
+    --talapo-accent: #0284c7;
+    --talapo-whatsapp: #25d366;
+    --talapo-gray: #4b5563;
+    --talapo-gold: #f59e0b;
+    --talapo-success: #10b981;
+
+    /* Colores propios de cada medalla — EDITA AQUÍ si querés otros tonos */
+    --tier-bronce: #a56a3a;
+    --tier-bronce-dark: #7a4a26;
+    --tier-plata: #8d99a6;
+    --tier-plata-dark: #5c6b7a;
+    --tier-oro: var(--talapo-gold);
+    --tier-oro-dark: #b8790a;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--talapo-light);
+    color: #1f2937;
+}
+
+/* ==========================================================================
+   NAVBAR (idéntico al de hoteles.html para mantener la misma identidad)
+   ========================================================================== */
+.main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 5%;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(28, 110, 107, 0.2);
+    flex-wrap: wrap;
+}
+
+.logo {
+    font-size: 1.9rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #1c6e6b, #0a2540);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-logo-img {
+    height: 42px; /* Puedes ajustar la altura según prefieras */
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #1A3A4A;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.25s;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2.5px;
+    background: linear-gradient(90deg, #012a18, #053049);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.nav-links a:hover::after { width: 100%; }
+.nav-links a:hover { color: #1C6E6B; transform: translateY(-1px); }
+
+.nav-plans-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700 !important;
+}
+
+.nav-plans-link.active-page {
+    color: var(--talapo-gold) !important;
+}
+
+.btn-sign {
+    background: linear-gradient(105deg, #1C6E6B, #0A2F44);
+    color: white;
+    padding: 0.6rem 1.6rem;
+    border-radius: 40px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(28, 110, 107, 0.25);
+}
+
+.btn-sign:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -8px rgba(28, 110, 107, 0.4);
+}
+
+/* Dropdowns */
+.nav-item-dropdown { position: relative; display: inline-block; }
+
+.nav-item-dropdown .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background-color: #FFFFFF;
+    min-width: 180px;
+    box-shadow: 0 10px 25px rgba(0, 48, 73, 0.12);
+    border-radius: 12px;
+    padding: 0.6rem 0;
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    z-index: 1100;
+    border: 1px solid rgba(28, 110, 107, 0.1);
+}
+
+.nav-item-dropdown .dropdown-menu::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 7px solid transparent;
+    border-bottom-color: #FFFFFF;
+}
+
+.nav-item-dropdown .dropdown-menu li a {
+    display: block;
+    padding: 0.6rem 1.2rem;
+    color: #1A3A4A;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: left;
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-item-dropdown .dropdown-menu li a::after { display: none; }
+
+.nav-item-dropdown .dropdown-menu li a:hover {
+    background-color: rgba(28, 110, 107, 0.06);
+    color: #1C6E6B;
+}
+
+.nav-item-dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+@media (min-width: 769px) {
+    .menu-toggle { display: none; }
+}
+
+@media (max-width: 1024px) {
+    .menu-toggle { display: block; }
+    .nav-links { display: none; flex-direction: column; width: 100%; gap: 1rem; padding: 1rem 0; background: white; }
+    .nav-links.active { display: flex; }
+    .nav-item-dropdown { width: 100%; text-align: center; }
+    .nav-item-dropdown .dropdown-menu { position: relative; left: 0; transform: none; box-shadow: none; display: none; width: 100%; background: #f8fafc; }
+    .nav-item-dropdown .dropdown-menu.show-mobile { display: block; opacity: 1; visibility: visible; }
+}
+
+/* ==========================================================================
+   HERO DE PLANES
+   ========================================================================== */
+.plans-hero {
+    position: relative;
+    background: linear-gradient(rgba(10, 37, 64, 0.82), rgba(10, 37, 64, 0.9)),
+                url('https://images.unsplash.com/photo-1502920917316-8db43d3d6cf6?auto=format&fit=crop&w=1400&q=80') no-repeat center center/cover;
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 60px 20px;
+}
+
+.talapo-badge {
+    background: rgba(28, 110, 107, 0.9);
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #ffffff40;
+    margin-bottom: 18px;
+}
+
+.plans-hero h1 {
+    font-size: 2.8rem;
+    margin: 6px 0;
+    font-weight: 800;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+.plans-hero p {
+    font-size: 1.1rem;
+    max-width: 640px;
+    margin: 0;
+    opacity: 0.95;
+}
+
+/* ==========================================================================
+   GRILLA DE PLANES (mismo lenguaje visual que .hotel-card)
+   ========================================================================== */
+.plans-main {
+    max-width: 1200px;
+    margin: -30px auto 60px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 5;
+}
+
+.plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+    align-items: start;
+}
+
+@media (max-width: 992px) {
+    .plans-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+}
+
+.plan-card {
+    position: relative;
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.02);
+    transition: all 0.3s ease;
+    padding: 34px 28px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.plan-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(10, 37, 64, 0.15);
+}
+
+.plan-card--oro {
+    border: 2px solid var(--tier-oro);
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.2);
+}
+
+.plan-tier-badge {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: white;
+}
+
+.plan-card--bronce .plan-tier-badge { background: var(--tier-bronce); }
+.plan-card--plata .plan-tier-badge { background: var(--tier-plata-dark); }
+.plan-card--oro .plan-tier-badge { background: var(--tier-oro-dark); }
+
+.plan-featured-tag {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: var(--tier-oro);
+    color: var(--talapo-primary);
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 5px 12px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.plan-name {
+    margin: 0;
+    color: var(--talapo-primary);
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.plan-tagline {
+    margin: -8px 0 0;
+    color: var(--talapo-gray);
+    font-size: 0.92rem;
+    min-height: 40px;
+}
+
+.plan-price-row { display: flex; align-items: baseline; gap: 6px; }
+.plan-price { font-size: 2.3rem; font-weight: 800; color: var(--talapo-primary); }
+.plan-period { color: var(--talapo-gray); font-size: 0.9rem; }
+
+.plan-features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+}
+
+.plan-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.92rem;
+    color: var(--talapo-primary);
+    font-weight: 500;
+}
+
+.plan-features i { color: var(--talapo-teal); margin-top: 3px; }
+.plan-card--oro .plan-features i { color: var(--tier-oro-dark); }
+
+.btn-plan {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--talapo-teal), var(--talapo-primary));
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(10,37,64,0.15);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-plan:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(10,37,64,0.22); }
+
+.btn-plan--oro {
+    background: linear-gradient(135deg, var(--tier-oro), var(--tier-oro-dark));
+    color: var(--talapo-primary);
+}
+
+.plans-footnote {
+    text-align: center;
+    color: var(--talapo-gray);
+    font-size: 0.85rem;
+    max-width: 560px;
+    margin: 40px auto 0;
+}
+
+.nav-profile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(105deg, #1C6E6B, #0A2F44);
+    color: white !important;
+    padding: 0.35rem 1rem 0.35rem 0.4rem;
+    border-radius: 40px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(28, 110, 107, 0.25);
+}
+
+.nav-profile-badge::after {
+    display: none !important; /* Desactiva la línea inferior por defecto de los links */
+}
+
+.nav-profile-img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #E2B13C;
+}
+
+.nav-profile-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px -6px rgba(28, 110, 107, 0.4);
+}

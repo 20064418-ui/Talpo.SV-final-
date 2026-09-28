@@ -1,0 +1,214 @@
+<div aria-live="polite" class="toast-stack" id="toastStack"></div>
+<button class="mini-cart" id="miniCart" onclick="goToStep(1)">
+<svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M4 12l5 5 11-11"></path></svg>
+<span id="miniCartText">0 places · View route</span>
+</button>
+<div class="detail-overlay" id="detailOverlay">
+<div class="detail-backdrop" id="detailBackdrop"></div>
+<aside aria-labelledby="detailName" aria-modal="true" class="detail-panel" id="detailPanel" role="dialog">
+<button aria-label="Cerrar" class="detail-close" id="detailClose">
+<svg stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+</button>
+<div class="detail-scene" id="detailScene"></div>
+<div class="detail-body">
+<span class="detail-tag" id="detailTag"></span>
+<h3 id="detailName"></h3>
+<span class="detail-loc" id="detailLoc"></span>
+<div class="detail-stars" id="detailStars"></div>
+<p class="detail-desc" id="detailDesc"></p>
+<div class="detail-meta">
+<div><span>Suggested duration</span><b id="detailDur"></b></div>
+<div><span>Coordenadas</span><b id="detailCoord"></b></div>
+</div>
+<div class="detail-actions">
+<button class="detail-add-btn" id="detailAddBtn"></button>
+<button aria-label="Marcar como favorito" class="detail-fav-btn" id="detailFavBtn"></button>
+</div>
+</div>
+</aside>
+</div>
+
+<header class="hero">
+<div class="wrap hero-inner">
+<div class="hero-figure">
+<div class="hero-scene">
+
+<img alt="Aventura en El Salvador" class="hero-scene-img" src="/assets/img/tours/guia.jpg"/>
+</div>
+<div class="hero-float-card">
+<span class="ico"><svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path><circle cx="12" cy="12" r="8"></circle></svg></span>
+<div><b>Local guides</b><span>Know every trail</span></div>
+</div>
+<div class="hero-badge">27 destinations · 14 departments</div>
+</div>
+<div>
+<span class="eyebrow light">Talapo · local tourism in El Salvador</span>
+<h1>Live your<br/><em>adventure.</em></h1>
+<p class="lead">Choose your favorite places in El Salvador, mark your starting point, and let Talapo map out the exact route: time, distance, and stops, all in one itinerary.</p>
+<div class="hero-search">
+<div class="hs-field">
+<svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M12 21s-6-5.2-6-10.2C6 6.5 8.7 3.5 12 3.5s6 3 6 7.3C18 15.8 12 21 12 21z"></path><circle cx="12" cy="10.5" r="2.3"></circle></svg>
+<div class="hs-field-text">
+<span>Location</span>
+<select aria-label="Filter by department" class="hs-select" id="heroLocation"></select>
+</div>
+</div>
+<div class="hs-divider"></div>
+<div class="hs-field">
+<svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="16" rx="3" width="18" x="3" y="5"></rect><path d="M3 9h18M8 3v4M16 3v4"></path></svg>
+<div class="hs-field-text">
+<span>Date</span>
+<input aria-label="Choose a day" class="hs-date" id="heroDate" type="date"/>
+</div>
+</div>
+<button class="btn btn-ember" id="heroSearchBtn">Search</button>
+</div>
+<div class="hero-features">
+<div class="hf-card">
+<span class="ico"><svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M12 2l3.1 6.6 7.4.6-5.6 4.9 1.7 7.2L12 17.8l-6.6 3.5 1.7-7.2-5.6-4.9 7.4-.6z"></path></svg></span>
+<b>Local guides</b>
+<span>Know every trail</span>
+</div>
+<div class="hf-card">
+<span class="ico"><svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M4 20c3-1 4-5 7-5s3 4 6 4 3-4 3-7"></path><circle cx="4" cy="20" fill="currentColor" r="1.4" stroke="none"></circle><circle cx="20" cy="12" fill="currentColor" r="1.4" stroke="none"></circle></svg></span>
+<b>Itineraries tailored to you</b>
+<span>Design your own adventure</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+<div class="trail">
+<div class="trail-svg-wrap">
+<svg class="trail-svg" preserveaspectratio="none" viewbox="0 0 1000 64">
+<path class="trail-track" d="M30,40 C160,10 190,60 320,42 C450,24 470,58 560,40 C650,22 680,56 750,40 C830,22 860,52 970,32"></path>
+<path class="trail-progress" d="M30,40 C160,10 190,60 320,42 C450,24 470,58 560,40 C650,22 680,56 750,40 C830,22 860,52 970,32" id="trailProgress"></path>
+<g id="trailNodes"></g>
+</svg>
+</div>
+<div class="trail-labels" id="trailLabels">
+<span class="active" data-short="1">Explore</span>
+<span data-short="2">Selection</span>
+<span data-short="3">Start</span>
+<span data-short="4">Route</span>
+<span data-short="5">Tours</span>
+</div>
+</div>
+
+<section class="wrap" id="paso-explorar">
+<div class="section-head">
+<div>
+<span class="eyebrow">Step 01</span>
+<h2>Find your place in El Salvador</h2>
+<p>Filter by department and add your destinations with the “+” button. You can save them as favorites for later.</p>
+</div>
+<div style="font-family:var(--font-mono);font-size:.82rem;color:var(--ink-600);">Selected: <b id="countTop">0</b></div>
+</div>
+<div class="explore-controls">
+<div class="search-field">
+<svg fill="none" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+<input id="searchInput" placeholder="Search for a place, e.g., “volcano” or “beach”" type="text"/>
+</div>
+<div class="chip-row" id="chipRow"></div>
+</div>
+<p class="results-count" id="resultsCount"></p>
+<div class="grid" id="destGrid"></div>
+</section>
+
+<section class="wrap" id="paso-seleccion">
+<button aria-label="Volver a explorar" class="step-back" onclick="goToStep(0)">
+<svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M15 5l-7 7 7 7"></path></svg>
+</button>
+<div class="selection-bar">
+<div>
+<span class="eyebrow">Step 02</span>
+<h2>Your selection</h2>
+</div>
+<div style="display:flex;align-items:center;gap:16px;">
+<span class="selection-count" id="selCountLabel">0 places added</span>
+<button class="btn btn-ember" id="genRouteBtn" onclick="goToStep(2)">Generate your route</button>
+</div>
+</div>
+<div class="selection-list" id="selectionList"></div>
+</section>
+
+<section class="wrap" id="paso-partida">
+<button aria-label="Back to your selection" class="step-back" onclick="goToStep(1)">
+<svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M15 5l-7 7 7 7"></path></svg>
+</button>
+<div class="section-head">
+<div>
+<span class="eyebrow">Step 03</span>
+<h2>Where are you starting from?</h2>
+<p>Locate your starting point on the map or enter the coordinates manually. Talapo will calculate the route from there.</p>
+</div>
+</div>
+<div class="split">
+<div class="map-frame"><div id="map-start"></div></div>
+<div class="coord-panel">
+<div class="field">
+<label for="lat">Latitude</label>
+<input id="lat" type="text" value="13.98933394"/>
+</div>
+<div class="field">
+<label for="lng">Longitude</label>
+<input id="lng" type="text" value="-89.55273521"/>
+</div>
+<div class="route-summary-mini">
+<div><span>Destinations</span><b id="miniCount">0</b></div>
+<div><span>Base Department</span><b style="font-size:.85rem;">Santa Ana</b></div>
+</div>
+<button class="btn btn-primary" onclick="buildRoute()" style="width:100%;justify-content:center;">Start Your Route</button>
+</div>
+</div>
+</section>
+
+<section class="wrap" id="paso-ruta">
+<button aria-label="Volver al punto de partida" class="step-back" onclick="goToStep(2)">
+<svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M15 5l-7 7 7 7"></path></svg>
+</button>
+<div class="section-head">
+<div>
+<span class="eyebrow">Step 04</span>
+<h2>Your route is ready</h2>
+<p>This is the optimal route between your starting point and the places you selected, in visit order.</p>
+</div>
+</div>
+<div class="route-wrap">
+<div class="map-frame" style="height:480px;"><div id="map-route"></div></div>
+<div class="route-float">
+<div><span>Time</span><b id="routeTime">—</b></div>
+<div><span>Distance</span><b id="routeDist">—</b></div>
+</div>
+</div>
+<div class="route-legend" id="routeLegend"></div>
+<!-- Nuevo: guardar el itinerario en InsForge (usa los botones .btn originales de esta página) -->
+<div class="save-route">
+<label class="visually-hidden" for="routeTitle">Itinerary name</label>
+<input id="routeTitle" maxlength="80" placeholder="Name your itinerary (e.g. Volcano weekend)">
+<button class="btn btn-ember" id="saveRouteBtn" onclick="saveItinerary()">Save itinerary</button>
+<a class="btn btn-ghost" href="/itineraries" id="viewSavedBtn" hidden>View my itineraries</a>
+</div>
+</section>
+
+<section class="wrap" id="paso-tours">
+<button aria-label="Back to your route" class="step-back" onclick="goToStep(3)">
+<svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M15 5l-7 7 7 7"></path></svg>
+</button>
+<div class="section-head">
+<div>
+<span class="eyebrow">Step 05</span>
+<h2>Guided tours by Talapo</h2>
+<p>Would you prefer that a local guide design everything for you? These are our most popular routes.</p>
+</div>
+</div>
+<div class="tours-grid" id="toursGrid"></div>
+<div class="cta-block">
+<div class="cta-text">
+<span class="eyebrow">Join Talapo</span>
+<h2>If you want everything complete, create your personalized itinerary and join the Talapo plans</h2>
+</div>
+<button class="btn btn-ember" onclick="goToStep(0)">Create Your Itinerary</button>
+</div>
+</section>

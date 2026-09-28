@@ -1,0 +1,70 @@
+# ---------------------------------------------------------------
+# Talapo.SV — archivos que NUNCA deben subirse a Git
+# ---------------------------------------------------------------
+
+# Dependencias y builds (se regeneran con npm install / npm run build)
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+
+# Variables de entorno y secretos (URL/claves de InsForge, OpenRouter, etc.)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets*.json
+
+# InsForge CLI: vínculo con tu proyecto y config descargada
+.insforge/
+insforge.toml
+
+# Archivos que crean los agentes/CLI de IA al hacer "insforge link"
+AGENTS.md
+CLAUDE.md
+.claude/
+.agents/
+.cursor/
+.codex/
+
+# Despliegues
+.vercel/
+.netlify/
+
+# Videos pesados (súbelos a InsForge Storage o cópialos a mano)
+public/assets/mp4/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.suo
+
+# InsForge & AI agent skills
+.insforge
+.agent
+.agents
+.augment
+.claude
+.cline
+.github/copilot*
+.kilocode
+.qoder
+.qwen
+.roo
+.trae
+.windsurf

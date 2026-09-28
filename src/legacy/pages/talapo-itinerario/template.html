@@ -1,0 +1,325 @@
+<div class="topbar">
+<div class="logo-dot"></div>
+<div class="logo-text">talapo<span>.sv</span></div>
+</div>
+<p style="text-align:center;font-family:'Public Sans',sans-serif;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);margin:2px 0 0;">Field notes for El Salvador</p>
+
+<div id="formView">
+<div class="hero">
+<h1>Tell us how you want to travel</h1>
+<p>The more information you provide, the more accurate your Talapo-generated itinerary will be. You can move between sections as you wish.</p>
+</div>
+<div class="route-wrap"><div class="route" id="routeTrack"></div></div>
+<div class="error-box" id="formError" style="display:none;max-width:640px;margin:0 auto 16px;"></div>
+<form id="tripForm">
+
+<section class="panel" data-step="0">
+<div class="panel-eyebrow">Step 1 of 6</div>
+<h2>About You</h2>
+<p class="panel-desc">We use this information to personalize your itinerary and send you booking confirmations.</p>
+<div class="row2">
+<div class="field"><label for="nombre">Full Name</label><input id="nombre" name="nombre" placeholder="e.g., Maria Hernandez" required="" type="text"/></div>
+<div class="field"><label for="email">Email Address</label><input id="email" name="email" placeholder="you@email.com" required="" type="email"/></div>
+</div>
+<div class="row2">
+<div class="field"><label for="telefono">Phone / WhatsApp</label><input id="telefono" inputmode="numeric" name="telefono" placeholder="+503 7000 0000" type="tel"/></div>
+<div class="field"><label for="pais">Country of Residence</label><input id="pais" name="pais" placeholder="e.g., El Salvador" type="text"/></div>
+</div>
+<div class="field">
+<label>Who are you traveling with?</label>
+<div class="radio-cards">
+<label class="radio-card"><input checked="" name="grupo" type="radio" value="solo"/><span class="radio-face">Alone</span></label>
+<label class="radio-card"><input name="grupo" type="radio" value="pareja"/><span class="radio-face">In a relationship</span></label>
+<label class="radio-card"><input name="grupo" type="radio" value="familia"/><span class="radio-face">With family</span></label>
+<label class="radio-card"><input name="grupo" type="radio" value="amigos"/><span class="radio-face">With friends</span></label>
+<label class="radio-card"><input name="grupo" type="radio" value="negocios"/><span class="radio-face">Business</span></label>
+<label class="radio-card"><input name="grupo" type="radio" value="grupo-grande"/><span class="radio-face">Large group</span></label>
+</div>
+</div>
+<div class="row2">
+<div class="field"><label>Adults</label>
+<div class="stepper-row">
+<button class="stepper-btn" data-delta="-1" data-target="adultos" type="button">−</button>
+<span class="stepper-count" id="adultosCount">1</span>
+<button class="stepper-btn" data-delta="1" data-target="adultos" type="button">+</button>
+<input id="adultos" name="adultos" type="hidden" value="1"/>
+</div>
+</div>
+<div class="field"><label>Children</label>
+<div class="stepper-row">
+<button class="stepper-btn" data-delta="-1" data-target="ninos" type="button">−</button>
+<span class="stepper-count" id="ninosCount">0</span>
+<button class="stepper-btn" data-delta="1" data-target="ninos" type="button">+</button>
+<input id="ninos" name="ninos" type="hidden" value="0"/>
+</div>
+</div>
+</div>
+</section>
+
+<section class="panel" data-step="1">
+<div class="panel-eyebrow">Step 2 of 6</div>
+<h2>Destination and Dates</h2>
+<p class="panel-desc">Define where and when your journey begins.</p>
+<div class="field">
+<label for="destino">Main Department or City</label>
+<select id="destino" name="destino">
+<option value="San Salvador">San Salvador</option>
+<option value="La Libertad">La Libertad (Balsam Coast)</option>
+<option value="Santa Ana">Santa Ana</option>
+<option value="Sonsonate">Sonsonate</option>
+<option value="Chalatenango">Chalatenango</option>
+<option value="La Paz">La Paz</option>
+<option value="San Miguel">San Miguel</option>
+<option value="Morazán">Morazán</option>
+<option value="Ahuachapán">Ahuachapán</option>
+<option value="varias">Multi-department tour</option>
+</select>
+</div>
+<div class="row2">
+<div class="field"><label for="fechaInicio">Start Date</label><input id="fechaInicio" name="fechaInicio" required="" type="date"/></div>
+<div class="field"><label for="fechaFin">End Date</label><input id="fechaFin" name="fechaFin" required="" type="date"/></div>
+</div>
+<div class="field">
+<label>Hours Available per Day</label>
+<div class="radio-cards">
+<label class="radio-card"><input name="horasDia" type="radio" value="medio-dia"/><span class="radio-face">Half Day<small>4–5 hrs</small></span></label>
+<label class="radio-card"><input checked="" name="horasDia" type="radio" value="dia-completo"/><span class="radio-face">Full Day<small>8–10 hrs</small></span></label>
+<label class="radio-card"><input name="horasDia" type="radio" value="flexible"/><span class="radio-face">Flexible<small>No rush</small></span></label>
+</div>
+</div>
+<div class="field"><label for="alojActual">Do you have accommodation reserved? (optional)</label><input id="alojActual" name="alojActual" placeholder="E.g., Real InterContinental Hotel, San Salvador center" type="text"/></div>
+</section>
+
+<section class="panel" data-step="2">
+<div class="panel-eyebrow">Step 3 of 6</div>
+<h2>Budget</h2>
+<p class="panel-desc">Adjust the total amount you want to invest in the entire trip (per person).</p>
+<div class="field">
+<label>Estimated Total Budget per Person</label>
+<div class="budget-value" id="budgetValue">$100</div>
+<input id="budgetRange" max="500" min="20" name="presupuesto" step="5" type="range" value="100"/>
+<div class="budget-scale"><span>$20</span><span>$500+</span></div>
+</div>
+<div class="field">
+<label>How important is it to stay within the budget?</label>
+<div class="radio-cards">
+<label class="radio-card"><input name="flexPresupuesto" type="radio" value="estricto"/><span class="radio-face">Strict<small>Don't exceed</small></span></label>
+<label class="radio-card"><input checked="" name="flexPresupuesto" type="radio" value="moderado"/><span class="radio-face">Moderate<small>Some flexibility</small></span></label>
+<label class="radio-card"><input name="flexPresupuesto" type="radio" value="flexible"/><span class="radio-face">Flexible<small>Prioritize quality</small></span></label>
+</div>
+</div>
+<div class="field">
+<label>Where do you prefer to invest more? (select up to 2)</label>
+<div class="chip-grid" id="prioridadGastoGrid">
+<label class="chip"><input name="prioridadGasto" type="checkbox" value="comida"/><span class="chip-face">🍽️ Food</span></label>
+<label class="chip"><input name="prioridadGasto" type="checkbox" value="hospedaje"/><span class="chip-face">🏨 Lodging</span></label>
+<label class="chip"><input name="prioridadGasto" type="checkbox" value="experiencias"/><span class="chip-face">🎟️ Experiences</span></label>
+<label class="chip"><input name="prioridadGasto" type="checkbox" value="transporte"/><span class="chip-face">🚗 Comfortable transport</span></label>
+</div>
+</div>
+</section>
+
+<section class="panel" data-step="3">
+<div class="panel-eyebrow">Step 4 of 6</div>
+<h2>Your Interests</h2>
+<p class="panel-desc">Select everything that catches your attention — this way we prioritize the activities in the itinerary.</p>
+<div class="field">
+<label>Experience Types</label>
+<div class="chip-grid">
+<label class="chip"><input name="intereses" type="checkbox" value="naturaleza"/><span class="chip-face">🌋 Nature and Volcanoes</span></label>
+<label class="chip"><input name="intereses" type="checkbox" value="playas"/><span class="chip-face">🏖️ Beaches and Surfing</span></label>
+<label class="chip"><input name="intereses" type="checkbox" value="cultura"/><span class="chip-face">🏛️ Culture and History</span></label>
+<label class="chip"><input name="intereses" type="checkbox" value="gastronomia"/><span class="chip-face">🥘 Local Cuisine</span></label>
+<label class="chip"><input name="intereses" type="checkbox" value="aventura"/><span class="chip-face">🥾 Extreme Adventure</span></label>
+<label class="chip"><input name="intereses" type="checkbox" value="arte"/><span class="chip-face">🎨 Art and Museums</span></label>
+<label class="chip"><input name="intereses" type="checkbox" value="vidaNocturna"/><span class="chip-face">🌃 Nightlife</span></label>
+<label class="chip"><input name="intereses" type="checkbox" value="compras"/><span class="chip-face">🛍️ Shopping and Crafts</span></label>
+<label class="chip"><input name="intereses" type="checkbox" value="familiar"/><span class="chip-face">👨‍👩‍👧 Family Activities</span></label>
+<label class="chip"><input name="intereses" type="checkbox" value="fotografia"/><span class="chip-face">📷 Photography and Landscapes</span></label>
+<label class="chip"><input name="intereses" type="checkbox" value="bienestar"/><span class="chip-face">🧘 Wellness and Relaxation</span></label>
+<label class="chip"><input name="intereses" type="checkbox" value="religioso"/><span class="chip-face">⛪ Religious Tourism</span></label>
+</div>
+</div>
+<div class="field">
+<label>Pace of the trip</label>
+<div class="radio-cards">
+<label class="radio-card"><input name="ritmo" type="radio" value="relajado"/><span class="radio-face">Relaxing<small>Few stops</small></span></label>
+<label class="radio-card"><input checked="" name="ritmo" type="radio" value="moderado"/><span class="radio-face">Moderate<small>Balanced</small></span></label>
+<label class="radio-card"><input name="ritmo" type="radio" value="intenso"/><span class="radio-face">Intense<small>See everything</small></span></label>
+</div>
+</div>
+<div class="field">
+<label>Adventure Level</label>
+<div class="radio-cards">
+<label class="radio-card"><input checked="" name="aventura" type="radio" value="tranquilo"/><span class="radio-face">Take it easy</span></label>
+<label class="radio-card"><input name="aventura" type="radio" value="moderado"/><span class="radio-face">Moderate</span></label>
+<label class="radio-card"><input name="aventura" type="radio" value="adrenalina"/><span class="radio-face">Maximum adrenaline</span></label>
+</div>
+</div>
+<div class="field">
+<label>What's your ideal schedule?</label>
+<div class="radio-cards">
+<label class="radio-card"><input name="horario" type="radio" value="madrugador"/><span class="radio-face">Early birds<small>From sunrise</small></span></label>
+<label class="radio-card"><input checked="" name="horario" type="radio" value="normal"/><span class="radio-face">Normal rhythm</span></label>
+<label class="radio-card"><input name="horario" type="radio" value="nocturno"/><span class="radio-face">Nightlife</span></label>
+</div>
+</div>
+<div class="field"><label for="mustSee">Places you definitely want to visit (optional)</label><input id="mustSee" name="mustSee" placeholder="e.g., El Boqueron, Playa El Tunco" type="text"/></div>
+<div class="field"><label for="evitar">Places or activities you prefer to avoid (optional)</label><input id="evitar" name="evitar" placeholder="e.g., long hikes, crowded places" type="text"/></div>
+</section>
+
+<section class="panel" data-step="4">
+<div class="panel-eyebrow">Step 5 of 6</div>
+<h2>Accommodation and Transportation</h2>
+<p class="panel-desc">This is how we adjust the routes, times, and costs of the itinerary to your comfort.</p>
+<div class="field">
+<label>Preferred type of accommodation</label>
+<div class="radio-cards">
+<label class="radio-card"><input checked="" name="alojamiento" type="radio" value="hotel"/><span class="radio-face">Hotel</span></label>
+<label class="radio-card"><input name="alojamiento" type="radio" value="hostal"/><span class="radio-face">Hostal</span></label>
+<label class="radio-card"><input name="alojamiento" type="radio" value="airbnb"/><span class="radio-face">Airbnb</span></label>
+<label class="radio-card"><input name="alojamiento" type="radio" value="resort"/><span class="radio-face">Resort / All-inclusive</span></label>
+<label class="radio-card"><input name="alojamiento" type="radio" value="ecolodge"/><span class="radio-face">Ecolodge / rural</span></label>
+<label class="radio-card"><input name="alojamiento" type="radio" value="sinPreferencia"/><span class="radio-face">No preference</span></label>
+</div>
+</div>
+<div class="field">
+<label>Preferred mode of transportation</label>
+<div class="radio-cards">
+<label class="radio-card"><input checked="" name="transporte" type="radio" value="uberTaxi"/><span class="radio-face">Uber / taxi</span></label>
+<label class="radio-card"><input name="transporte" type="radio" value="vehiculoPropio"/><span class="radio-face">Own vehicle</span></label>
+<label class="radio-card"><input name="transporte" type="radio" value="publico"/><span class="radio-face">Public transportation</span></label>
+<label class="radio-card"><input name="transporte" type="radio" value="tourPrivado"/><span class="radio-face">Private tour</span></label>
+</div>
+</div>
+<div class="row2">
+<div class="field">
+<label>Is this your first time in El Salvador?</label>
+<div class="radio-cards" style="grid-template-columns:1fr 1fr;">
+<label class="radio-card"><input checked="" name="primeraVez" type="radio" value="si"/><span class="radio-face">Yes</span></label>
+<label class="radio-card"><input name="primeraVez" type="radio" value="no"/><span class="radio-face">No</span></label>
+</div>
+</div>
+<div class="field">
+<label>Do you have travel insurance?</label>
+<div class="radio-cards" style="grid-template-columns:1fr 1fr;">
+<label class="radio-card"><input name="seguroViaje" type="radio" value="si"/><span class="radio-face">Yes</span></label>
+<label class="radio-card"><input checked="" name="seguroViaje" type="radio" value="no"/><span class="radio-face">No</span></label>
+</div>
+</div>
+</div>
+<div class="field">
+<label>Would you like to include a tour guide?</label>
+<div class="radio-cards">
+<label class="radio-card"><input name="guiaTuristico" type="radio" value="si"/><span class="radio-face">Yes</span></label>
+<label class="radio-card"><input checked="" name="guiaTuristico" type="radio" value="no"/><span class="radio-face">No</span></label>
+<label class="radio-card"><input name="guiaTuristico" type="radio" value="talVez"/><span class="radio-face">Maybe</span></label>
+</div>
+</div>
+<div class="field"><label for="restricciones">Food restrictions or allergies (optional)</label><input id="restricciones" name="restricciones" placeholder="e.g., vegetarian, no seafood, nut allergy" type="text"/></div>
+<div class="field"><label for="accesibilidad">Accessibility or mobility needs (optional)</label><input id="accesibilidad" name="accesibilidad" placeholder="e.g., wheelchair, limited mobility, traveling with infant" type="text"/></div>
+</section>
+
+<section class="panel" data-step="5">
+<div class="panel-eyebrow">Step 6 of 6</div>
+<h2>Final details</h2>
+<p class="panel-desc">With this, we refine the tone and recommendations of your final itinerary.</p>
+<div class="field">
+<label for="ocasion">Is there a special occasion?</label>
+<select id="ocasion" name="ocasion">
+<option value="">None in particular</option>
+<option value="cumpleanos">Birthday</option>
+<option value="aniversario">Anniversary</option>
+<option value="lunaDeMiel">Honeymoon</option>
+<option value="despedidaSoltero">Bachelor/Bachelorette Party</option>
+<option value="viajeDeNegocios">Business Trip</option>
+<option value="reunionFamiliar">Family Reunion</option>
+</select>
+</div>
+<div class="field">
+<label>Preferred Weather</label>
+<div class="radio-cards">
+<label class="radio-card"><input name="clima" type="radio" value="calido"/><span class="radio-face">☀️ Warm</span></label>
+<label class="radio-card"><input name="clima" type="radio" value="fresco"/><span class="radio-face">🌤️ Cool</span></label>
+<label class="radio-card"><input checked="" name="clima" type="radio" value="sinPreferencia"/><span class="radio-face">🤷 No preference</span></label>
+</div>
+</div>
+<div class="field"><label for="comentarios">Is there anything else we should know?</label><textarea id="comentarios" name="comentarios" placeholder="Tell us any additional details: important dates, group energy level, something you'd love to experience..."></textarea></div>
+<div class="field">
+<label style="display:flex;align-items:center;gap:10px;font-weight:500;">
+<input id="acepta" name="acepta" required="" style="width:18px;height:18px;accent-color:var(--anil);" type="checkbox"/>
+          I accept that Talapo.sv will use this information to generate my personalized itinerary.
+        </label>
+</div>
+</section>
+
+<section class="panel" data-step="6">
+<div class="panel-eyebrow">Ready</div>
+<div style="text-align:center;padding:10px 0 4px;">
+<div style="width:64px;height:64px;border-radius:50%;border:2px dashed var(--gold);color:var(--anil);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;font-family:'Public Sans',sans-serif;">✓</div>
+<h2>Review your request</h2>
+<p class="panel-desc">Confirm that everything is correct before generating your itinerary with AI.</p>
+</div>
+<ul class="summary-list" id="summaryList"></ul>
+</section>
+</form>
+<div class="nav-buttons">
+<button class="btn btn-ghost" id="btnBack" type="button">Back</button>
+<button class="btn btn-primary" id="btnNext" type="button">Next</button>
+</div>
+</div>
+
+<div id="resultView">
+<div class="result-header">
+<button class="edit-pencil" id="btnRegenerar" style="right:64px;" title="Generate another version">🔄</button>
+<button class="edit-pencil" id="btnEditar" title="Edit itinerary">✏️</button>
+<h2 id="resTitulo">Full Itinerary</h2>
+<div class="sub" id="resSub">—</div>
+<div class="result-badges" id="resBadges"></div>
+</div>
+<div class="section-card" id="ocasionBanner" style="display:none;background:var(--anil);color:var(--paper);border-color:var(--anil-ink);"></div>
+<div class="stats-bar" id="statsBar"></div>
+<div class="carousel-wrap">
+<div class="carousel-track" id="carouselTrack"></div>
+<div class="carousel-nav">
+<button id="carouselPrev">‹</button>
+<button id="carouselNext">›</button>
+</div>
+</div>
+<div class="day-tabs" id="dayTabs"></div>
+<div id="dayExtras"></div>
+<div id="dayContent"></div>
+<div class="section-card">
+<h3>🗺️ Route Map</h3>
+<div class="map-wrap"><div id="map"></div></div>
+<p style="font-size:12px;color:var(--ink-soft);margin-top:4px;">Interactive map — scroll to zoom. The dashed line shows the suggested route order for the selected day.</p>
+</div>
+<div class="section-card">
+<h3>💰 Estimated Expense Summary</h3>
+<table class="budget-table" id="budgetTable">
+<thead><tr><th>Category</th><th style="text-align:right;">Approximate Cost</th></tr></thead>
+<tbody id="budgetBody"></tbody>
+</table>
+<div class="budget-note" id="budgetNote"></div>
+</div>
+<div class="section-card">
+<h3>🎒 What to Bring</h3>
+<ul class="checklist" id="checklistUl"></ul>
+</div>
+<div id="extraAlerts"></div>
+<div class="action-buttons">
+<button class="btn btn-primary" id="btnGuardarItinerario">💾 Save to my itineraries</button>
+<button class="btn btn-primary" id="btnPDF">📄 Save as PDF</button>
+<button class="btn btn-aqua" id="btnReservas">📅 Make your reservations</button>
+<button class="btn btn-ghost" id="btnCompartir" style="border-color:var(--teal);color:var(--teal);">📤 Share</button>
+<button class="btn btn-ghost" id="btnPlan" style="border-color:var(--anil);color:var(--anil);">🤝 Join the Talapo plan</button>
+</div>
+</div>
+<div class="loading-overlay" id="loadingOverlay">
+<div class="loading-card">
+<div class="spinner"></div>
+<div class="loading-msg" id="loadingMsg">Preparing your itinerary …</div>
+<div class="loading-sub">This may take a few seconds per travel day.</div>
+</div>
+</div>
+<footer>© Talapo.sv — Your itinerary, tailored to your needs.</footer>
