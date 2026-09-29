@@ -732,6 +732,7 @@ __ready( () => {
   if (typeof closeModal !== 'undefined') __expose('closeModal', closeModal);
   if (typeof filterDifficulty !== 'undefined') __expose('filterDifficulty', filterDifficulty);
   if (typeof moveCarousel !== 'undefined') __expose('moveCarousel', moveCarousel);
+  if (typeof openModal !== 'undefined') __expose('openModal', openModal);
   if (typeof scrollToRecipes !== 'undefined') __expose('scrollToRecipes', scrollToRecipes);
   if (typeof showAllRecipesExtended !== 'undefined') __expose('showAllRecipesExtended', showAllRecipesExtended);
   if (typeof spinPlate !== 'undefined') __expose('spinPlate', spinPlate);

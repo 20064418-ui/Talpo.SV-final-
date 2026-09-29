@@ -96,6 +96,9 @@ html, body { max-width: 100%; overflow-x: hidden; }
   .lg-typicalrecipes .video-card { min-width: 0; width: 100%; }
   .lg-typicalrecipes .main-dish-img { width: min(280px, 72vw); height: min(280px, 72vw); }
   .lg-typicalrecipes [class*="grid"] { max-width: 100%; }
+  .lg-typicalrecipes .challenge-section { padding: 50px 5%; }
+  .lg-typicalrecipes .challenge-grid { flex-direction: column; gap: 18px; }
+  .lg-typicalrecipes .challenge-col { width: 100%; }
 }
 
 /* Celular: los idiomas caben en la tarjeta (el de destino se salía de la pantalla) */
