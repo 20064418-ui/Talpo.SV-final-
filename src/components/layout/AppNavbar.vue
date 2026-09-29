@@ -96,6 +96,7 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
           <i class="fas fa-chevron-down text-xs"></i>
         </a>
         <ul class="dropdown-menu dropdown-menu-right">
+          <li><RouterLink to="/passport"><i class="fas fa-passport"></i> My passport</RouterLink></li>
           <li><RouterLink to="/itineraries"><i class="fas fa-calendar-days"></i> My itineraries</RouterLink></li>
           <li><RouterLink to="/contests"><i class="fas fa-trophy"></i> My contests</RouterLink></li>
           <li><a href="#" @click.prevent="logout"><i class="fas fa-sign-out-alt"></i> Sign out</a></li>
