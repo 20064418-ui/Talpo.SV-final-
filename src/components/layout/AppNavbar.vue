@@ -42,6 +42,7 @@ const groups = [
     { label: 'Chatbot Talapo', href: 'https://talapo-gu-a-de-el-salvador-298518227672.us-west1.run.app/' },
     { label: 'Talapo Contests', to: '/contests' },
     { label: 'Talapo Travelers', to: '/travelers' },
+    { label: 'Talapo Stand · Santa Ana', to: '/kiosk/parque-libertad' },
     { label: 'Forum', to: '/foro' },
     { label: 'The journalistic corner', to: '/planguide' },
     { label: 'Emergency services', to: '/emergency' },
@@ -92,7 +93,8 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
       <div v-if="auth.isAuthenticated" class="nav-item-dropdown profile-dropdown" :class="{ open: openGroup === 'profile' }">
         <a href="#" class="nav-profile-badge" @click.prevent.stop="toggleGroup('profile')">
           <img :src="photo()" alt="Profile" class="nav-profile-img">
-          <span>{{ passport.profile?.display_name || auth.displayName }}</span>
+          <!-- Muestra el @usuario; si todavía no tiene, su nombre -->
+          <span class="badge-name">{{ passport.profile?.username ? `@${passport.profile.username}` : (passport.profile?.display_name || auth.displayName) }}</span>
           <span v-if="passport.streak" class="streak-chip" :title="`Talapo streak: ${passport.streak} day(s)`">🔥{{ passport.streak }}</span>
           <i class="fas fa-chevron-down text-xs"></i>
         </a>
@@ -299,6 +301,7 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
 .nav-profile-badge::after { display: none !important; }
 .nav-profile-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 2px solid #E2B13C; }
 .nav-profile-badge:hover { transform: translateY(-2px); box-shadow: 0 8px 18px -6px rgba(28, 110, 107, 0.4); }
+.badge-name { max-width: 22ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .streak-chip { font-size: 0.8rem; background: rgba(255,255,255,.18); padding: 1px 7px; border-radius: 20px; }
 
 /* Abrir desplegables también con toque (en celulares no existe hover) */
