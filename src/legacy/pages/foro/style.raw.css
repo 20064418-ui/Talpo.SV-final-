@@ -419,3 +419,9 @@ body {
     box-shadow: 0 8px 18px -6px rgba(28, 110, 107, 0.4);
 }
 .forum-empty { padding: 2rem; text-align: center; color: #58717f; background: #fff; border-radius: 14px; border: 1px dashed #dde6e5; }
+
+/* NUEVO: nombre y foto del autor llevan a su perfil público */
+.author-link { color: inherit; text-decoration: none; cursor: pointer; display: inline-block; }
+.author-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.author-link img { transition: transform .2s, box-shadow .2s; }
+.author-link:hover img { transform: scale(1.06); box-shadow: 0 0 0 3px rgba(28,110,107,.35); }

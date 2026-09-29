@@ -729,14 +729,21 @@ const DEPARTMENT_COLORS = {
   "San Salvador": "#0a2540"
 };
 
+// NUEVO: enlace al perfil público del autor (solo usuarios reales de InsForge)
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function profileLink(userId, inner, extraClass = "") {
+  if (!userId || !UUID_RE.test(String(userId))) return inner;
+  return `<a class="author-link ${extraClass}" href="/travelers/${userId}" title="View profile">${inner}</a>`;
+}
+
 function renderCommentNode(post, comment) {
   const isReply = Boolean(comment.parentId);
   return `
     <div class="comment-item" data-comment-id="${comment.id}">
-      <img class="comment-avatar" src="${comment.authorAvatar}" alt="${escapeHtml(comment.authorName)}">
+      ${profileLink(comment.userId, `<img class="comment-avatar" src="${comment.authorAvatar}" alt="${escapeHtml(comment.authorName)}">`)}
       <div style="flex:1;">
         <div class="comment-bubble">
-          <p class="comment-author">${escapeHtml(comment.authorName)}</p>
+          <p class="comment-author">${profileLink(comment.userId, escapeHtml(comment.authorName))}</p>
           <p class="comment-text">${escapeHtml(comment.body)}</p>
         </div>
         ${
@@ -783,9 +790,9 @@ function renderPostCard(post, isTopPopular) {
           <h3 class="post-title">${escapeHtml(post.title)}</h3>
         </div>
         <div class="post-author-pill">
-          <img class="post-avatar" src="${post.authorAvatar}" alt="${escapeHtml(post.authorName)}">
+          ${profileLink(post.userId, `<img class="post-avatar" src="${post.authorAvatar}" alt="${escapeHtml(post.authorName)}">`)}
           <div>
-            <p class="post-author-name">${escapeHtml(post.authorName)}</p>
+            <p class="post-author-name">${profileLink(post.userId, escapeHtml(post.authorName))}</p>
             <p class="post-date">${timeAgo(post.createdAt)}</p>
           </div>
         </div>
