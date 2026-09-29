@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/auth';
 import { usePassportStore } from '@/stores/passport';
 import { useItinerariesStore } from '@/stores/itineraries';
 import { useContestsStore } from '@/stores/contests';
+import { useSocialStore } from '@/stores/social';
 import { challenges } from '@/data/contests';
 import { toast } from '@/composables/useToast';
 import '@/styles/pages/passport.css';
@@ -16,6 +17,14 @@ const auth = useAuthStore();
 const passport = usePassportStore();
 const itineraries = useItinerariesStore();
 const contests = useContestsStore();
+const social = useSocialStore();
+const savingPublic = ref(false);
+async function togglePublic() {
+  savingPublic.value = true;
+  try { await passport.setPublic(!(passport.profile?.is_public ?? true)); toast(passport.profile.is_public ? 'Your profile is now public' : 'Your profile is now private'); }
+  catch (e) { toast(e.message, 'error'); }
+  finally { savingPublic.value = false; }
+}
 
 const editing = ref(false);
 const saving = ref(false);
@@ -134,6 +143,7 @@ const tabs = computed(() => [
   { id: 'plans', emoji: '🗓️', count: plans.value.length, label: 'Itineraries' },
   { id: 'tours', emoji: '🧭', count: tourRoutes.value.length, label: 'Tours' },
   { id: 'contests', emoji: '🏆', count: contests.count, label: 'Contests' },
+  { id: 'community', emoji: '🤝', count: social.followersCount, label: 'Followers' },
 ]);
 
 /** 12 semanas en columnas (lunes arriba), terminando en la semana actual. */
@@ -359,6 +369,24 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
               </div>
             </div>
 
+            <!-- COMMUNITY -->
+            <div v-else-if="panel === 'community'" key="community" class="card-box panel">
+              <div class="panel-head"><h2>Talapo Community</h2><button class="link-btn" @click="router.push('/travelers')">Find travelers →</button></div>
+              <div class="streak-stats community-stats">
+                <div><b>{{ social.followersCount }}</b><span>Followers</span></div>
+                <div><b>{{ social.followingCount }}</b><span>Following</span></div>
+              </div>
+              <label class="public-toggle">
+                <input type="checkbox" :checked="passport.profile?.is_public ?? true" :disabled="savingPublic" @change="togglePublic">
+                <span class="switch"></span>
+                <span><b>Public profile</b><small>Other travelers can see your name, photo, streak and visited places. Your passport number and birth date are never shown.</small></span>
+              </label>
+              <div class="actions-row" style="margin-top: 14px;">
+                <button class="btn-secondary" style="margin-top: 0;" @click="router.push({ path: '/travelers', query: { tab: 'followers' } })"><i class="fas fa-users"></i> My followers</button>
+                <button class="btn-submit" style="margin-top: 0;" :disabled="!(passport.profile?.is_public ?? true)" @click="router.push(`/travelers/${passport.profile.id}`)"><i class="fas fa-id-card"></i> View my public profile</button>
+              </div>
+            </div>
+
             <!-- CONTESTS -->
             <div v-else key="contests" class="card-box panel">
               <div class="panel-head"><h2>Talapo Contests</h2></div>
@@ -392,7 +420,7 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
 .actions-row > * { flex: 1; }
 
 /* Panel del perfil: mismos colores, radios y tipografía del pasaporte */
-.panel-tabs { width: 100%; max-width: 860px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 28px; }
+.panel-tabs { width: 100%; max-width: 860px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 28px; }
 .panel-tabs button { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28); color: #e2e8f0; border-radius: 16px; padding: 12px 8px; cursor: pointer; display: grid; justify-items: center; gap: 2px; font-family: 'Inter', sans-serif; backdrop-filter: blur(6px); transition: background .25s, transform .25s, color .25s; }
 .panel-tabs button:hover { transform: translateY(-3px); background: rgba(255,255,255,.2); }
 .panel-tabs button.on { background: #ffffff; color: #0f172a; box-shadow: 0 14px 30px -14px rgba(0,0,0,.5); }
@@ -437,6 +465,16 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
 .panel-list .emoji { font-size: 1.3rem; }
 .panel-list small { display: block; color: #64748b; font-size: 12px; }
 .panel-list .score, .panel-list .open { margin-left: auto; font-weight: 700; color: #2563eb; text-decoration: none; font-size: 13px; white-space: nowrap; }
+/* Comunidad */
+.community-stats { grid-template-columns: repeat(2, 1fr) !important; margin-bottom: 14px; }
+.public-toggle { display: flex; gap: 12px; align-items: flex-start; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; cursor: pointer; color: #0f172a; }
+.public-toggle input { position: absolute; opacity: 0; pointer-events: none; }
+.public-toggle .switch { flex: 0 0 44px; height: 24px; border-radius: 20px; background: #cbd5e1; position: relative; transition: background .2s; margin-top: 2px; }
+.public-toggle .switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.public-toggle input:checked + .switch { background: #1C6E6B; }
+.public-toggle input:checked + .switch::after { transform: translateX(20px); }
+.public-toggle b { display: block; font-size: 14px; }
+.public-toggle small { color: #64748b; font-size: 12px; line-height: 1.4; }
 @keyframes flicker { 0%, 100% { transform: scale(1) rotate(-3deg); } 50% { transform: scale(1.12) rotate(3deg); } }
 
 /* Transiciones */
@@ -448,7 +486,7 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
 .stamp-move { transition: transform .3s ease; }
 
 @media (max-width: 640px) {
-  .panel-tabs { grid-template-columns: repeat(2, 1fr); }
+  .panel-tabs { grid-template-columns: repeat(3, 1fr); }
   .streak-hero { grid-template-columns: 1fr; justify-items: center; }
   .streak-text h2, .streak-text > p { text-align: center; }
   .streak-stats { grid-template-columns: repeat(2, 1fr); }

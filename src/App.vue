@@ -10,6 +10,7 @@ import { useAuthStore } from '@/stores/auth';
 import { usePassportStore } from '@/stores/passport';
 import { useItinerariesStore } from '@/stores/itineraries';
 import { useContestsStore } from '@/stores/contests';
+import { useSocialStore } from '@/stores/social';
 
 const route = useRoute();
 const router = useRouter();
@@ -26,6 +27,7 @@ const auth = useAuthStore();
 const passport = usePassportStore();
 const itineraries = useItinerariesStore();
 const contests = useContestsStore();
+const social = useSocialStore();
 
 // Persistencia: al haber sesión se cargan perfil + racha + itinerarios + concursos
 watch(() => auth.user?.id, (id) => {
@@ -33,8 +35,9 @@ watch(() => auth.user?.id, (id) => {
     passport.load().catch((e) => console.error('[Talapo] passport', e));
     itineraries.load().catch((e) => console.error('[Talapo] itineraries', e));
     contests.load().catch((e) => console.error('[Talapo] contests', e));
+    social.load().catch((e) => console.error('[Talapo] social', e));
   } else {
-    passport.reset(); itineraries.reset(); contests.reset();
+    passport.reset(); itineraries.reset(); contests.reset(); social.reset();
   }
 }, { immediate: true });
 </script>

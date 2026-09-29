@@ -64,9 +64,26 @@ export const usePassportStore = defineStore('passport', {
         this.activity = activity.map((r) => r.active_date);
         this.stamps = stamps;
         this.loaded = true;
+        this.sendWelcomeOnce();
       } finally {
         this.loading = false;
       }
+    },
+
+    /** Correo de bienvenida (una sola vez y solo con el correo ya verificado). */
+    sendWelcomeOnce() {
+      const auth = useAuthStore();
+      if (!auth.user?.emailVerified || this.profile?.welcome_sent_at) return;
+      insforge.functions.invoke('welcome-email', { body: {} })
+        .then(({ data }) => { if (data?.sent && this.profile) this.profile.welcome_sent_at = new Date().toISOString(); })
+        .catch((e) => console.warn('[Talapo] welcome email', e));
+    },
+
+    /** Mostrar u ocultar mi perfil en la comunidad de viajeros. */
+    async setPublic(is_public) {
+      const auth = useAuthStore();
+      const rows = await unwrap(insforge.database.from('profiles').update({ is_public }).eq('id', auth.user.id).select());
+      this.profile = rows[0];
     },
 
     async uploadPhoto(file) {

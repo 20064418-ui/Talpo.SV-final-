@@ -41,6 +41,7 @@ const groups = [
   { label: 'Technology', items: [
     { label: 'Chatbot Talapo', href: 'https://talapo-gu-a-de-el-salvador-298518227672.us-west1.run.app/' },
     { label: 'Talapo Contests', to: '/contests' },
+    { label: 'Talapo Travelers', to: '/travelers' },
     { label: 'Forum', to: '/foro' },
     { label: 'The journalistic corner', to: '/planguide' },
     { label: 'Emergency services', to: '/emergency' },
@@ -99,6 +100,7 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
           <li><RouterLink to="/passport"><i class="fas fa-passport"></i> My passport</RouterLink></li>
           <li><RouterLink to="/itineraries"><i class="fas fa-calendar-days"></i> My itineraries</RouterLink></li>
           <li><RouterLink to="/contests"><i class="fas fa-trophy"></i> My contests</RouterLink></li>
+          <li><RouterLink to="/travelers"><i class="fas fa-user-group"></i> Travelers</RouterLink></li>
           <li><a href="#" @click.prevent="logout"><i class="fas fa-sign-out-alt"></i> Sign out</a></li>
         </ul>
       </div>
