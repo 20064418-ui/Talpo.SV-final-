@@ -16,6 +16,7 @@ const openId = ref(null);
 const editingId = ref(null);
 const draft = ref('');
 let map = null;
+const focusStop = ref(() => {});
 
 const plans = computed(() => store.items.filter((i) => i.source === 'planner'));
 const routes = computed(() => store.items.filter((i) => i.source !== 'planner'));
@@ -44,13 +45,39 @@ async function show(it) {
   const pts = points(it);
   if (!el || !pts.length) return;
   map = L.map(el, { scrollWheelZoom: false });
+  // Primero la vista (si no, Leaflet no puede dibujar los puntos)
+  map.fitBounds(L.latLngBounds(pts).pad(0.2), { maxZoom: 13 });
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors', maxZoom: 19 }).addTo(map);
   const offset = it.source === 'planner' ? 0 : 1;
   const label = (i) => (i < offset ? 'Start' : `${i - offset + 1}. ${it.stops[i - offset]?.name || ''}${it.stops[i - offset]?.time ? ` · ${it.stops[i - offset].time}` : ''}`);
-  const group = L.featureGroup(pts.map((p, i) => L.circleMarker(p, { radius: 8, color: '#fff', weight: 2, fillColor: i < offset ? '#0A2F44' : '#E46D5C', fillOpacity: 1 })
-    .bindTooltip(label(i)))).addTo(map);
-  L.polyline(pts, { color: '#1C6E6B', weight: 3, dashArray: '4 8' }).addTo(map);
-  map.fitBounds(group.getBounds().pad(0.2));
+  L.polyline(pts, { color: '#1C6E6B', weight: 4, opacity: 0.9, dashArray: '6 8' }).addTo(map);
+  // Cada punto se puede tocar: tarjeta con foto, nombre, hora y botón "Go here"
+  const esc = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const markers = pts.map((p, i) => {
+    const isStart = i < offset;
+    const stop = isStart ? null : it.stops[i - offset];
+    const title = isStart ? (it.start_label || 'Starting point') : stop?.name;
+    const meta = isStart ? 'Starting point' : [stop?.place, stop?.time && `🕒 ${stop.time}`, stop?.duration && `⏱ ${stop.duration}`].filter(Boolean).join(' · ');
+    const popup = `
+      <div class="pin-card">
+        ${stop?.img ? `<img src="${encodeURI(stop.img)}" alt="">` : ''}
+        <b>${isStart ? 'A' : i - offset + 1}. ${esc(title)}</b>
+        ${meta ? `<small>${esc(meta)}</small>` : ''}
+        <a href="https://www.google.com/maps/dir/?api=1&destination=${p[0]},${p[1]}" target="_blank" rel="noopener">Go here →</a>
+      </div>`;
+    return L.marker(p, {
+      riseOnHover: true,
+      icon: L.divIcon({
+        className: 'trip-pin',
+        html: `<span style="background:${isStart ? '#0A2F44' : '#E46D5C'}">${isStart ? 'A' : i - offset + 1}</span>`,
+        iconSize: [32, 32], iconAnchor: [16, 16], popupAnchor: [0, -14],
+      }),
+    }).bindTooltip(label(i), { direction: 'top', offset: [0, -14] })
+      .bindPopup(popup, { maxWidth: 240, className: 'trip-popup' })
+      .addTo(map);
+  });
+  // Lista de paradas debajo del mapa: al tocar una, el mapa vuela a ese punto
+  focusStop.value = (i) => { const m = markers[i]; if (!m) return; map.flyTo(m.getLatLng(), Math.max(map.getZoom(), 12), { duration: 0.8 }); setTimeout(() => m.openPopup(), 850); };
   setTimeout(() => map?.invalidateSize(), 200);
 }
 
@@ -185,7 +212,17 @@ onBeforeUnmount(() => map?.remove());
               </div>
             </div>
             <Transition name="fade">
-              <div v-if="openId === it.id" :id="`map-${it.id}`" class="mini-map"></div>
+              <div v-if="openId === it.id" class="map-block">
+                <div :id="`map-${it.id}`" class="mini-map"></div>
+                <ol class="stop-list">
+                  <li v-if="it.source !== 'planner' && it.start_lat != null">
+                    <button @click="focusStop(0)"><span class="n start">A</span>{{ it.start_label || 'Starting point' }}</button>
+                  </li>
+                  <li v-for="(s, i) in it.stops.filter((x) => x.lat != null)" :key="s.id || i">
+                    <button @click="focusStop(i + (it.source !== 'planner' && it.start_lat != null ? 1 : 0))"><span class="n">{{ i + 1 }}</span>{{ s.name }}<small v-if="s.time"> · {{ s.time }}</small></button>
+                  </li>
+                </ol>
+              </div>
             </Transition>
           </li>
         </TransitionGroup>
@@ -253,7 +290,22 @@ onBeforeUnmount(() => map?.remove());
 .rename input { flex: 1; min-width: 180px; padding: .5rem .8rem; border: 1.5px solid #cbdbe2; border-radius: 12px; font: inherit; }
 .mini-btn { border: 1.5px solid #dce7ea; background: #fff; border-radius: 12px; padding: .4rem .8rem; font: inherit; font-weight: 600; cursor: pointer; }
 .mini-btn.dark { background: #0A2F44; border-color: #0A2F44; color: #fff; }
-.mini-map { height: 320px; border-radius: 18px; margin-top: 1rem; z-index: 0; }
+.mini-map { height: 340px; border-radius: 18px; margin-top: 1rem; z-index: 0; }
+.stop-list { list-style: none; margin: .8rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+.stop-list button { display: inline-flex; align-items: center; gap: .45rem; border: 1.5px solid #dce7ea; background: #fff; border-radius: 40px; padding: .3rem .8rem .3rem .3rem; font: inherit; font-size: .85rem; font-weight: 600; color: #1A3A4A; cursor: pointer; transition: border-color .2s, transform .15s; }
+.stop-list button:hover { border-color: #1C6E6B; transform: translateY(-2px); }
+.stop-list .n { width: 24px; height: 24px; border-radius: 50%; background: #E46D5C; color: #fff; display: grid; place-items: center; font-size: .75rem; font-weight: 800; }
+.stop-list .n.start { background: #0A2F44; }
+.stop-list small { color: #8aa0ab; font-weight: 500; }
+:deep(.trip-pin span) { width: 32px; height: 32px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font: 800 13px Outfit, Inter, sans-serif; border: 2px solid #fff; box-shadow: 0 6px 14px -6px rgba(0,0,0,.6); cursor: pointer; transition: transform .2s; }
+:deep(.trip-pin:hover span) { transform: scale(1.18); }
+:deep(.trip-popup .leaflet-popup-content-wrapper) { border-radius: 16px; }
+:deep(.trip-popup .leaflet-popup-content) { margin: 10px; }
+:deep(.pin-card) { display: grid; gap: 4px; font-family: Outfit, Inter, sans-serif; min-width: 170px; }
+:deep(.pin-card img) { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; }
+:deep(.pin-card b) { color: #0A2F44; font-size: 14px; }
+:deep(.pin-card small) { color: #58717f; }
+:deep(.pin-card a) { color: #E46D5C; font-weight: 700; text-decoration: none; margin-top: 2px; }
 
 /* Transiciones */
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }

@@ -165,7 +165,7 @@ function cardHTML(d,i){
       ${sceneImg(d.img, d.nombre)}
       <div class="card-actions">
         <button class="icon-btn fav ${isFav?'active':''}" data-action="fav" data-id="${d.id}" aria-label="Marcar ${d.nombre} como favorito">${heartSVG}</button>
-        <button class="icon-btn add ${isSel?'active':''}" data-action="add" data-id="${d.id}" aria-label="Agregar ${d.nombre} al itinerario">${isSel?checkSVG:plusSVG}</button>
+        <button class="icon-btn add ${isSel?'active':''}" data-action="add" data-id="${d.id}" aria-label="Add ${d.nombre} to your tour">${isSel?checkSVG:plusSVG}</button>
       </div>
       <span class="card-tag">${d.tag}</span>
     </div>
@@ -682,7 +682,7 @@ async function saveItinerary(){
   const lng = parseFloat(document.getElementById('lng').value);
   if(!__talapo.user()){
     sessionStorage.setItem(PENDING_KEY, JSON.stringify({ ids:[...selected], lat, lng, title }));
-    __talapo.requireLogin('Sign in to save your itinerary — your route will be waiting');
+    __talapo.requireLogin('Sign in to save your tour — your route will be waiting');
     return;
   }
   const kmText = document.getElementById('routeDist').textContent;
@@ -701,10 +701,10 @@ async function saveItinerary(){
     duration_min: hm ? (+hm[1])*60 + (+hm[2]) : null,
   }]);
   btn.disabled = false;
-  if(error){ btn.textContent = 'Save itinerary'; __talapo.toast(error.message || 'Could not save', 'error'); return; }
+  if(error){ btn.textContent = 'Save tour'; __talapo.toast(error.message || 'Could not save', 'error'); return; }
   btn.textContent = 'Saved ✓';
   document.getElementById('viewSavedBtn').hidden = false;
-  __talapo.toast('Itinerary saved to your passport ✈️');
+  __talapo.toast('Tour saved to your passport ✈️');
   __talapo.onSaved && __talapo.onSaved();
 }
 __expose('saveItinerary', saveItinerary);
