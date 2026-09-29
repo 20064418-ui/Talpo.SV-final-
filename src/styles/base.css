@@ -78,43 +78,43 @@ html, body { max-width: 100%; overflow-x: hidden; }
    ===================================================================== */
 /* Celular: carrusel arriba y texto abajo (el original dejaba el texto en una columna muy angosta) */
 @media (max-width: 768px) {
-  .lg-turisticattractions .app { flex-direction: column; height: auto; min-height: calc(100vh - 83px); }
-  .lg-turisticattractions .carousel { width: 100%; padding: 28px 0 8px; }
-  .lg-turisticattractions .track { width: min(72vw, 300px); height: min(98vw, 400px); }
-  .lg-turisticattractions .card.next { transform: translateX(40px) scale(0.9); }
-  .lg-turisticattractions .card.prev { transform: translateX(-40px) scale(0.9); }
-  .lg-turisticattractions .info { width: 100%; padding: 20px 20px 48px; align-items: center; text-align: center; }
-  .lg-turisticattractions .info h1 { font-size: 1.8rem; letter-spacing: 1px; max-width: 100%; }
-  .lg-turisticattractions .info p { max-width: 100%; }
+  html body .lg-turisticattractions .app { flex-direction: column; height: auto; min-height: calc(100vh - 83px); }
+  html body .lg-turisticattractions .carousel { width: 100%; padding: 28px 0 8px; }
+  html body .lg-turisticattractions .track { width: min(72vw, 300px); height: min(98vw, 400px); }
+  html body .lg-turisticattractions .card.next { transform: translateX(40px) scale(0.9); }
+  html body .lg-turisticattractions .card.prev { transform: translateX(-40px) scale(0.9); }
+  html body .lg-turisticattractions .info { width: 100%; padding: 20px 20px 48px; align-items: center; text-align: center; }
+  html body .lg-turisticattractions .info h1 { font-size: 1.8rem; letter-spacing: 1px; max-width: 100%; }
+  html body .lg-turisticattractions .info p { max-width: 100%; }
 }
 
 /* Celular: tarjetas en una columna y sin anchos fijos que se salgan de la pantalla */
 @media (max-width: 768px) {
-  .lg-typicalrecipes .tips-section { padding: 50px 5%; }
-  .lg-typicalrecipes .tips-grid { flex-direction: column; gap: 16px; }
-  .lg-typicalrecipes .recipe-card { min-width: min(290px, 82vw); max-width: min(290px, 82vw); }
-  .lg-typicalrecipes .video-card { min-width: 0; width: 100%; }
-  .lg-typicalrecipes .main-dish-img { width: min(280px, 72vw); height: min(280px, 72vw); }
-  .lg-typicalrecipes [class*="grid"] { max-width: 100%; }
-  .lg-typicalrecipes .challenge-section { padding: 50px 5%; }
-  .lg-typicalrecipes .challenge-grid { flex-direction: column; gap: 18px; }
-  .lg-typicalrecipes .challenge-col { width: 100%; }
+  html body .lg-typicalrecipes .tips-section { padding: 50px 5%; }
+  html body .lg-typicalrecipes .tips-grid { flex-direction: column; gap: 16px; }
+  html body .lg-typicalrecipes .recipe-card { min-width: min(290px, 82vw); max-width: min(290px, 82vw); }
+  html body .lg-typicalrecipes .video-card { min-width: 0; width: 100%; }
+  html body .lg-typicalrecipes .main-dish-img { width: min(280px, 72vw); height: min(280px, 72vw); }
+  html body .lg-typicalrecipes [class*="grid"] { max-width: 100%; }
+  html body .lg-typicalrecipes .challenge-section { padding: 50px 5%; }
+  html body .lg-typicalrecipes .challenge-grid { flex-direction: column; gap: 18px; }
+  html body .lg-typicalrecipes .challenge-col { width: 100%; }
 }
 
 /* Celular: los idiomas caben en la tarjeta (el de destino se salía de la pantalla) */
 @media (max-width: 768px) {
-  .lg-traductor .languages-header { gap: 6px; padding-left: 12px; padding-right: 12px; }
-  .lg-traductor .lang-select { min-width: 0; width: 100%; font-size: 14px; flex: 1 1 0; }
-  .lg-traductor .btn-swap-lang { flex: 0 0 auto; }
+  html body .lg-traductor .languages-header { gap: 6px; padding-left: 12px; padding-right: 12px; }
+  html body .lg-traductor .lang-select { min-width: 0; width: 100%; font-size: 14px; flex: 1 1 0; }
+  html body .lg-traductor .btn-swap-lang { flex: 0 0 auto; }
 }
 
 /* Celular: campos del formulario dentro de la tarjeta */
 @media (max-width: 768px) {
-  .lg-foro select, .lg-foro input[type="file"] { width: 100%; max-width: 100%; font-size: 14px; }
-  .lg-foro input[type="file"] { overflow: hidden; }
+  html body .lg-foro select, html body .lg-foro input[type="file"] { width: 100%; max-width: 100%; font-size: 14px; }
+  html body .lg-foro input[type="file"] { overflow: hidden; }
 }
 
 /* Celular: la barra de pasos se desliza en lugar de salirse de la pantalla */
 @media (max-width: 768px) {
-  .lg-talapo-itinerario #routeTrack { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  html body .lg-talapo-itinerario #routeTrack { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
