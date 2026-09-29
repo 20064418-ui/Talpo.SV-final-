@@ -3,29 +3,32 @@
 import { computed } from 'vue';
 import QrCode from '@/components/kiosk/QrCode.vue';
 import { distanceMeters, walkLabel } from '@/data/stands';
+import { useKioskI18n } from '@/i18n/kiosk';
+const { t, loc, lang } = useKioskI18n();
 
 const props = defineProps({ stand: { type: Object, required: true } });
 const places = computed(() => props.stand.places.map((p) => ({ ...p, meters: distanceMeters(props.stand, p) })).sort((a, b) => a.meters - b.meters));
-const url = (p) => `${location.origin}/kiosk/${props.stand.id}/place/${p.slug}`;
+// El QR abre la ficha en el celular en el MISMO idioma
+const url = (p) => `${location.origin}/kiosk/${props.stand.id}/place/${p.slug}?lang=${lang.value}`;
 </script>
 
 <template>
   <section class="page">
     <div class="head">
       <span class="emoji">🏛️</span>
-      <div><h1>History</h1><p>Scan a code with your phone camera to take the story with you — or touch a card to read it here.</p></div>
+      <div><h1>{{ t('historyTitle') }}</h1><p>{{ t('historySub') }}</p></div>
     </div>
     <div class="grid">
       <RouterLink v-for="(p, i) in places" :key="p.slug" :to="{ name: 'kiosk-place', params: { stand: stand.id, slug: p.slug } }" class="card" :style="{ animationDelay: `${i * 70}ms` }">
         <div class="photo" :class="{ noimg: !p.image }" :style="p.image ? { backgroundImage: `url('${p.image}')` } : {}">
-              <span class="cat">{{ p.category }}</span><span v-if="!p.image" class="ph-emoji">{{ p.emoji }}</span>
+              <span class="cat">{{ loc(p.category) }}</span><span v-if="!p.image" class="ph-emoji">{{ p.emoji }}</span>
             </div>
         <div class="body">
-          <QrCode :value="url(p)" :size="118" :label="`QR ${p.name}`" />
+          <QrCode :value="url(p)" :size="118" :label="`QR ${loc(p.name)}`" />
           <div>
-            <h2>{{ p.name }}</h2>
-            <p>{{ p.short }}</p>
-            <small><i class="fas fa-person-walking"></i> {{ p.meters < 30 ? 'You are here' : walkLabel(p.meters) }}</small>
+            <h2>{{ loc(p.name) }}</h2>
+            <p>{{ loc(p.short) }}</p>
+            <small><i class="fas fa-person-walking"></i> {{ p.meters < 30 ? t('youAreHere') : walkLabel(p.meters) }}</small>
           </div>
         </div>
       </RouterLink>

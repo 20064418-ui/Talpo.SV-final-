@@ -4,6 +4,8 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import QrCode from '@/components/kiosk/QrCode.vue';
 import { distanceMeters, walkLabel, directionsUrl } from '@/data/stands';
+import { useKioskI18n } from '@/i18n/kiosk';
+const { t, loc } = useKioskI18n();
 
 const props = defineProps({ stand: { type: Object, required: true } });
 const route = useRoute();
@@ -16,26 +18,26 @@ const dir = computed(() => place.value && directionsUrl(props.stand, place.value
   <section v-if="place" class="place">
     <div class="hero" :style="{ backgroundImage: place.image ? `linear-gradient(rgba(10,47,68,.15), rgba(10,47,68,.85)), url('${place.image}')` : 'linear-gradient(135deg, #1C6E6B, #0A2F44)' }">
       <span v-if="!place.image" class="hero-emoji">{{ place.emoji }}</span>
-      <span class="cat">{{ place.category }}</span>
-      <h1>{{ place.name }}</h1>
-      <p><i class="fas fa-person-walking"></i> {{ meters < 30 ? 'You are here' : `${walkLabel(meters)} from the stand` }}</p>
+      <span class="cat">{{ loc(place.category) }}</span>
+      <h1>{{ loc(place.name) }}</h1>
+      <p><i class="fas fa-person-walking"></i> {{ meters < 30 ? t('youAreHere') : t('fromStand', { walk: walkLabel(meters) }) }}</p>
     </div>
     <div class="content">
       <article>
-        <p class="lead">{{ place.short }}</p>
-        <p>{{ place.story }}</p>
-        <div class="tip">💡 <b>Talapo tip:</b> {{ place.tip }}</div>
-        <a :href="dir" target="_blank" rel="noopener" class="go"><i class="fas fa-diamond-turn-right"></i> How to get there</a>
+        <p class="lead">{{ loc(place.short) }}</p>
+        <p>{{ loc(place.story) }}</p>
+        <div class="tip">💡 <b>{{ t('tipLabel') }}</b> {{ loc(place.tip) }}</div>
+        <a :href="dir" target="_blank" rel="noopener" class="go"><i class="fas fa-diamond-turn-right"></i> {{ t('howToGet') }}</a>
       </article>
       <aside class="qr-box">
-        <h2>📱 Take it with you</h2>
-        <p>Scan to open the walking route on your phone.</p>
-        <QrCode :value="dir" :size="170" :label="`Directions to ${place.name}`" />
+        <h2>{{ t('takeIt') }}</h2>
+        <p>{{ t('takeItText') }}</p>
+        <QrCode :value="dir" :size="170" :label="t('howToGet')" />
       </aside>
     </div>
-    <p class="more">Discover more of El Salvador at <RouterLink to="/">Talapo.SV</RouterLink> ✈️</p>
+    <p class="more">{{ t('discoverMore') }} <RouterLink to="/">Talapo.SV</RouterLink> ✈️</p>
   </section>
-  <section v-else class="place missing"><h1>Place not found</h1></section>
+  <section v-else class="place missing"><h1>{{ t('placeNotFound') }}</h1></section>
 </template>
 
 <style scoped>

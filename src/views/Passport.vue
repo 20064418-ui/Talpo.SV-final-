@@ -10,6 +10,7 @@ import { useContestsStore } from '@/stores/contests';
 import { useSocialStore } from '@/stores/social';
 import { challenges } from '@/data/contests';
 import { toast } from '@/composables/useToast';
+import { stands } from '@/data/stands';
 import '@/styles/pages/passport.css';
 
 const router = useRouter();
@@ -102,7 +103,6 @@ async function guardar() {
       birth_date: form.fechaNac || null,
       photo_url,
     });
-    await passport.seedDefaultStamps();
     photoFile.value = null;
     editing.value = false;
     toast('Your Talapo Passport is ready 🛂');
@@ -128,22 +128,9 @@ const mrz = computed(() => {
   ];
 });
 
-/* ---------- 3. Bitácora de lugares (foto de visita por lugar) ---------- */
-const placeInput = ref(null);
-let activeStamp = null;
-function pedirFoto(stamp) { activeStamp = stamp; placeInput.value.click(); }
-async function onPlacePhoto(e) {
-  const f = e.target.files[0];
-  e.target.value = '';
-  if (!f || !activeStamp) return;
-  try { await passport.stampPhoto(activeStamp, f); toast(`${activeStamp.place_name}: stamped!`); }
-  catch (err) { toast(err.message, 'error'); }
-}
-async function nuevoDestino() {
-  const name = prompt('Enter the name of a new place you visited in El Salvador:');
-  if (!name || !name.trim()) return;
-  try { await passport.addStamp(name.trim().slice(0, 60)); } catch (err) { toast(err.message, 'error'); }
-}
+/* ---------- 3. Bitácora: solo sellos verificados por un Stand Talapo ---------- */
+const visitedStamps = computed(() => passport.stamps.filter((st) => st.visited_at));
+const pendingStands = computed(() => Object.values(stands).filter((st) => !passport.stamps.some((x) => x.visited_at && x.place_name === `${st.name}, ${st.city}`)));
 
 /* ---------- 4. Paneles nuevos ---------- */
 const plans = computed(() => itineraries.items.filter((i) => i.source === 'planner'));
@@ -277,24 +264,26 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
                   <div class="visa-header">TRAVEL LOG / VISITS</div>
                   <div style="font-size: 10px; color: #1e3a8a; font-weight: bold;"><i class="fas fa-stamp"></i> DIGITAL STAMP</div>
                 </div>
-                <div style="font-size: 10px; color: #64748b; margin-bottom: 5px;">Click on any destination to upload your visit photo:</div>
+                <div style="font-size: 10px; color: #64748b; margin-bottom: 5px;">Stamps are added automatically when you visit a Talapo Stand:</div>
                 <TransitionGroup name="stamp" tag="div" class="places-grid">
-                  <div v-for="s in passport.stamps" :key="s.id" class="place-stamp-card" @click="pedirFoto(s)">
+                  <!-- Solo sellos VERIFICADOS (puestos por un Stand Talapo). No se pueden editar. -->
+                  <div v-for="s in visitedStamps" :key="s.id" class="place-stamp-card verified" :title="`Verified visit · ${fmtDate(s.visited_at)}`">
                     <div class="place-img-box">
                       <img v-if="s.photo_url" :src="s.photo_url" :alt="s.place_name">
-                      <div v-else class="placeholder-icon"><i class="fas fa-camera"></i></div>
+                      <div v-else class="placeholder-icon"><i class="fas fa-stamp"></i></div>
+                      <span class="seal">✓</span>
                     </div>
                     <div class="place-title">{{ s.place_name }}</div>
-                    <div class="place-status">
-                      <template v-if="s.visited_at && s.photo_url"><i class="fas fa-check-circle" style="color:#059669"></i> Visited</template>
-                      <template v-else><i class="fas fa-plus-circle"></i> Add photo</template>
-                    </div>
+                    <div class="place-status"><i class="fas fa-check-circle" style="color:#059669"></i> Verified · {{ fmtDate(s.visited_at) }}</div>
                   </div>
-                  <div key="add" class="add-place-btn" @click="nuevoDestino">
-                    <i class="fas fa-map-marked-alt" style="font-size: 16px;"></i>
-                    <span>New destination</span>
-                  </div>
+                  <!-- Dónde conseguir más sellos -->
+                  <RouterLink v-for="st in pendingStands" :key="`st-${st.id}`" :to="`/kiosk/${st.id}`" class="place-stamp-card locked">
+                    <div class="place-img-box"><div class="placeholder-icon"><i class="fas fa-lock"></i></div></div>
+                    <div class="place-title">{{ st.name }}, {{ st.city }}</div>
+                    <div class="place-status"><i class="fas fa-location-dot"></i> Visit the Talapo Stand</div>
+                  </RouterLink>
                 </TransitionGroup>
+                <p v-if="!visitedStamps.length" class="no-stamps">🛂 No stamps yet. Visit a <b>Talapo Stand</b>, fill the form with your username <b>@{{ p.username || 'your.username' }}</b> and your first stamp will appear here.</p>
               </div>
               <div style="font-size: 10px; color: #64748b; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; padding-top: 8px; margin-top: 10px;">
                 <span>El Salvador Travel Hub</span>
@@ -427,8 +416,6 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
         </div>
       </Transition>
     </div>
-    <!-- Input oculto para subir fotos de los lugares de visita -->
-    <input ref="placeInput" type="file" accept="image/*" class="hidden" @change="onPlacePhoto">
   </div>
 </template>
 
@@ -486,6 +473,12 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
 .panel-list .emoji { font-size: 1.3rem; }
 .panel-list small { display: block; color: #64748b; font-size: 12px; }
 .panel-list .score, .panel-list .open { margin-left: auto; font-weight: 700; color: #2563eb; text-decoration: none; font-size: 13px; white-space: nowrap; }
+.place-stamp-card.verified { cursor: default; border-color: #bbf7d0; }
+.place-stamp-card.verified .place-img-box { position: relative; }
+.seal { position: absolute; right: 4px; bottom: 4px; width: 22px; height: 22px; border-radius: 50%; background: #059669; color: #fff; font-size: 12px; font-weight: 800; display: grid; place-items: center; box-shadow: 0 2px 6px rgba(0,0,0,.3); }
+.place-stamp-card.locked { text-decoration: none; opacity: .75; border-style: dashed; }
+.place-stamp-card.locked:hover { opacity: 1; }
+.no-stamps { font-size: 11px; color: #475569; background: #f1f5f9; border-radius: 8px; padding: 8px 10px; margin: 8px 0 0; line-height: 1.5; }
 /* Usuario */
 .user-input { display: flex; align-items: center; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; overflow: hidden; }
 .user-input span { padding: 0 4px 0 12px; font-weight: 700; color: #1e3a8a; }

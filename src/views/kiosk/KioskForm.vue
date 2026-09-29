@@ -7,6 +7,8 @@ import QrCode from '@/components/kiosk/QrCode.vue';
 import { insforge, isConfigured } from '@/lib/insforge';
 import { trashTypes } from '@/data/stands';
 import { normalizeUsername } from '@/stores/passport';
+import { useKioskI18n } from '@/i18n/kiosk';
+const { t, locale } = useKioskI18n();
 
 const props = defineProps({ stand: { type: Object, required: true } });
 const router = useRouter();
@@ -19,16 +21,16 @@ const error = ref('');
 const result = ref(null);
 let homeTimer;
 
-const zones = [
-  { id: 'clean', emoji: '😊', label: 'Clean', text: 'The area looks good' },
-  { id: 'dirty', emoji: '😐', label: 'A little dirty', text: 'Some trash here and there' },
-  { id: 'very_dirty', emoji: '😟', label: 'Very dirty', text: 'A lot of trash' },
-];
-const urgencies = [
-  { id: 'low', emoji: '🟢', label: 'Not urgent', text: 'It can wait' },
-  { id: 'medium', emoji: '🟡', label: 'Soon', text: 'Should be cleaned today' },
-  { id: 'high', emoji: '🔴', label: 'Urgent', text: 'Someone needs to come quickly' },
-];
+const zones = computed(() => [
+  { id: 'clean', emoji: '😊', label: t('zClean'), text: t('zCleanT') },
+  { id: 'dirty', emoji: '😐', label: t('zDirty'), text: t('zDirtyT') },
+  { id: 'very_dirty', emoji: '😟', label: t('zVery'), text: t('zVeryT') },
+]);
+const urgencies = computed(() => [
+  { id: 'low', emoji: '🟢', label: t('uLow'), text: t('uLowT') },
+  { id: 'medium', emoji: '🟡', label: t('uMed'), text: t('uMedT') },
+  { id: 'high', emoji: '🔴', label: t('uHigh'), text: t('uHighT') },
+]);
 
 const canNext = computed(() => [true, !!form.zone, form.hasTrash === false || (form.hasTrash && form.trash.length), !!form.urgency, true][step.value]);
 function next() { if (canNext.value) step.value = Math.min(step.value + 1, TOTAL - 1); }
@@ -41,7 +43,7 @@ function pickUrgency(u) { form.urgency = u; setTimeout(next, 180); }
 async function submit() {
   error.value = ''; sending.value = true;
   try {
-    if (!isConfigured) throw new Error('Talapo is not connected (missing .env.local).');
+    if (!isConfigured) throw new Error(t('notConnected'));
     const { data, error: e } = await insforge.database.rpc('stand_submit', {
       p_stand: props.stand.id,
       p_passport: form.passport.trim(),
@@ -56,7 +58,7 @@ async function submit() {
     step.value = TOTAL;
     homeTimer = setTimeout(() => router.replace({ name: 'kiosk-home', params: { stand: props.stand.id } }), 15000);
   } catch (e) {
-    error.value = e.message || 'Something went wrong. Please try again.';
+    error.value = e.message || t('genericError');
   } finally { sending.value = false; }
 }
 function restart() {
@@ -78,84 +80,84 @@ const registerUrl = computed(() => `${location.origin}/register`);
       <!-- 0 · USUARIO -->
       <div v-if="step === 0" key="s0" class="q">
         <span class="big">🛂</span>
-        <h1>Stamp your Talapo Passport</h1>
-        <p>Type your <b>Talapo username</b> and we will add the <b>{{ stand.name }}</b> stamp to your passport automatically.</p>
+        <h1>{{ t('formStamp') }}</h1>
+        <p v-html="t('formStampText', { name: stand.name })"></p>
         <div class="user-box">
           <span>@</span>
           <input v-model="form.passport" class="pass-input" autocomplete="off" autocapitalize="none" spellcheck="false"
                  placeholder="your.username" maxlength="24" @input="form.passport = normalizeUsername(form.passport)" @keyup.enter="next" />
         </div>
-        <p class="hint">You can see it in your Talapo Passport, below your name.</p>
+        <p class="hint">{{ t('formUserHint') }}</p>
         <div class="nav">
-          <button class="btn ghost" @click="form.passport = ''; next()">I don't have an account</button>
-          <button class="btn main" :disabled="form.passport.length < 3" @click="next">Continue <i class="fas fa-arrow-right"></i></button>
+          <button class="btn ghost" @click="form.passport = ''; next()">{{ t('noAccount') }}</button>
+          <button class="btn main" :disabled="form.passport.length < 3" @click="next">{{ t('continue') }} <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
       <!-- 1 · ESTADO DE LA ZONA -->
       <div v-else-if="step === 1" key="s1" class="q">
         <span class="big">🌳</span>
-        <h1>How is the area right now?</h1>
+        <h1>{{ t('zoneQ') }}</h1>
         <div class="options three">
           <button v-for="z in zones" :key="z.id" class="opt" :class="{ on: form.zone === z.id }" @click="pickZone(z.id)">
             <span class="oe">{{ z.emoji }}</span><b>{{ z.label }}</b><small>{{ z.text }}</small>
           </button>
         </div>
-        <div class="nav"><button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> Back</button></div>
+        <div class="nav"><button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> {{ t('backBtn') }}</button></div>
       </div>
 
       <!-- 2 · BASURA -->
       <div v-else-if="step === 2" key="s2" class="q">
         <span class="big">🗑️</span>
-        <h1>Is there trash in the area?</h1>
+        <h1>{{ t('trashQ') }}</h1>
         <div class="options two">
-          <button class="opt" :class="{ on: form.hasTrash === true }" @click="pickTrash(true)"><span class="oe">👍</span><b>Yes</b></button>
-          <button class="opt" :class="{ on: form.hasTrash === false }" @click="pickTrash(false)"><span class="oe">✋</span><b>No</b></button>
+          <button class="opt" :class="{ on: form.hasTrash === true }" @click="pickTrash(true)"><span class="oe">👍</span><b>{{ t('yes') }}</b></button>
+          <button class="opt" :class="{ on: form.hasTrash === false }" @click="pickTrash(false)"><span class="oe">✋</span><b>{{ t('no') }}</b></button>
         </div>
         <Transition name="slide">
           <div v-if="form.hasTrash" class="types">
-            <h2>What type of trash? <small>(choose all that apply)</small></h2>
+            <h2>{{ t('trashTypeQ') }} <small>{{ t('chooseAll') }}</small></h2>
             <div class="chips">
-              <button v-for="t in trashTypes" :key="t.id" class="chip" :class="{ on: form.trash.includes(t.id) }" @click="toggleType(t.id)">
-                <span>{{ t.emoji }}</span> {{ t.label }} <i v-if="form.trash.includes(t.id)" class="fas fa-check"></i>
+              <button v-for="tt in trashTypes" :key="tt.id" class="chip" :class="{ on: form.trash.includes(tt.id) }" @click="toggleType(tt.id)">
+                <span>{{ tt.emoji }}</span> {{ t(tt.key) }} <i v-if="form.trash.includes(tt.id)" class="fas fa-check"></i>
               </button>
             </div>
           </div>
         </Transition>
         <div class="nav">
-          <button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> Back</button>
-          <button v-if="form.hasTrash !== null" class="btn main" :disabled="!canNext" @click="next">Continue <i class="fas fa-arrow-right"></i></button>
+          <button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> {{ t('backBtn') }}</button>
+          <button v-if="form.hasTrash !== null" class="btn main" :disabled="!canNext" @click="next">{{ t('continue') }} <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
       <!-- 3 · URGENCIA -->
       <div v-else-if="step === 3" key="s3" class="q">
         <span class="big">🚨</span>
-        <h1>Does someone need to come quickly?</h1>
+        <h1>{{ t('urgQ') }}</h1>
         <div class="options three">
           <button v-for="u in urgencies" :key="u.id" class="opt" :class="{ on: form.urgency === u.id }" @click="pickUrgency(u.id)">
             <span class="oe">{{ u.emoji }}</span><b>{{ u.label }}</b><small>{{ u.text }}</small>
           </button>
         </div>
-        <div class="nav"><button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> Back</button></div>
+        <div class="nav"><button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> {{ t('backBtn') }}</button></div>
       </div>
 
       <!-- 4 · COMENTARIO Y ENVÍO -->
       <div v-else-if="step === 4" key="s4" class="q">
         <span class="big">💬</span>
-        <h1>Anything else? <small>(optional)</small></h1>
-        <textarea v-model="form.comment" maxlength="500" rows="4" placeholder="e.g. There is trash next to the fountain…"></textarea>
+        <h1>{{ t('commentQ') }} <small>{{ t('optional') }}</small></h1>
+        <textarea v-model="form.comment" maxlength="500" rows="4" :placeholder="t('commentPh')"></textarea>
         <div class="summary">
           <span v-if="form.passport">🛂 @{{ form.passport }}</span>
           <span>{{ zones.find((z) => z.id === form.zone)?.emoji }} {{ zones.find((z) => z.id === form.zone)?.label }}</span>
-          <span>🗑️ {{ form.hasTrash ? form.trash.map((t) => trashTypes.find((x) => x.id === t)?.label).join(', ') : 'No trash' }}</span>
+          <span>🗑️ {{ form.hasTrash ? form.trash.map((id) => t(trashTypes.find((x) => x.id === id)?.key)).join(', ') : t('noTrash') }}</span>
           <span>{{ urgencies.find((u) => u.id === form.urgency)?.emoji }} {{ urgencies.find((u) => u.id === form.urgency)?.label }}</span>
         </div>
         <p v-if="error" class="err"><i class="fas fa-triangle-exclamation"></i> {{ error }}</p>
         <div class="nav">
-          <button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> Back</button>
+          <button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> {{ t('backBtn') }}</button>
           <button class="btn main" :disabled="sending" @click="submit">
-            <i class="fas" :class="sending ? 'fa-spinner fa-spin' : 'fa-paper-plane'"></i> {{ sending ? 'Sending…' : 'Send' }}
+            <i class="fas" :class="sending ? 'fa-spinner fa-spin' : 'fa-paper-plane'"></i> {{ sending ? t('sending') : t('send') }}
           </button>
         </div>
       </div>
@@ -164,26 +166,26 @@ const registerUrl = computed(() => `${location.origin}/register`);
       <div v-else key="s5" class="q done">
         <template v-if="result?.passport_found">
           <div class="stamp" :class="{ again: result.already_stamped }">
-            <span>TALAPO.SV</span><b>{{ stand.name.toUpperCase() }}</b><small>{{ new Date().toLocaleDateString('en-US') }}</small>
+            <span>TALAPO.SV</span><b>{{ stand.name.toUpperCase() }}</b><small>{{ new Date().toLocaleDateString(locale) }}</small>
           </div>
-          <h1>{{ result.already_stamped ? 'Welcome back' : 'Stamped' }}, {{ result.first_name || 'traveler' }}! 🎉</h1>
-          <p>The <b>{{ result.stamp_name }}</b> stamp is in your Talapo Passport. Thank you for reporting the area!</p>
+          <h1>{{ t(result.already_stamped ? 'welcomeBack' : 'stamped', { name: result.first_name || t('traveler') }) }}</h1>
+          <p v-html="t('stampedText', { stamp: result.stamp_name })"></p>
         </template>
         <template v-else>
           <span class="big">💚</span>
-          <h1>Thank you for helping!</h1>
-          <p v-if="form.passport">We couldn't find the username <b>@{{ form.passport }}</b>, but your report was saved. Check it in your Talapo Passport and try again next time.</p>
-          <p v-else>Your report was saved and the city team will review it.</p>
+          <h1>{{ t('thanks') }}</h1>
+          <p v-if="form.passport" v-html="t('userNotFound', { user: form.passport })"></p>
+          <p v-else>{{ t('reportSaved') }}</p>
           <div class="qr-join">
-            <QrCode :value="registerUrl" :size="130" label="Create your Talapo Passport" />
-            <span><b>Create your Talapo Passport</b><br>Scan to join and collect stamps from every place you visit.</span>
+            <QrCode :value="registerUrl" :size="130" :label="t('createPassport')" />
+            <span><b>{{ t('createPassport') }}</b><br>{{ t('createPassportText') }}</span>
           </div>
         </template>
         <div class="nav">
-          <button class="btn ghost" @click="restart">New report</button>
-          <RouterLink class="btn main" :to="{ name: 'kiosk-home', params: { stand: stand.id } }">Back to home</RouterLink>
+          <button class="btn ghost" @click="restart">{{ t('newReport') }}</button>
+          <RouterLink class="btn main" :to="{ name: 'kiosk-home', params: { stand: stand.id } }">{{ t('backHome') }}</RouterLink>
         </div>
-        <p class="hint">This screen returns to the home page in a few seconds.</p>
+        <p class="hint">{{ t('autoHome') }}</p>
       </div>
     </Transition>
   </section>

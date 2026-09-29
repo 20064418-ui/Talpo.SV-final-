@@ -123,44 +123,8 @@ export const usePassportStore = defineStore('passport', {
       if (fields.display_name) await insforge.auth.setProfile({ name: fields.display_name });
     },
 
-    async addStamp(place_name) {
-      const auth = useAuthStore();
-      const rows = await unwrap(insforge.database.from('passport_stamps')
-        .insert([{ user_id: auth.user.id, place_name }]).select());
-      this.stamps.push(rows[0]);
-    },
-
-    async toggleStamp(stamp) {
-      const visited_at = stamp.visited_at ? null : new Date().toISOString();
-      const rows = await unwrap(insforge.database.from('passport_stamps')
-        .update({ visited_at }).eq('id', stamp.id).select());
-      Object.assign(stamp, rows[0]);
-    },
-
-    /** Foto de visita de un lugar (como en el pasaporte original): lo marca como visitado. */
-    async stampPhoto(stamp, file) {
-      const auth = useAuthStore();
-      const ext = (file.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
-      const up = await unwrap(insforge.storage.from('passport-photos')
-        .upload(`${auth.user.id}/stamps/${stamp.id}-${Date.now()}.${ext}`, file));
-      const rows = await unwrap(insforge.database.from('passport_stamps')
-        .update({ photo_url: up.url, visited_at: new Date().toISOString() }).eq('id', stamp.id).select());
-      Object.assign(stamp, rows[0]);
-    },
-
-    /** Los 5 destinos que el pasaporte original traía por defecto. */
-    async seedDefaultStamps() {
-      const auth = useAuthStore();
-      if (this.stamps.length) return;
-      const names = ['El Tunco Beach', 'Suchitoto', 'San Salvador Volcano', 'Lake Coatepeque', 'Flower Route'];
-      this.stamps = await unwrap(insforge.database.from('passport_stamps')
-        .insert(names.map((place_name) => ({ user_id: auth.user.id, place_name }))).select());
-    },
-
-    async removeStamp(stamp) {
-      await unwrap(insforge.database.from('passport_stamps').delete().eq('id', stamp.id));
-      this.stamps = this.stamps.filter((s) => s.id !== stamp.id);
-    },
+    // Los sellos ya no se crean ni se editan desde la página: solo los pone un Stand Talapo
+    // (función stand_submit en la base de datos). Aquí solo se leen.
   },
 });
 

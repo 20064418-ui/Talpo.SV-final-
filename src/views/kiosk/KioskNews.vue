@@ -3,6 +3,8 @@
 import { ref, computed, onMounted } from 'vue';
 import QrCode from '@/components/kiosk/QrCode.vue';
 import { insforge, isConfigured } from '@/lib/insforge';
+import { useKioskI18n } from '@/i18n/kiosk';
+const { t, locale } = useKioskI18n();
 
 const props = defineProps({ stand: { type: Object, required: true } });
 const news = ref([]);
@@ -10,8 +12,7 @@ const loading = ref(true);
 const openId = ref(null);
 
 const mailto = computed(() => {
-  const body = 'Title of the news:\n\nWhat happened / what will happen:\n\nDate and place:\n\nYour name and phone (optional):\n';
-  return `mailto:${props.stand.newsEmail}?subject=${encodeURIComponent(props.stand.newsSubject)}&body=${encodeURIComponent(body)}`;
+  return `mailto:${props.stand.newsEmail}?subject=${encodeURIComponent(t('mailSubject'))}&body=${encodeURIComponent(t('mailBody'))}`;
 });
 
 onMounted(async () => {
@@ -22,23 +23,23 @@ onMounted(async () => {
   }
   loading.value = false;
 });
-const fmt = (d) => (d ? new Date(d).toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric' }) : '');
+const fmt = (d) => (d ? new Date(d).toLocaleDateString(locale.value, { weekday: 'short', month: 'long', day: 'numeric' }) : '');
 </script>
 
 <template>
   <section class="page">
     <div class="head">
       <span class="emoji">📰</span>
-      <div><h1>Municipal News</h1><p>News and events of {{ stand.city }}, reviewed by the Talapo team.</p></div>
+      <div><h1>{{ t('newsTitle') }}</h1><p>{{ t('newsSub', { city: stand.city }) }}</p></div>
     </div>
 
     <div class="layout">
       <div class="list">
-        <p v-if="loading" class="note"><i class="fas fa-spinner fa-spin"></i> Loading news…</p>
+        <p v-if="loading" class="note"><i class="fas fa-spinner fa-spin"></i> {{ t('loadingNews') }}</p>
         <div v-else-if="!news.length" class="empty">
           <span>🗞️</span>
-          <h2>No news yet</h2>
-          <p>Be the first! Send your municipal news by email using the QR code.</p>
+          <h2>{{ t('noNews') }}</h2>
+          <p>{{ t('noNewsText') }}</p>
         </div>
         <TransitionGroup v-else name="card" tag="div" class="cards">
           <article v-for="n in news" :key="n.id" class="news" :class="{ open: openId === n.id }" @click="openId = openId === n.id ? null : n.id">
@@ -47,21 +48,21 @@ const fmt = (d) => (d ? new Date(d).toLocaleDateString('en-US', { weekday: 'shor
               <small>{{ fmt(n.published_at || n.created_at) }}<template v-if="n.author"> · {{ n.author }}</template></small>
               <h2>{{ n.title }}</h2>
               <p>{{ n.body }}</p>
-              <span class="more">{{ openId === n.id ? 'Show less' : 'Read more' }} <i class="fas" :class="openId === n.id ? 'fa-chevron-up' : 'fa-chevron-down'"></i></span>
+              <span class="more">{{ openId === n.id ? t('showLess') : t('readMore') }} <i class="fas" :class="openId === n.id ? 'fa-chevron-up' : 'fa-chevron-down'"></i></span>
             </div>
           </article>
         </TransitionGroup>
       </div>
 
       <aside class="send">
-        <h2>📩 Share your news</h2>
-        <p>Do you have news or an event from your community? <b>Scan this code</b> with your phone camera: it opens an email ready to send.</p>
-        <QrCode :value="mailto" :size="200" label="Send your news by email" />
+        <h2>{{ t('shareTitle') }}</h2>
+        <p v-html="t('shareText')"></p>
+        <QrCode :value="mailto" :size="200" :label="t('shareTitle')" />
         <p class="mail"><i class="fas fa-envelope"></i> {{ stand.newsEmail }}</p>
         <ol>
-          <li>Scan the QR code.</li>
-          <li>Write your news in the email.</li>
-          <li>Send it — our team reviews it and publishes it here.</li>
+          <li>{{ t('step1') }}</li>
+          <li>{{ t('step2') }}</li>
+          <li>{{ t('step3') }}</li>
         </ol>
       </aside>
     </div>

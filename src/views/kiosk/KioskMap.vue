@@ -1,15 +1,24 @@
 <script setup>
 // Mapa del stand: lugares cercanos, distancia caminando y cómo llegar
-import { ref, computed, onMounted, onBeforeUnmount, shallowRef } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, shallowRef, watch } from 'vue';
 import L from 'leaflet';
 import QrCode from '@/components/kiosk/QrCode.vue';
 import { distanceMeters, walkLabel, directionsUrl } from '@/data/stands';
+import { useKioskI18n } from '@/i18n/kiosk';
+const { t, loc, lang } = useKioskI18n();
 
 const props = defineProps({ stand: { type: Object, required: true } });
 const el = ref(null);
 const map = shallowRef(null);
 const selected = ref(null);
 const markers = {};
+let youMarker = null;
+const popupHtml = (p) => `<b>${loc(p.name)}</b><br>${walkLabel(p.meters)}`;
+// Al cambiar de idioma se actualizan las etiquetas del mapa
+watch(lang, () => {
+  places.value.forEach((p) => markers[p.slug]?.setPopupContent(popupHtml(p)));
+  youMarker?.setIcon(L.divIcon({ className: 'k-you', html: `<span>${t('youAreHerePin')}</span>`, iconSize: [140, 34], iconAnchor: [70, 38] }));
+});
 const places = computed(() => props.stand.places.map((p) => ({ ...p, meters: distanceMeters(props.stand, p) })).sort((a, b) => a.meters - b.meters));
 
 function select(p) {
@@ -26,15 +35,16 @@ onMounted(() => {
   // "Estás aquí" (el stand)
   L.marker([props.stand.lat, props.stand.lng], {
     zIndexOffset: 1000,
-    icon: L.divIcon({ className: 'k-you', html: '<span>📍 You are here</span>', iconSize: [120, 34], iconAnchor: [60, 38] }),
+    icon: L.divIcon({ className: 'k-you', html: `<span>${t('youAreHerePin')}</span>`, iconSize: [140, 34], iconAnchor: [70, 38] }),
   }).addTo(map.value);
+  youMarker = map.value._layers[Object.keys(map.value._layers).pop()];
 
   places.value.forEach((p, i) => {
     if (p.meters < 30) return; // el propio parque es el stand
     markers[p.slug] = L.marker([p.lat, p.lng], {
       riseOnHover: true,
       icon: L.divIcon({ className: 'k-pin', html: `<span>${i}</span>`, iconSize: [36, 36], iconAnchor: [18, 18], popupAnchor: [0, -16] }),
-    }).bindPopup(`<b>${p.name}</b><br>${walkLabel(p.meters)}`).on('click', () => (selected.value = p)).addTo(map.value);
+    }).bindPopup(popupHtml(p)).on('click', () => (selected.value = p)).addTo(map.value);
   });
   const pts = places.value.map((p) => [p.lat, p.lng]).concat([[props.stand.lat, props.stand.lng]]);
   map.value.fitBounds(L.latLngBounds(pts).pad(0.25), { maxZoom: 18 });
@@ -47,32 +57,32 @@ onBeforeUnmount(() => map.value?.remove());
   <section class="page">
     <div class="head">
       <span class="emoji">🗺️</span>
-      <div><h1>Map</h1><p>Places around {{ stand.name }}. Touch one to see how to get there.</p></div>
+      <div><h1>{{ t('mapTitle') }}</h1><p>{{ t('mapSub', { name: stand.name }) }}</p></div>
     </div>
     <div class="layout">
-      <div ref="el" class="map" role="application" aria-label="Map of nearby places"></div>
+      <div ref="el" class="map" role="application" :aria-label="t('mapAria')"></div>
       <aside class="side">
         <Transition name="kfade" mode="out-in">
           <div v-if="selected" :key="selected.slug" class="detail">
             <img v-if="selected.image" :src="selected.image" alt="" />
             <div v-else class="noimg">{{ selected.emoji }}</div>
-            <h2>{{ selected.name }}</h2>
+            <h2>{{ loc(selected.name) }}</h2>
             <p class="dist"><i class="fas fa-person-walking"></i> {{ walkLabel(selected.meters) }}</p>
-            <p>{{ selected.short }}</p>
+            <p>{{ loc(selected.short) }}</p>
             <div class="qr-row">
-              <QrCode :value="directionsUrl(stand, selected)" :size="120" :label="`Directions to ${selected.name}`" />
-              <span>📱 Scan to open the walking route on your phone</span>
+              <QrCode :value="directionsUrl(stand, selected)" :size="120" :label="t('howToGet')" />
+              <span>{{ t('scanRoute') }}</span>
             </div>
             <div class="btns">
-              <RouterLink :to="{ name: 'kiosk-place', params: { stand: stand.id, slug: selected.slug } }" class="b ghost">Read its story</RouterLink>
-              <button class="b ghost" @click="selected = null">All places</button>
+              <RouterLink :to="{ name: 'kiosk-place', params: { stand: stand.id, slug: selected.slug } }" class="b ghost">{{ t('readStory') }}</RouterLink>
+              <button class="b ghost" @click="selected = null">{{ t('allPlaces') }}</button>
             </div>
           </div>
           <ol v-else key="list" class="list">
             <li v-for="(p, i) in places" :key="p.slug">
               <button @click="select(p)">
                 <span class="n" :class="{ here: p.meters < 30 }">{{ p.meters < 30 ? '📍' : i }}</span>
-                <span class="txt"><b>{{ p.name }}</b><small>{{ p.meters < 30 ? 'You are here' : walkLabel(p.meters) }}</small></span>
+                <span class="txt"><b>{{ loc(p.name) }}</b><small>{{ p.meters < 30 ? t('youAreHere') : walkLabel(p.meters) }}</small></span>
                 <i class="fas fa-chevron-right"></i>
               </button>
             </li>
