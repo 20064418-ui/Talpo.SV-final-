@@ -43,6 +43,23 @@ export const usePassportStore = defineStore('passport', {
       ));
     },
 
+    /** Guarda el @usuario (único). Lanza 'USERNAME_TAKEN' o 'USERNAME_FORMAT'. */
+    async setUsername(raw) {
+      const auth = useAuthStore();
+      const username = normalizeUsername(raw);
+      if (!USERNAME_RE.test(username)) throw new Error('USERNAME_FORMAT');
+      const { data, error } = await insforge.database.from('profiles').update({ username }).eq('id', auth.user.id).select();
+      if (error) throw new Error(/duplicate|unique/i.test(error.message) ? 'USERNAME_TAKEN' : error.message);
+      if (this.profile) this.profile.username = data?.[0]?.username ?? username;
+      return username;
+    },
+
+    async usernameAvailable(raw) {
+      const { data, error } = await insforge.database.rpc('username_available', { p_username: normalizeUsername(raw) });
+      if (error) return true; // si no se puede comprobar, la base de datos lo validará al guardar
+      return Array.isArray(data) ? !!data[0] : !!data;
+    },
+
     /** Carga persistente al iniciar sesión: perfil, racha (se actualiza hoy) y sellos. */
     async load(force = false) {
       const auth = useAuthStore();
@@ -65,6 +82,9 @@ export const usePassportStore = defineStore('passport', {
         this.stamps = stamps;
         this.loaded = true;
         this.sendWelcomeOnce();
+        // Usuarios que se registraron antes: copiar el @usuario que eligieron al registrarse
+        const pending = auth.user.profile?.username;
+        if (!this.profile?.username && pending) this.setUsername(pending).catch(() => {});
       } finally {
         this.loading = false;
       }
@@ -150,4 +170,10 @@ export function isoWeek(dateStr) {
   d.setDate(d.getDate() - day + 3);
   const firstThursday = new Date(d.getFullYear(), 0, 4);
   return `${d.getFullYear()}-${Math.round(((d - firstThursday) / 864e5 - 3 + ((firstThursday.getDay() + 6) % 7)) / 7) + 1}`;
+}
+
+/** Usuario válido: 3–24 caracteres, minúsculas, números, punto y guion bajo. */
+export const USERNAME_RE = /^[a-z0-9._]{3,24}$/;
+export function normalizeUsername(raw = '') {
+  return String(raw).trim().replace(/^@+/, '').toLowerCase().replace(/[^a-z0-9._]/g, '');
 }

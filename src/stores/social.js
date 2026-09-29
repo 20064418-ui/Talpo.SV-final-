@@ -35,7 +35,8 @@ export const useSocialStore = defineStore('social', {
     /** Busca viajeros por nombre (vacío = los más activos). */
     async search(q = '', limit = 30) {
       let req = insforge.database.from('public_profiles').select('*');
-      if (q.trim()) req = req.ilike('display_name', `%${q.trim()}%`);
+      const term = q.trim().replace(/^@/, '').replace(/[%,()]/g, '');
+      if (term) req = req.or(`display_name.ilike.%${term}%,username.ilike.%${term}%`);
       return unwrap(req.order('followers_count', { ascending: false }).order('current_streak', { ascending: false }).limit(limit));
     },
 

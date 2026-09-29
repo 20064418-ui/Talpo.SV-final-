@@ -58,6 +58,7 @@ const since = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'long
             <div class="who">
               <span class="badge">✦ TALAPO PASSPORT ✦</span>
               <h1>{{ p.display_name }}</h1>
+              <p v-if="p.username" class="handle">@{{ p.username }}</p>
               <p class="sub">
                 <span v-if="p.nationality"><i class="fas fa-flag"></i> {{ p.nationality }}</span>
                 <span v-if="p.joined_at"><i class="fas fa-calendar"></i> Traveler since {{ since(p.joined_at) }}</span>
@@ -122,6 +123,7 @@ const since = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'long
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
 .badge { display: inline-block; font-size: .7rem; font-weight: 700; letter-spacing: 1px; color: #1e3a8a; background: #e8eefc; padding: .25rem .7rem; border-radius: 30px; }
 .who h1 { margin: .35rem 0 .3rem; color: #0A2F44; font-size: clamp(1.6rem, 3.5vw, 2.3rem); line-height: 1.1; }
+.handle { margin: 0 0 .35rem; color: #1C6E6B; font-weight: 700; }
 .sub { margin: 0; display: flex; flex-wrap: wrap; gap: .4rem 1rem; color: #58717f; font-size: .9rem; }
 .sub i { color: #1C6E6B; margin-right: .2rem; }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem; margin-top: 1.4rem; }

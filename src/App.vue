@@ -50,11 +50,11 @@ watch(() => auth.user?.id, (id) => {
     <!-- Transición entre páginas (lo único nuevo a nivel visual) -->
     <RouterView v-slot="{ Component, route: r }">
       <Transition name="page" mode="out-in" appear>
-        <component :is="Component" :key="r.path" />
+        <component :is="Component" :key="r.meta.kiosk ? `kiosk-${r.params.stand}` : r.path" />
       </Transition>
     </RouterView>
   </main>
   <AppFooter v-if="!bare && !route.meta.ownFooter" />
-  <TalapoAI />
+  <TalapoAI v-if="!route.meta.kiosk" />
   <ToastHost />
 </template>

@@ -4,7 +4,7 @@ import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import SocialButtons from '@/components/auth/SocialButtons.vue';
 import { useAuthStore } from '@/stores/auth';
-import { usePassportStore } from '@/stores/passport';
+import { usePassportStore, USERNAME_RE, normalizeUsername } from '@/stores/passport';
 import { insforge } from '@/lib/insforge';
 import '@/styles/pages/register.css';
 import '@/styles/pages/auth-extras.css';
@@ -21,7 +21,10 @@ const icon = { error: 'fa-exclamation-circle', success: 'fa-check-circle', warni
 
 async function goToPassport() {
   await passport.ensureProfile();
-  if (form.username) await insforge.auth.setProfile({ username: form.username }).catch(() => {});
+  if (form.username) {
+    await insforge.auth.setProfile({ username: form.username }).catch(() => {});
+    await passport.setUsername(form.username).catch(() => {});
+  }
   router.replace('/passport');   // Registro por primera vez -> Pasaporte
 }
 
@@ -29,6 +32,13 @@ async function submit() {
   msg.value = null;
   if (!form.name || !form.email || !form.username || !form.password || !form.confirm) {
     msg.value = { type: 'warning', text: 'Please fill in all the fields' }; return;
+  }
+  form.username = normalizeUsername(form.username);
+  if (!USERNAME_RE.test(form.username)) {
+    msg.value = { type: 'warning', text: 'Your username must have 3–24 characters: lowercase letters, numbers, dots or underscores (e.g. rocio.calderon).' }; return;
+  }
+  if (!(await passport.usernameAvailable(form.username))) {
+    msg.value = { type: 'error', text: `The username @${form.username} is already taken. Try another one.` }; return;
   }
   if (form.password.length < 8) { msg.value = { type: 'warning', text: 'Your password must have at least 8 characters' }; return; }
   if (form.password !== form.confirm) { msg.value = { type: 'error', text: 'The passwords do not match' }; return; }
@@ -119,7 +129,8 @@ async function verify() {
               </div>
               <div class="form-group">
                 <label for="username">Username</label>
-                <input id="username" v-model.trim="form.username" type="text" name="username" required autocomplete="username" placeholder="Choose a username">
+                <input id="username" v-model="form.username" type="text" name="username" required autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="24" placeholder="e.g. rocio.calderon" @input="form.username = normalizeUsername(form.username)">
+                <small class="field-hint">You will use it to stamp your passport at Talapo Stands.</small>
               </div>
               <div class="form-group">
                 <label for="password">Password</label>

@@ -4,7 +4,7 @@
 import { ref, reactive, computed, watch, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import { usePassportStore } from '@/stores/passport';
+import { usePassportStore, USERNAME_RE, normalizeUsername } from '@/stores/passport';
 import { useItinerariesStore } from '@/stores/itineraries';
 import { useContestsStore } from '@/stores/contests';
 import { useSocialStore } from '@/stores/social';
@@ -28,7 +28,8 @@ async function togglePublic() {
 
 const editing = ref(false);
 const saving = ref(false);
-const form = reactive({ nombre: '', nacionalidad: '', nPasaporte: '', fechaNac: '' });
+const form = reactive({ nombre: '', usuario: '', nacionalidad: '', nPasaporte: '', fechaNac: '' });
+const usernameError = ref('');
 const photoFile = ref(null);
 const preview = ref('');
 const photoStatus = ref({ text: 'You can take an instant photo or upload an image file from your device.', ok: false });
@@ -39,6 +40,7 @@ const showForm = computed(() => editing.value || (passport.loaded && !passport.h
 
 function fillForm() {
   form.nombre = p.value.display_name || auth.displayName;
+  form.usuario = p.value.username || auth.user?.profile?.username || '';
   form.nacionalidad = p.value.nationality || '';
   form.nPasaporte = p.value.passport_number || '';
   form.fechaNac = p.value.birth_date || '';
@@ -85,8 +87,13 @@ onBeforeUnmount(stopCamera);
 
 async function guardar() {
   if (!preview.value) { alert('Please take a photo or upload an image to continue.'); return; }
+  usernameError.value = '';
+  const uname = normalizeUsername(form.usuario);
+  if (!USERNAME_RE.test(uname)) { usernameError.value = 'Use 3–24 characters: lowercase letters, numbers, dots or underscores.'; return; }
+  if (uname !== p.value.username && !(await passport.usernameAvailable(uname))) { usernameError.value = `@${uname} is already taken. Try another one.`; return; }
   saving.value = true;
   try {
+    if (uname !== p.value.username) await passport.setUsername(uname);
     const photo_url = photoFile.value ? await passport.uploadPhoto(photoFile.value) : p.value.photo_url;
     await passport.savePassport({
       display_name: form.nombre.trim(),
@@ -99,7 +106,10 @@ async function guardar() {
     photoFile.value = null;
     editing.value = false;
     toast('Your Talapo Passport is ready 🛂');
-  } catch (e) { toast(e.message, 'error'); }
+  } catch (e) {
+    if (e.message === 'USERNAME_TAKEN') usernameError.value = 'That username was just taken. Try another one.';
+    else toast(e.message, 'error');
+  }
   finally { saving.value = false; }
 }
 
@@ -187,6 +197,12 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
               <input id="nombre" v-model="form.nombre" type="text" required placeholder="e.g. Rocío Calderón">
             </div>
             <div class="form-group">
+              <label for="usuario">Username:</label>
+              <div class="user-input"><span>@</span><input id="usuario" v-model="form.usuario" type="text" required maxlength="24" autocapitalize="none" spellcheck="false" placeholder="e.g. rocio.calderon" @input="form.usuario = normalizeUsername(form.usuario); usernameError = ''"></div>
+              <small v-if="usernameError" class="user-error">{{ usernameError }}</small>
+              <small v-else class="user-hint">Use it at Talapo Stands to stamp your passport automatically.</small>
+            </div>
+            <div class="form-group">
               <label for="nacionalidad">Nationality:</label>
               <input id="nacionalidad" v-model="form.nacionalidad" type="text" required placeholder="e.g. Salvadoran">
             </div>
@@ -244,6 +260,7 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
                   <div class="passport-data-grid">
                     <div class="data-item"><label>SURNAME / APELLIDOS</label><span>{{ apellido }}</span></div>
                     <div class="data-item"><label>GIVEN NAMES / NOMBRES</label><span>{{ nombre }}</span></div>
+                    <div v-if="p.username" class="data-item"><label>USERNAME / USUARIO</label><span>@{{ p.username }}</span></div>
                     <div class="data-item"><label>NATIONALITY / NACIONALIDAD</label><span>{{ (p.nationality || '').toUpperCase() }}</span></div>
                     <div class="data-item"><label>DATE OF BIRTH / FECHA NAC.</label><span>{{ p.birth_date }}</span></div>
                     <div class="data-item"><label>PASSPORT NO. / N° PASAPORTE</label><span>{{ (p.passport_number || '').toUpperCase() }}</span></div>
@@ -297,6 +314,10 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
           </div>
 
           <!-- NUEVO: panel del perfil (Streak · Itineraries · Tours · Contests) -->
+          <div v-if="!p.username" class="user-banner">
+            <span>🏷️ <b>Choose your username</b> to stamp your passport at Talapo Stands.</span>
+            <button @click="fillForm(); editing = true">Choose username</button>
+          </div>
           <div class="panel-tabs" role="tablist">
             <button v-for="t in tabs" :key="t.id" role="tab" :class="{ on: panel === t.id }" :aria-selected="panel === t.id" @click="panel = t.id">
               <span class="tab-emoji">{{ t.emoji }}</span>
@@ -465,6 +486,15 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
 .panel-list .emoji { font-size: 1.3rem; }
 .panel-list small { display: block; color: #64748b; font-size: 12px; }
 .panel-list .score, .panel-list .open { margin-left: auto; font-weight: 700; color: #2563eb; text-decoration: none; font-size: 13px; white-space: nowrap; }
+/* Usuario */
+.user-input { display: flex; align-items: center; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; overflow: hidden; }
+.user-input span { padding: 0 4px 0 12px; font-weight: 700; color: #1e3a8a; }
+.user-input input { border: 0 !important; flex: 1; outline: none; box-shadow: none !important; }
+.user-hint { display: block; margin-top: 4px; font-size: 12px; color: #64748b; }
+.user-error { display: block; margin-top: 4px; font-size: 12px; color: #c62828; font-weight: 600; }
+.user-banner { width: 100%; max-width: 860px; margin-top: 18px; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; background: #fff7e6; border: 1px solid #f7d9a4; color: #7a4b00; border-radius: 14px; padding: 12px 16px; animation: authRise .4s ease both; }
+.user-banner button { background: #0A2F44; color: #fff; border: 0; border-radius: 30px; padding: 8px 16px; font-weight: 700; cursor: pointer; }
+@keyframes authRise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 /* Comunidad */
 .community-stats { grid-template-columns: repeat(2, 1fr) !important; margin-bottom: 14px; }
 .public-toggle { display: flex; gap: 12px; align-items: flex-start; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; cursor: pointer; color: #0f172a; }

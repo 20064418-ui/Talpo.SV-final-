@@ -715,27 +715,46 @@ function renderDia(index){
   renderMapa(dia);
 }
 
+let lastBounds = null;
+function refitMap(){
+  if(!mapInstance) return;
+  mapInstance.invalidateSize();
+  if(lastBounds) mapInstance.fitBounds(lastBounds, { padding: [30,30], maxZoom: 14 });
+}
 function renderMapa(dia){
   const paradas = (dia.paradas || []).filter(p => typeof p.lat === 'number' && typeof p.lng === 'number');
+  const el = document.getElementById('map');
   if(!mapInstance){
-    mapInstance = L.map('map', { scrollWheelZoom: true });
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors', maxZoom: 18
+    mapInstance = L.map(el, { scrollWheelZoom: true });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors', maxZoom: 19
     }).addTo(mapInstance);
+    // ARREGLO: el mapa se creaba con su recuadro escondido y quedaba gris.
+    // Ahora se vuelve a medir cada vez que el recuadro aparece o cambia de tamaño.
+    if('ResizeObserver' in window){
+      const ro = new ResizeObserver(() => refitMap());
+      ro.observe(el);
+    }
   }
   mapInstance.eachLayer(layer => { if(layer instanceof L.Marker || layer instanceof L.Polyline) mapInstance.removeLayer(layer); });
 
   if(!paradas.length){
+    lastBounds = null;
     mapInstance.setView([13.6929, -89.2182], 9);
+    setTimeout(refitMap, 150);
     return;
   }
   const latlngs = paradas.map(p => [p.lat, p.lng]);
   paradas.forEach((p, i) => {
     L.marker([p.lat, p.lng]).addTo(mapInstance)
-      .bindPopup(`<b>${i+1}. ${p.lugar || ''}</b><br>${p.hora || ''}`);
+      .bindPopup(`<b>${i+1}. ${p.lugar || ''}</b><br>${p.hora || ''}<br><a href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}" target="_blank" rel="noopener">Go here →</a>`);
   });
   L.polyline(latlngs, { color: '#3C91E6', weight: 3, dashArray: '6,8' }).addTo(mapInstance);
-  mapInstance.fitBounds(L.latLngBounds(latlngs), { padding: [30,30] });
+  lastBounds = L.latLngBounds(latlngs);
+  mapInstance.fitBounds(lastBounds, { padding: [30,30], maxZoom: 14 });
+  // cuando el resultado termina de mostrarse, se vuelve a medir
+  setTimeout(refitMap, 150);
+  setTimeout(refitMap, 600);
 }
 
 function renderPresupuestoTotal(dias){

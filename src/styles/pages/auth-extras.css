@@ -33,3 +33,5 @@
 .pg-auth .verify-help { font-size: 0.85rem; color: var(--text-gray); margin-top: 16px; line-height: 1.6; text-align: center; }
 .pg-auth .link-inline { background: none; border: 0; padding: 0; color: var(--orange, #E46D5C); font: inherit; font-weight: 700; cursor: pointer; text-decoration: underline; }
 .pg-auth .link-inline:disabled { color: var(--text-gray); cursor: default; text-decoration: none; }
+
+.pg-auth .field-hint { display: block; margin-top: 6px; font-size: 0.8rem; color: var(--text-gray); }

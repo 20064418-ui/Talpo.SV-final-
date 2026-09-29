@@ -24,6 +24,20 @@ const routes = [
   { path: '/auth/callback', name: 'auth-callback', component: () => import('@/views/AuthCallback.vue'), meta: { bare: true } },
   { path: '/passport', name: 'passport', component: () => import('@/views/Passport.vue'), meta: { requiresAuth: true, title: 'My Passport' } },
   { path: '/itineraries', name: 'itineraries', component: () => import('@/views/Itineraries.vue'), meta: { requiresAuth: true, title: 'My trips' } },
+  // Página del STAND (tablet en el lugar): pantalla completa, sin navbar/footer/chat
+  {
+    path: '/kiosk/:stand',
+    component: () => import('@/views/kiosk/KioskShell.vue'),
+    meta: { bare: true, kiosk: true, title: 'Talapo Stand' },
+    children: [
+      { path: '', name: 'kiosk-home', component: () => import('@/views/kiosk/KioskHome.vue'), meta: { bare: true, kiosk: true, title: 'Talapo Stand' } },
+      { path: 'news', name: 'kiosk-news', component: () => import('@/views/kiosk/KioskNews.vue'), meta: { bare: true, kiosk: true, title: 'Municipal News' } },
+      { path: 'history', name: 'kiosk-history', component: () => import('@/views/kiosk/KioskHistory.vue'), meta: { bare: true, kiosk: true, title: 'History' } },
+      { path: 'place/:slug', name: 'kiosk-place', component: () => import('@/views/kiosk/KioskPlace.vue'), meta: { bare: true, kiosk: true, title: 'Place' } },
+      { path: 'map', name: 'kiosk-map', component: () => import('@/views/kiosk/KioskMap.vue'), meta: { bare: true, kiosk: true, title: 'Map' } },
+      { path: 'form', name: 'kiosk-form', component: () => import('@/views/kiosk/KioskForm.vue'), meta: { bare: true, kiosk: true, title: 'Fill the form' } },
+    ],
+  },
   { path: '/travelers', name: 'travelers', component: () => import('@/views/Travelers.vue'), meta: { title: 'Travelers' } },
   { path: '/travelers/:id', name: 'traveler', component: () => import('@/views/TravelerProfile.vue'), meta: { title: 'Traveler' } },
   { path: '/contests', name: 'contests', component: () => import('@/views/Contests.vue'), meta: { title: 'Talapo Contests' } },

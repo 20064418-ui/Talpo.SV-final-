@@ -84,6 +84,7 @@ const since = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'shor
               <span v-else>{{ initial(p) }}</span>
             </div>
             <h3>{{ p.display_name }}</h3>
+            <p v-if="p.username" class="handle">@{{ p.username }}</p>
             <p class="meta">
               <span v-if="p.nationality">{{ p.nationality }}</span>
               <span v-if="p.joined_at">· since {{ since(p.joined_at) }}</span>
@@ -128,6 +129,7 @@ const since = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'shor
 .avatar { width: 88px; height: 88px; border-radius: 50%; overflow: hidden; border: 3px solid #E2B13C; background: linear-gradient(135deg, #1C6E6B, #0A2F44); display: grid; place-items: center; color: #fff; font-size: 2rem; font-weight: 800; margin-bottom: .3rem; }
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
 .person h3 { margin: 0; color: #0A2F44; font-size: 1.15rem; }
+.handle { margin: 0; color: #1C6E6B; font-weight: 700; font-size: .9rem; }
 .meta { margin: 0; color: #58717f; font-size: .85rem; }
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .4rem; width: 100%; margin: .6rem 0 .8rem; }
 .stats div { background: #EEF6F6; border-radius: 12px; padding: .45rem .2rem; }

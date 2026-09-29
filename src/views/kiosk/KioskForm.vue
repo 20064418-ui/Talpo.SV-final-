@@ -1,0 +1,244 @@
+<script setup>
+// Formulario del stand: sella el pasaporte (con el NOMBRE DE USUARIO) y reporta la zona.
+// Se guarda en InsForge con la función segura stand_submit (tabla stand_reports).
+import { ref, reactive, computed, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
+import QrCode from '@/components/kiosk/QrCode.vue';
+import { insforge, isConfigured } from '@/lib/insforge';
+import { trashTypes } from '@/data/stands';
+import { normalizeUsername } from '@/stores/passport';
+
+const props = defineProps({ stand: { type: Object, required: true } });
+const router = useRouter();
+
+const step = ref(0);           // 0 pasaporte · 1 zona · 2 basura · 3 urgencia · 4 comentario · 5 resultado
+const TOTAL = 5;
+const form = reactive({ passport: '', zone: '', hasTrash: null, trash: [], urgency: '', comment: '' });
+const sending = ref(false);
+const error = ref('');
+const result = ref(null);
+let homeTimer;
+
+const zones = [
+  { id: 'clean', emoji: '😊', label: 'Clean', text: 'The area looks good' },
+  { id: 'dirty', emoji: '😐', label: 'A little dirty', text: 'Some trash here and there' },
+  { id: 'very_dirty', emoji: '😟', label: 'Very dirty', text: 'A lot of trash' },
+];
+const urgencies = [
+  { id: 'low', emoji: '🟢', label: 'Not urgent', text: 'It can wait' },
+  { id: 'medium', emoji: '🟡', label: 'Soon', text: 'Should be cleaned today' },
+  { id: 'high', emoji: '🔴', label: 'Urgent', text: 'Someone needs to come quickly' },
+];
+
+const canNext = computed(() => [true, !!form.zone, form.hasTrash === false || (form.hasTrash && form.trash.length), !!form.urgency, true][step.value]);
+function next() { if (canNext.value) step.value = Math.min(step.value + 1, TOTAL - 1); }
+function back() { step.value = Math.max(step.value - 1, 0); }
+function pickZone(z) { form.zone = z; if (z === 'clean' && form.hasTrash === null) form.hasTrash = false; setTimeout(next, 180); }
+function pickTrash(v) { form.hasTrash = v; if (!v) { form.trash = []; setTimeout(next, 180); } }
+function toggleType(id) { form.trash = form.trash.includes(id) ? form.trash.filter((t) => t !== id) : [...form.trash, id]; }
+function pickUrgency(u) { form.urgency = u; setTimeout(next, 180); }
+
+async function submit() {
+  error.value = ''; sending.value = true;
+  try {
+    if (!isConfigured) throw new Error('Talapo is not connected (missing .env.local).');
+    const { data, error: e } = await insforge.database.rpc('stand_submit', {
+      p_stand: props.stand.id,
+      p_passport: form.passport.trim(),
+      p_zone: form.zone,
+      p_has_trash: !!form.hasTrash,
+      p_trash: form.trash,
+      p_urgency: form.urgency,
+      p_comment: form.comment.trim(),
+    });
+    if (e) throw new Error(e.message);
+    result.value = Array.isArray(data) ? data[0] : data;
+    step.value = TOTAL;
+    homeTimer = setTimeout(() => router.replace({ name: 'kiosk-home', params: { stand: props.stand.id } }), 15000);
+  } catch (e) {
+    error.value = e.message || 'Something went wrong. Please try again.';
+  } finally { sending.value = false; }
+}
+function restart() {
+  clearTimeout(homeTimer);
+  Object.assign(form, { passport: '', zone: '', hasTrash: null, trash: [], urgency: '', comment: '' });
+  result.value = null; step.value = 0;
+}
+onBeforeUnmount(() => clearTimeout(homeTimer));
+const registerUrl = computed(() => `${location.origin}/register`);
+</script>
+
+<template>
+  <section class="page">
+    <div v-if="step < TOTAL" class="progress" aria-hidden="true">
+      <span v-for="i in TOTAL" :key="i" :class="{ on: i - 1 <= step }"></span>
+    </div>
+
+    <Transition name="slide" mode="out-in">
+      <!-- 0 · USUARIO -->
+      <div v-if="step === 0" key="s0" class="q">
+        <span class="big">🛂</span>
+        <h1>Stamp your Talapo Passport</h1>
+        <p>Type your <b>Talapo username</b> and we will add the <b>{{ stand.name }}</b> stamp to your passport automatically.</p>
+        <div class="user-box">
+          <span>@</span>
+          <input v-model="form.passport" class="pass-input" autocomplete="off" autocapitalize="none" spellcheck="false"
+                 placeholder="your.username" maxlength="24" @input="form.passport = normalizeUsername(form.passport)" @keyup.enter="next" />
+        </div>
+        <p class="hint">You can see it in your Talapo Passport, below your name.</p>
+        <div class="nav">
+          <button class="btn ghost" @click="form.passport = ''; next()">I don't have an account</button>
+          <button class="btn main" :disabled="form.passport.length < 3" @click="next">Continue <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- 1 · ESTADO DE LA ZONA -->
+      <div v-else-if="step === 1" key="s1" class="q">
+        <span class="big">🌳</span>
+        <h1>How is the area right now?</h1>
+        <div class="options three">
+          <button v-for="z in zones" :key="z.id" class="opt" :class="{ on: form.zone === z.id }" @click="pickZone(z.id)">
+            <span class="oe">{{ z.emoji }}</span><b>{{ z.label }}</b><small>{{ z.text }}</small>
+          </button>
+        </div>
+        <div class="nav"><button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> Back</button></div>
+      </div>
+
+      <!-- 2 · BASURA -->
+      <div v-else-if="step === 2" key="s2" class="q">
+        <span class="big">🗑️</span>
+        <h1>Is there trash in the area?</h1>
+        <div class="options two">
+          <button class="opt" :class="{ on: form.hasTrash === true }" @click="pickTrash(true)"><span class="oe">👍</span><b>Yes</b></button>
+          <button class="opt" :class="{ on: form.hasTrash === false }" @click="pickTrash(false)"><span class="oe">✋</span><b>No</b></button>
+        </div>
+        <Transition name="slide">
+          <div v-if="form.hasTrash" class="types">
+            <h2>What type of trash? <small>(choose all that apply)</small></h2>
+            <div class="chips">
+              <button v-for="t in trashTypes" :key="t.id" class="chip" :class="{ on: form.trash.includes(t.id) }" @click="toggleType(t.id)">
+                <span>{{ t.emoji }}</span> {{ t.label }} <i v-if="form.trash.includes(t.id)" class="fas fa-check"></i>
+              </button>
+            </div>
+          </div>
+        </Transition>
+        <div class="nav">
+          <button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> Back</button>
+          <button v-if="form.hasTrash !== null" class="btn main" :disabled="!canNext" @click="next">Continue <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- 3 · URGENCIA -->
+      <div v-else-if="step === 3" key="s3" class="q">
+        <span class="big">🚨</span>
+        <h1>Does someone need to come quickly?</h1>
+        <div class="options three">
+          <button v-for="u in urgencies" :key="u.id" class="opt" :class="{ on: form.urgency === u.id }" @click="pickUrgency(u.id)">
+            <span class="oe">{{ u.emoji }}</span><b>{{ u.label }}</b><small>{{ u.text }}</small>
+          </button>
+        </div>
+        <div class="nav"><button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> Back</button></div>
+      </div>
+
+      <!-- 4 · COMENTARIO Y ENVÍO -->
+      <div v-else-if="step === 4" key="s4" class="q">
+        <span class="big">💬</span>
+        <h1>Anything else? <small>(optional)</small></h1>
+        <textarea v-model="form.comment" maxlength="500" rows="4" placeholder="e.g. There is trash next to the fountain…"></textarea>
+        <div class="summary">
+          <span v-if="form.passport">🛂 @{{ form.passport }}</span>
+          <span>{{ zones.find((z) => z.id === form.zone)?.emoji }} {{ zones.find((z) => z.id === form.zone)?.label }}</span>
+          <span>🗑️ {{ form.hasTrash ? form.trash.map((t) => trashTypes.find((x) => x.id === t)?.label).join(', ') : 'No trash' }}</span>
+          <span>{{ urgencies.find((u) => u.id === form.urgency)?.emoji }} {{ urgencies.find((u) => u.id === form.urgency)?.label }}</span>
+        </div>
+        <p v-if="error" class="err"><i class="fas fa-triangle-exclamation"></i> {{ error }}</p>
+        <div class="nav">
+          <button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> Back</button>
+          <button class="btn main" :disabled="sending" @click="submit">
+            <i class="fas" :class="sending ? 'fa-spinner fa-spin' : 'fa-paper-plane'"></i> {{ sending ? 'Sending…' : 'Send' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- 5 · RESULTADO -->
+      <div v-else key="s5" class="q done">
+        <template v-if="result?.passport_found">
+          <div class="stamp" :class="{ again: result.already_stamped }">
+            <span>TALAPO.SV</span><b>{{ stand.name.toUpperCase() }}</b><small>{{ new Date().toLocaleDateString('en-US') }}</small>
+          </div>
+          <h1>{{ result.already_stamped ? 'Welcome back' : 'Stamped' }}, {{ result.first_name || 'traveler' }}! 🎉</h1>
+          <p>The <b>{{ result.stamp_name }}</b> stamp is in your Talapo Passport. Thank you for reporting the area!</p>
+        </template>
+        <template v-else>
+          <span class="big">💚</span>
+          <h1>Thank you for helping!</h1>
+          <p v-if="form.passport">We couldn't find the username <b>@{{ form.passport }}</b>, but your report was saved. Check it in your Talapo Passport and try again next time.</p>
+          <p v-else>Your report was saved and the city team will review it.</p>
+          <div class="qr-join">
+            <QrCode :value="registerUrl" :size="130" label="Create your Talapo Passport" />
+            <span><b>Create your Talapo Passport</b><br>Scan to join and collect stamps from every place you visit.</span>
+          </div>
+        </template>
+        <div class="nav">
+          <button class="btn ghost" @click="restart">New report</button>
+          <RouterLink class="btn main" :to="{ name: 'kiosk-home', params: { stand: stand.id } }">Back to home</RouterLink>
+        </div>
+        <p class="hint">This screen returns to the home page in a few seconds.</p>
+      </div>
+    </Transition>
+  </section>
+</template>
+
+<style scoped>
+.page { flex: 1; display: flex; flex-direction: column; align-items: center; padding: clamp(18px, 3vh, 36px) clamp(16px, 4vw, 44px); }
+.progress { display: flex; gap: 8px; width: min(100%, 560px); margin-bottom: 22px; }
+.progress span { flex: 1; height: 8px; border-radius: 8px; background: #dce7ea; transition: background .3s; }
+.progress span.on { background: #C98A1B; }
+.q { width: min(100%, 900px); background: #fff; border-radius: 28px; padding: clamp(22px, 4vw, 40px); text-align: center; box-shadow: 0 24px 40px -24px rgba(0,32,64,.4); }
+.big { font-size: 3.4rem; display: block; }
+.q h1 { margin: 8px 0 10px; font-size: clamp(1.6rem, 3.6vw, 2.4rem); color: #0A2F44; }
+.q h1 small, .types h2 small { font-size: .55em; color: #8aa0ab; font-weight: 600; }
+.q > p { font-size: 1.15rem; color: #4a6472; max-width: 46ch; margin: 0 auto 16px; line-height: 1.5; }
+.user-box { display: flex; align-items: center; width: min(100%, 460px); margin: 0 auto; border: 3px solid #dce7ea; border-radius: 20px; background: #fff; transition: border-color .2s; }
+.user-box:focus-within { border-color: #C98A1B; }
+.user-box span { padding-left: 18px; font-size: 2rem; font-weight: 800; color: #C98A1B; }
+.pass-input { flex: 1; min-width: 0; font: inherit; font-size: 2rem; font-weight: 800; letter-spacing: 1px; padding: 16px 16px 16px 6px; border: 0; background: none; outline: none; }
+.hint { color: #8aa0ab !important; font-size: .95rem !important; margin-top: 10px !important; }
+.options { display: grid; gap: 14px; margin: 18px 0; }
+.options.three { grid-template-columns: repeat(3, 1fr); }
+.options.two { grid-template-columns: repeat(2, 1fr); max-width: 520px; margin-inline: auto; }
+.opt { display: grid; justify-items: center; gap: 6px; padding: 22px 12px; min-height: 150px; border-radius: 24px; border: 3px solid #e2ecef; background: #fff; font: inherit; color: #0A2F44; cursor: pointer; transition: border-color .2s, transform .15s, background .2s; }
+.opt:active { transform: scale(.97); }
+.opt.on { border-color: #C98A1B; background: #FFF8EA; }
+.oe { font-size: 3rem; line-height: 1; }
+.opt b { font-size: 1.3rem; }
+.opt small { color: #58717f; font-size: .95rem; }
+.types h2 { font-size: 1.3rem; color: #0A2F44; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.chip { display: inline-flex; align-items: center; gap: 8px; min-height: 58px; padding: 0 20px; border-radius: 40px; border: 2.5px solid #e2ecef; background: #fff; font: inherit; font-size: 1.1rem; font-weight: 700; color: #0A2F44; cursor: pointer; transition: all .15s; }
+.chip span { font-size: 1.4rem; }
+.chip.on { background: #0A2F44; border-color: #0A2F44; color: #fff; }
+textarea { width: 100%; font: inherit; font-size: 1.15rem; padding: 16px; border-radius: 18px; border: 3px solid #dce7ea; resize: none; outline: none; }
+textarea:focus { border-color: #C98A1B; }
+.summary { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 16px 0 4px; }
+.summary span { background: #EEF6F6; color: #1C6E6B; border-radius: 30px; padding: 8px 14px; font-weight: 700; }
+.err { color: #c62828 !important; font-weight: 700; }
+.nav { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
+.btn { min-height: 60px; padding: 0 28px; border-radius: 40px; font: inherit; font-size: 1.15rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; border: 0; transition: transform .15s, opacity .2s; }
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.main { background: #C98A1B; color: #fff; }
+.btn.ghost { background: #EEF6F6; color: #1C6E6B; }
+/* Sello animado */
+.stamp { width: 210px; height: 210px; margin: 0 auto 10px; border-radius: 50%; border: 6px double #C0392B; color: #C0392B; display: grid; place-content: center; text-align: center; transform: rotate(-12deg); animation: stamp .55s cubic-bezier(.2,1.6,.4,1) both; background: rgba(192,57,43,.04); }
+.stamp span { font-weight: 800; letter-spacing: 2px; }
+.stamp b { font-size: 1.25rem; margin: 6px 0; letter-spacing: 1px; }
+.stamp small { font-weight: 700; }
+.stamp.again { border-color: #1C6E6B; color: #1C6E6B; }
+@keyframes stamp { from { opacity: 0; transform: rotate(-12deg) scale(2.2); } to { opacity: 1; transform: rotate(-12deg) scale(1); } }
+.qr-join { display: inline-flex; gap: 16px; align-items: center; text-align: left; background: #0A2F44; color: #fff; border-radius: 20px; padding: 14px 18px; margin-top: 10px; max-width: 520px; }
+.slide-enter-active, .slide-leave-active { transition: opacity .25s ease, transform .3s ease; }
+.slide-enter-from { opacity: 0; transform: translateX(30px); }
+.slide-leave-to { opacity: 0; transform: translateX(-30px); }
+@media (max-width: 700px) { .options.three { grid-template-columns: 1fr; } .opt { min-height: 110px; } .pass-input, .user-box span { font-size: 1.5rem; } }
+</style>
