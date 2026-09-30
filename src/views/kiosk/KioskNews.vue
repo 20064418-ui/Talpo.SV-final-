@@ -10,6 +10,7 @@ const props = defineProps({ stand: { type: Object, required: true } });
 const news = ref([]);
 const loading = ref(true);
 const openId = ref(null);
+const big = ref(null); // foto ampliada
 
 const mailto = computed(() => {
   return `mailto:${props.stand.newsEmail}?subject=${encodeURIComponent(t('mailSubject'))}&body=${encodeURIComponent(t('mailBody'))}`;
@@ -43,11 +44,16 @@ const fmt = (d) => (d ? new Date(d).toLocaleDateString(locale.value, { weekday: 
         </div>
         <TransitionGroup v-else name="card" tag="div" class="cards">
           <article v-for="n in news" :key="n.id" class="news" :class="{ open: openId === n.id }" @click="openId = openId === n.id ? null : n.id">
-            <img v-if="n.image_url" :src="n.image_url" alt="" />
+            <img v-if="n.image_url" :src="n.image_url" alt="" class="cover" />
             <div class="news-body">
               <small>{{ fmt(n.published_at || n.created_at) }}<template v-if="n.author"> · {{ n.author }}</template></small>
               <h2>{{ n.title }}</h2>
               <p>{{ n.body }}</p>
+              <!-- Galería: todas las fotos de la noticia -->
+              <div v-if="openId === n.id && n.images?.length > 1" class="gallery" @click.stop>
+                <img v-for="(url, i) in n.images" :key="i" :src="url" alt="" loading="lazy" @click="big = url" />
+              </div>
+              <span v-if="n.images?.length > 1 && openId !== n.id" class="photos-count">📷 {{ n.images.length }}</span>
               <span class="more">{{ openId === n.id ? t('showLess') : t('readMore') }} <i class="fas" :class="openId === n.id ? 'fa-chevron-up' : 'fa-chevron-down'"></i></span>
             </div>
           </article>
@@ -66,6 +72,10 @@ const fmt = (d) => (d ? new Date(d).toLocaleDateString(locale.value, { weekday: 
         </ol>
       </aside>
     </div>
+    <!-- Foto ampliada -->
+    <Transition name="fadebig">
+      <div v-if="big" class="lightbox" @click="big = null"><img :src="big" alt="" /><span>✕</span></div>
+    </Transition>
   </section>
 </template>
 
@@ -84,7 +94,17 @@ const fmt = (d) => (d ? new Date(d).toLocaleDateString(locale.value, { weekday: 
 .cards { display: grid; gap: 14px; }
 .news { display: grid; grid-template-columns: auto 1fr; gap: 16px; background: #fff; border-radius: 22px; padding: 16px; box-shadow: 0 18px 30px -22px rgba(0,32,64,.35); cursor: pointer; transition: transform .2s; }
 .news:active { transform: scale(.99); }
-.news img { width: 130px; height: 110px; object-fit: cover; border-radius: 14px; }
+.news img.cover { width: 160px; height: 130px; object-fit: cover; border-radius: 14px; transition: all .3s ease; }
+.news.open { grid-template-columns: 1fr; }
+.news.open img.cover { width: 100%; height: clamp(200px, 32vh, 340px); }
+.gallery { display: flex; gap: 8px; overflow-x: auto; margin-top: 12px; padding-bottom: 4px; }
+.gallery img { width: 120px; height: 90px; object-fit: cover; border-radius: 10px; flex-shrink: 0; cursor: zoom-in; }
+.photos-count { display: inline-block; margin: 6px 10px 0 0; font-weight: 700; color: #58717f; }
+.lightbox { position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,.88); display: grid; place-items: center; padding: 20px; }
+.lightbox img { max-width: 100%; max-height: 90vh; border-radius: 12px; }
+.lightbox span { position: absolute; top: 18px; right: 22px; color: #fff; font-size: 1.8rem; }
+.fadebig-enter-active, .fadebig-leave-active { transition: opacity .2s; }
+.fadebig-enter-from, .fadebig-leave-to { opacity: 0; }
 .news:not(:has(img)) { grid-template-columns: 1fr; }
 .news small { color: #1C6E6B; font-weight: 700; }
 .news h2 { margin: 4px 0 6px; font-size: 1.3rem; }
@@ -99,5 +119,5 @@ const fmt = (d) => (d ? new Date(d).toLocaleDateString(locale.value, { weekday: 
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 .card-enter-active { transition: opacity .35s ease, transform .35s ease; }
 .card-enter-from { opacity: 0; transform: translateY(12px); }
-@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } .send { position: static; } .news img { width: 96px; height: 84px; } }
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } .send { position: static; } .news img.cover { width: 96px; height: 84px; } .news.open img.cover { width: 100%; height: 220px; } }
 </style>

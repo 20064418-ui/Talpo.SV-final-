@@ -38,6 +38,7 @@ const routes = [
       { path: 'form', name: 'kiosk-form', component: () => import('@/views/kiosk/KioskForm.vue'), meta: { bare: true, kiosk: true, title: 'Fill the form' } },
     ],
   },
+  { path: '/admin/news', name: 'admin-news', component: () => import('@/views/AdminNews.vue'), meta: { requiresAuth: true, title: 'Admin · News' } },
   { path: '/travelers', name: 'travelers', component: () => import('@/views/Travelers.vue'), meta: { title: 'Travelers' } },
   { path: '/travelers/:id', name: 'traveler', component: () => import('@/views/TravelerProfile.vue'), meta: { title: 'Traveler' } },
   { path: '/contests', name: 'contests', component: () => import('@/views/Contests.vue'), meta: { title: 'Talapo Contests' } },

@@ -54,17 +54,5 @@ desktop.ini
 *.swp
 *.suo
 
-# InsForge & AI agent skills
-.insforge
-.agent
-.agents
-.augment
-.claude
-.cline
-.github/copilot*
-.kilocode
-.qoder
-.qwen
-.roo
-.trae
-.windsurf
+# Excel de reportes (tienen datos de usuarios; no se suben a Git)
+reportes/

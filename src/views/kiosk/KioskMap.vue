@@ -64,7 +64,7 @@ onBeforeUnmount(() => map.value?.remove());
       <aside class="side">
         <Transition name="kfade" mode="out-in">
           <div v-if="selected" :key="selected.slug" class="detail">
-            <img v-if="selected.image" :src="selected.image" alt="" />
+            <div v-if="selected.image" class="photo-wrap"><img :src="selected.image" alt="" /><span v-if="selected.credit" class="credit">📷 {{ selected.credit }}</span></div>
             <div v-else class="noimg">{{ selected.emoji }}</div>
             <h2>{{ loc(selected.name) }}</h2>
             <p class="dist"><i class="fas fa-person-walking"></i> {{ walkLabel(selected.meters) }}</p>
@@ -111,6 +111,8 @@ onBeforeUnmount(() => map.value?.remove());
 .txt { flex: 1; }
 .txt b { display: block; font-size: 1.05rem; }
 .txt small { color: #58717f; }
+.photo-wrap { position: relative; }
+.credit { position: absolute; right: 8px; bottom: 6px; font-size: .65rem; color: #fff; background: rgba(0,0,0,.45); padding: 2px 6px; border-radius: 6px; }
 .detail img { width: 100%; height: 170px; object-fit: cover; border-radius: 16px; }
 .noimg { height: 150px; border-radius: 16px; background: linear-gradient(135deg, #1C6E6B, #0A2F44); display: grid; place-items: center; font-size: 4rem; }
 .detail h2 { margin: 12px 0 4px; }

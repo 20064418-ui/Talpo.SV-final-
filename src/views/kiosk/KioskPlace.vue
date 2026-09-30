@@ -18,6 +18,7 @@ const dir = computed(() => place.value && directionsUrl(props.stand, place.value
   <section v-if="place" class="place">
     <div class="hero" :style="{ backgroundImage: place.image ? `linear-gradient(rgba(10,47,68,.15), rgba(10,47,68,.85)), url('${place.image}')` : 'linear-gradient(135deg, #1C6E6B, #0A2F44)' }">
       <span v-if="!place.image" class="hero-emoji">{{ place.emoji }}</span>
+      <span v-if="place.credit" class="credit">📷 {{ place.credit }}</span>
       <span class="cat">{{ loc(place.category) }}</span>
       <h1>{{ loc(place.name) }}</h1>
       <p><i class="fas fa-person-walking"></i> {{ meters < 30 ? t('youAreHere') : t('fromStand', { walk: walkLabel(meters) }) }}</p>
@@ -44,6 +45,7 @@ const dir = computed(() => place.value && directionsUrl(props.stand, place.value
 .place { flex: 1; max-width: 1100px; width: 100%; margin: 0 auto; padding: clamp(14px, 3vh, 30px) clamp(14px, 4vw, 40px); }
 .hero { border-radius: 28px; min-height: 280px; background-size: cover; background-position: center; color: #fff; display: flex; flex-direction: column; justify-content: flex-end; padding: 26px; animation: rise .55s ease both; }
 .hero { position: relative; }
+.credit { position: absolute; right: 14px; bottom: 10px; font-size: .7rem; color: #fff; background: rgba(0,0,0,.45); padding: 2px 8px; border-radius: 6px; }
 .hero-emoji { position: absolute; right: 28px; top: 20px; font-size: 5rem; opacity: .9; }
 .cat { align-self: flex-start; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35); padding: 4px 14px; border-radius: 30px; font-weight: 700; font-size: .85rem; margin-bottom: auto; }
 .hero h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; }

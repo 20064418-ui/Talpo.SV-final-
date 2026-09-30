@@ -22,6 +22,7 @@ const url = (p) => `${location.origin}/kiosk/${props.stand.id}/place/${p.slug}?l
       <RouterLink v-for="(p, i) in places" :key="p.slug" :to="{ name: 'kiosk-place', params: { stand: stand.id, slug: p.slug } }" class="card" :style="{ animationDelay: `${i * 70}ms` }">
         <div class="photo" :class="{ noimg: !p.image }" :style="p.image ? { backgroundImage: `url('${p.image}')` } : {}">
               <span class="cat">{{ loc(p.category) }}</span><span v-if="!p.image" class="ph-emoji">{{ p.emoji }}</span>
+              <span v-if="p.credit" class="credit">📷 {{ p.credit }}</span>
             </div>
         <div class="body">
           <QrCode :value="url(p)" :size="118" :label="`QR ${loc(p.name)}`" />
@@ -48,6 +49,7 @@ const url = (p) => `${location.origin}/kiosk/${props.stand.id}/place/${p.slug}?l
 .photo { height: 140px; background-size: cover; background-position: center; position: relative; }
 .photo.noimg { background: linear-gradient(135deg, #1C6E6B, #0A2F44); display: grid; place-items: center; }
 .ph-emoji { font-size: 3.4rem; filter: drop-shadow(0 6px 10px rgba(0,0,0,.35)); }
+.credit { position: absolute; right: 8px; bottom: 6px; font-size: .65rem; color: #fff; background: rgba(0,0,0,.45); padding: 2px 6px; border-radius: 6px; }
 .cat { position: absolute; left: 14px; top: 14px; background: rgba(10,47,68,.85); color: #fff; font-weight: 700; font-size: .8rem; padding: 4px 12px; border-radius: 30px; }
 .body { display: grid; grid-template-columns: auto 1fr; gap: 14px; padding: 14px; align-items: center; }
 .body h2 { margin: 0 0 4px; font-size: 1.2rem; }

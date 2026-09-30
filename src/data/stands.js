@@ -13,8 +13,8 @@ export const stands = {
     name: 'Parque Libertad',
     city: 'Santa Ana',
     cover: '/assets/img/stand/parksantaana.jpg',
-    lat: 13.9943,
-    lng: -89.5596,
+    lat: 13.99474,
+    lng: -89.55661,
     // Correo donde las personas mandan sus noticias municipales (solo llega aquí)
     newsEmail: 'avisos.talapo@gmail.com',
     newsSubject: 'Municipal news — Parque Libertad, Santa Ana',
@@ -25,7 +25,7 @@ export const stands = {
         slug: 'parque-libertad',
         emoji: '🌳',
         image: '/assets/img/stand/parksantaana.jpg',
-        lat: 13.9943, lng: -89.5596,
+        lat: 13.99474, lng: -89.55661,
         name: { es: 'Parque Libertad', en: 'Parque Libertad', fr: 'Parc Libertad', pt: 'Parque Libertad' },
         category: { es: 'Plaza', en: 'Plaza', fr: 'Place', pt: 'Praça' },
         short: {
@@ -35,10 +35,10 @@ export const stands = {
           pt: 'A praça principal de Santa Ana, cercada pelos edifícios históricos mais importantes da cidade.',
         },
         story: {
-          es: 'El Parque Libertad es el punto de encuentro tradicional de Santa Ana. A su alrededor están la Catedral, el Teatro de Santa Ana y el Palacio Municipal, así que en un solo paseo puedes ver el patrimonio arquitectónico que convirtió a Santa Ana en una de las ciudades más importantes de El Salvador. Familias, vendedores y eventos le dan vida todos los días.',
-          en: 'Parque Libertad is the traditional meeting point of Santa Ana. Around it stand the Cathedral, the Santa Ana Theater and the Municipal Palace, so in a single walk you can see the architectural heritage that made Santa Ana one of the most important cities in El Salvador. Families, street vendors and events keep the square alive every day.',
-          fr: 'Le Parc Libertad est le lieu de rencontre traditionnel de Santa Ana. Autour de lui se trouvent la Cathédrale, le Théâtre de Santa Ana et le Palais municipal : en une seule promenade, vous découvrez le patrimoine architectural qui a fait de Santa Ana l’une des villes les plus importantes du Salvador. Familles, vendeurs et événements l’animent chaque jour.',
-          pt: 'O Parque Libertad é o ponto de encontro tradicional de Santa Ana. Ao seu redor estão a Catedral, o Teatro de Santa Ana e o Palácio Municipal; em um só passeio você conhece o patrimônio arquitetônico que fez de Santa Ana uma das cidades mais importantes de El Salvador. Famílias, vendedores e eventos animam a praça todos os dias.',
+          es: 'El Parque Libertad nació como la plaza central de Santa Ana en la época colonial: fue mercado, lugar de fiestas y escenario de la vida política de la ciudad. El 8 de junio de 1886, el presidente Francisco Menéndez decretó que en la plaza se construyera un parque. Hoy lo rodean la Catedral, el Teatro y el Palacio Municipal, y es el punto de encuentro de familias, vendedores y eventos.',
+          en: 'Parque Libertad began as the central square of Santa Ana in colonial times: it was a market, a place for festivities and the stage of the city’s political life. On June 8, 1886, President Francisco Menéndez decreed that a park be built in the square. Today it is surrounded by the Cathedral, the Theater and the Municipal Palace, and it is the meeting point for families, vendors and events.',
+          fr: 'Le Parc Libertad est né comme place centrale de Santa Ana à l’époque coloniale : marché, lieu de fêtes et scène de la vie politique de la ville. Le 8 juin 1886, le président Francisco Menéndez décréta la création d’un parc sur la place. Aujourd’hui, il est entouré par la Cathédrale, le Théâtre et le Palais municipal, et reste le lieu de rencontre des familles, des vendeurs et des événements.',
+          pt: 'O Parque Libertad nasceu como a praça central de Santa Ana na época colonial: foi mercado, lugar de festas e palco da vida política da cidade. Em 8 de junho de 1886, o presidente Francisco Menéndez decretou a construção de um parque na praça. Hoje está cercado pela Catedral, pelo Teatro e pelo Palácio Municipal, e é o ponto de encontro de famílias, vendedores e eventos.',
         },
         tip: {
           es: 'Ven al final de la tarde, cuando la fachada de la Catedral se ilumina con el atardecer.',
@@ -51,7 +51,7 @@ export const stands = {
         slug: 'catedral-santa-ana',
         emoji: '⛪',
         image: '/assets/img/realidadaumentada/santaana.jpg',
-        lat: 13.9945, lng: -89.5588,
+        lat: 13.99498, lng: -89.55547,
         name: { es: 'Catedral de Santa Ana', en: 'Santa Ana Cathedral', fr: 'Cathédrale de Santa Ana', pt: 'Catedral de Santa Ana' },
         category: { es: 'Iglesia', en: 'Church', fr: 'Église', pt: 'Igreja' },
         short: {
@@ -61,10 +61,10 @@ export const stands = {
           pt: 'Uma catedral neogótica de fachada branca, um dos edifícios mais fotografados do país.',
         },
         story: {
-          es: 'La Catedral de Nuestra Señora Santa Ana se construyó a inicios del siglo XX en estilo neogótico, con torres puntiagudas y una fachada blanca muy decorada. Es el centro espiritual de la ciudad y el escenario de las fiestas en honor a Santa Ana, patrona de la ciudad, en julio.',
-          en: 'The Cathedral of Our Lady Saint Anne was built at the beginning of the 20th century in neo-Gothic style, with pointed towers and a richly decorated white façade. It is the spiritual center of the city and the setting of the festivities in honor of Saint Anne, the patron saint of Santa Ana, in July.',
-          fr: 'La Cathédrale Notre-Dame-Sainte-Anne a été construite au début du XXe siècle dans un style néogothique, avec des tours pointues et une façade blanche richement décorée. C’est le centre spirituel de la ville et le cadre des fêtes en l’honneur de sainte Anne, patronne de Santa Ana, en juillet.',
-          pt: 'A Catedral de Nossa Senhora Sant’Ana foi construída no início do século XX em estilo neogótico, com torres pontiagudas e uma fachada branca muito decorada. É o centro espiritual da cidade e o cenário das festas em honra a Sant’Ana, padroeira da cidade, em julho.',
+          es: 'La Catedral de Nuestra Señora Santa Ana se construyó entre 1906 y 1913 en estilo neogótico, algo poco común en El Salvador, donde la mayoría de iglesias antiguas son de estilo colonial. En 1913 el papa Pío X creó la diócesis de Santa Ana. Es el centro espiritual de la ciudad y el escenario de las Fiestas Julias en honor a Santa Ana, su patrona.',
+          en: 'The Cathedral of Our Lady Saint Anne was built between 1906 and 1913 in neo-Gothic style — unusual in El Salvador, where most old churches are colonial. In 1913 Pope Pius X created the Diocese of Santa Ana. It is the spiritual center of the city and the setting of the July festivities (Fiestas Julias) in honor of Saint Anne, its patron saint.',
+          fr: 'La Cathédrale Notre-Dame-Sainte-Anne a été construite entre 1906 et 1913 dans un style néogothique, rare au Salvador où la plupart des églises anciennes sont coloniales. En 1913, le pape Pie X créa le diocèse de Santa Ana. C’est le centre spirituel de la ville et le cadre des fêtes de juillet (Fiestas Julias) en l’honneur de sainte Anne, sa patronne.',
+          pt: 'A Catedral de Nossa Senhora Sant’Ana foi construída entre 1906 e 1913 em estilo neogótico, algo raro em El Salvador, onde a maioria das igrejas antigas é colonial. Em 1913 o papa Pio X criou a diocese de Santa Ana. É o centro espiritual da cidade e o cenário das festas de julho (Fiestas Julias) em honra a Sant’Ana, sua padroeira.',
         },
         tip: {
           es: 'Entra en silencio para ver los vitrales y la altura de la nave.',
@@ -76,8 +76,9 @@ export const stands = {
       {
         slug: 'teatro-santa-ana',
         emoji: '🎭',
-        image: null,
-        lat: 13.9951, lng: -89.5595,
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/ES_Santa_Ana_06_2011_2535.jpg?width=1200',
+        credit: 'Mariordo · CC BY-SA 3.0 · Wikimedia Commons',
+        lat: 13.99545, lng: -89.55663,
         name: { es: 'Teatro de Santa Ana', en: 'Santa Ana Theater', fr: 'Théâtre de Santa Ana', pt: 'Teatro de Santa Ana' },
         category: { es: 'Cultura', en: 'Culture', fr: 'Culture', pt: 'Cultura' },
         short: {
@@ -87,10 +88,10 @@ export const stands = {
           pt: 'Um teatro neoclássico inaugurado no início do século XX, símbolo da prosperidade da era do café.',
         },
         story: {
-          es: 'El Teatro de Santa Ana se construyó con la riqueza del auge cafetalero y se inauguró a inicios del siglo XX. Su fachada neoclásica y su interior, inspirado en los teatros de ópera europeos, lo convierten en una de las joyas de la arquitectura salvadoreña. Hoy recibe conciertos, obras de teatro y eventos culturales.',
-          en: 'The Santa Ana Theater was built with the wealth of the coffee boom and opened at the beginning of the 20th century. Its neoclassical façade and its interior, inspired by European opera houses, make it one of the jewels of Salvadoran architecture. Today it hosts concerts, plays and cultural events.',
-          fr: 'Le Théâtre de Santa Ana a été construit grâce à la richesse du boom du café et inauguré au début du XXe siècle. Sa façade néoclassique et son intérieur, inspiré des opéras européens, en font l’un des joyaux de l’architecture salvadorienne. Il accueille aujourd’hui concerts, pièces de théâtre et événements culturels.',
-          pt: 'O Teatro de Santa Ana foi construído com a riqueza do auge do café e inaugurado no início do século XX. Sua fachada neoclássica e seu interior, inspirado nos teatros de ópera europeus, fazem dele uma das joias da arquitetura salvadorenha. Hoje recebe concertos, peças de teatro e eventos culturais.',
+          es: 'La primera piedra del Teatro de Santa Ana se colocó el 9 de febrero de 1902 y el edificio se inauguró en 1910. Los planos fueron del ingeniero Domingo Call, y los arquitectos italianos Francisco Durini y Cristóbal Molinari dirigieron su decoración junto a artistas italianos y salvadoreños. Su gran telón fue pintado en Milán. En 1982 fue declarado Monumento Nacional.',
+          en: 'The first stone of the Santa Ana Theater was laid on February 9, 1902, and the building opened in 1910. The plans were drawn by engineer Domingo Call, and Italian architects Francisco Durini and Cristóbal Molinari led its decoration together with Italian and Salvadoran artists. Its great stage curtain was painted in Milan. In 1982 it was declared a National Monument.',
+          fr: 'La première pierre du Théâtre de Santa Ana a été posée le 9 février 1902 et le bâtiment a été inauguré en 1910. Les plans sont de l’ingénieur Domingo Call, et les architectes italiens Francisco Durini et Cristóbal Molinari ont dirigé sa décoration avec des artistes italiens et salvadoriens. Son grand rideau de scène a été peint à Milan. Il a été déclaré Monument national en 1982.',
+          pt: 'A pedra fundamental do Teatro de Santa Ana foi colocada em 9 de fevereiro de 1902, e o edifício foi inaugurado em 1910. Os planos foram do engenheiro Domingo Call, e os arquitetos italianos Francisco Durini e Cristóbal Molinari dirigiram a decoração com artistas italianos e salvadorenhos. Sua grande cortina de palco foi pintada em Milão. Em 1982 foi declarado Monumento Nacional.',
         },
         tip: {
           es: 'Revisa la programación en la entrada: a menudo hay eventos culturales gratuitos.',
@@ -102,8 +103,9 @@ export const stands = {
       {
         slug: 'palacio-municipal',
         emoji: '🏛️',
-        image: null,
-        lat: 13.9943, lng: -89.5604,
+        image: 'https://commons.wikimedia.org/wiki/Special:FilePath/ES_Santa_Ana_06_2011_2482.jpg?width=1200',
+        credit: 'Mariordo · CC BY-SA 3.0 · Wikimedia Commons',
+        lat: 13.99480, lng: -89.55780,
         name: { es: 'Palacio Municipal', en: 'Municipal Palace', fr: 'Palais municipal', pt: 'Palácio Municipal' },
         category: { es: 'Historia', en: 'History', fr: 'Histoire', pt: 'História' },
         short: {
@@ -113,10 +115,10 @@ export const stands = {
           pt: 'A prefeitura histórica de Santa Ana, um edifício neoclássico com pátio interno.',
         },
         story: {
-          es: 'El Palacio Municipal, sede de la alcaldía de Santa Ana, es un edificio neoclásico de finales del siglo XIX. Sus arcadas y su patio interior reflejan la elegancia de la época. Junto con la Catedral y el Teatro, completa el conjunto histórico alrededor del Parque Libertad.',
-          en: 'The Municipal Palace, home of the Santa Ana city government, is a neoclassical building from the late 19th century. Its arcades and interior courtyard reflect the elegance of the period. Together with the Cathedral and the Theater, it completes the historic ensemble around Parque Libertad.',
-          fr: 'Le Palais municipal, siège de la mairie de Santa Ana, est un bâtiment néoclassique de la fin du XIXe siècle. Ses arcades et sa cour intérieure reflètent l’élégance de l’époque. Avec la Cathédrale et le Théâtre, il complète l’ensemble historique autour du Parc Libertad.',
-          pt: 'O Palácio Municipal, sede da prefeitura de Santa Ana, é um edifício neoclássico do final do século XIX. Suas arcadas e seu pátio interno refletem a elegância da época. Junto com a Catedral e o Teatro, completa o conjunto histórico ao redor do Parque Libertad.',
+          es: 'El Palacio Municipal de Santa Ana, sede de la alcaldía, empezó a construirse en 1874. Sus arcadas, columnas y patio interior son un ejemplo de la arquitectura del siglo XIX, y un siglo después fue declarado monumento nacional. Junto con la Catedral y el Teatro, forma el conjunto histórico alrededor del Parque Libertad.',
+          en: 'Construction of the Santa Ana Municipal Palace, home of the city government, began in 1874. Its arcades, columns and interior courtyard are an example of 19th-century architecture, and a century later it was declared a national monument. Together with the Cathedral and the Theater, it forms the historic ensemble around Parque Libertad.',
+          fr: 'La construction du Palais municipal de Santa Ana, siège de la mairie, a commencé en 1874. Ses arcades, ses colonnes et sa cour intérieure illustrent l’architecture du XIXe siècle, et un siècle plus tard il fut déclaré monument national. Avec la Cathédrale et le Théâtre, il forme l’ensemble historique autour du Parc Libertad.',
+          pt: 'A construção do Palácio Municipal de Santa Ana, sede da prefeitura, começou em 1874. Suas arcadas, colunas e pátio interno são um exemplo da arquitetura do século XIX, e um século depois foi declarado monumento nacional. Junto com a Catedral e o Teatro, forma o conjunto histórico ao redor do Parque Libertad.',
         },
         tip: {
           es: 'Mira el patio desde la entrada: sus columnas son perfectas para fotos.',
@@ -129,7 +131,7 @@ export const stands = {
         slug: 'casino-santaneco',
         emoji: '🏰',
         image: null,
-        lat: 13.9939, lng: -89.5603,
+        lat: 13.99415, lng: -89.55760, // ⚠️ aproximada: 2.ª Calle Poniente y Av. Independencia Sur
         name: { es: 'Casino Santaneco', en: 'Casino Santaneco', fr: 'Casino Santaneco', pt: 'Casino Santaneco' },
         category: { es: 'Historia', en: 'History', fr: 'Histoire', pt: 'História' },
         short: {
@@ -139,10 +141,10 @@ export const stands = {
           pt: 'Um edifício histórico ornamentado junto à praça, clube social das famílias tradicionais de Santa Ana.',
         },
         story: {
-          es: 'El Casino Santaneco es un edificio histórico cerca del Parque Libertad que durante generaciones fue club social de las familias de la ciudad. Su fachada decorada es otro ejemplo de la arquitectura que floreció en Santa Ana gracias al café.',
-          en: 'The Casino Santaneco is a historic building near Parque Libertad that for generations served as a social club for the families of the city. Its decorated façade is another example of the architecture that flourished in Santa Ana thanks to coffee.',
-          fr: 'Le Casino Santaneco est un bâtiment historique près du Parc Libertad qui a servi pendant des générations de club social aux familles de la ville. Sa façade décorée est un autre exemple de l’architecture qui a fleuri à Santa Ana grâce au café.',
-          pt: 'O Casino Santaneco é um edifício histórico perto do Parque Libertad que, por gerações, foi clube social das famílias da cidade. Sua fachada decorada é mais um exemplo da arquitetura que floresceu em Santa Ana graças ao café.',
+          es: 'El Casino Santaneco es un club social del Centro Histórico de Santa Ana, cuyo edificio se construyó en 1896. Durante generaciones ha sido punto de encuentro de la sociedad santaneca, y hoy sus salones se usan para fiestas, congresos y eventos. Su fachada es otro ejemplo de la arquitectura que floreció en Santa Ana gracias al café.',
+          en: 'The Casino Santaneco is a social club in the Historic Center of Santa Ana, whose building was built in 1896. For generations it has been a meeting point of Santa Ana society, and today its halls host parties, conferences and events. Its façade is another example of the architecture that flourished in Santa Ana thanks to coffee.',
+          fr: 'Le Casino Santaneco est un club social du centre historique de Santa Ana, dont le bâtiment a été construit en 1896. Pendant des générations, il a été un lieu de rencontre de la société de Santa Ana, et ses salons accueillent aujourd’hui fêtes, congrès et événements. Sa façade illustre l’architecture qui a fleuri à Santa Ana grâce au café.',
+          pt: 'O Casino Santaneco é um clube social do Centro Histórico de Santa Ana, cujo edifício foi construído em 1896. Por gerações foi ponto de encontro da sociedade de Santa Ana, e hoje seus salões recebem festas, congressos e eventos. Sua fachada é mais um exemplo da arquitetura que floresceu em Santa Ana graças ao café.',
         },
         tip: {
           es: 'Admira su fachada desde el parque; la mejor vista es desde el lado oeste de la plaza.',
@@ -155,7 +157,7 @@ export const stands = {
         slug: 'museo-regional-occidente',
         emoji: '🏺',
         image: null,
-        lat: 13.9931, lng: -89.5593,
+        lat: 13.99380, lng: -89.55740, // ⚠️ aproximada: Av. Independencia Sur n.º 8
         name: { es: 'Museo Regional de Occidente', en: 'Western Regional Museum', fr: 'Musée régional de l’Ouest', pt: 'Museu Regional do Ocidente' },
         category: { es: 'Museo', en: 'Museum', fr: 'Musée', pt: 'Museu' },
         short: {
@@ -165,10 +167,10 @@ export const stands = {
           pt: 'Um museu sobre a história e a arqueologia do ocidente de El Salvador, a poucos passos da praça.',
         },
         story: {
-          es: 'El Museo Regional de Occidente presenta la historia de la región occidental de El Salvador: arqueología, la época del café y el desarrollo de Santa Ana. Es una gran parada para entender las historias detrás de los edificios que ves alrededor del Parque Libertad.',
-          en: 'The Western Regional Museum presents the history of the western region of El Salvador: archaeology, the coffee era and the development of Santa Ana. It is a great stop to understand the stories behind the buildings you see around Parque Libertad.',
-          fr: 'Le Musée régional de l’Ouest présente l’histoire de la région occidentale du Salvador : archéologie, époque du café et développement de Santa Ana. Une excellente étape pour comprendre les histoires derrière les bâtiments autour du Parc Libertad.',
-          pt: 'O Museu Regional do Ocidente apresenta a história da região ocidental de El Salvador: arqueologia, a era do café e o desenvolvimento de Santa Ana. É uma ótima parada para entender as histórias por trás dos edifícios ao redor do Parque Libertad.',
+          es: 'El Museo Regional de Occidente funciona en el antiguo edificio del Banco Central de Reserva y abrió al público en 1999. Guarda piezas arqueológicas de Santa Ana, Ahuachapán y Sonsonate, cuenta la historia reciente del occidente del país y tiene una colección de monedas salvadoreñas en la antigua bóveda del banco.',
+          en: 'The Western Regional Museum is housed in the former Central Reserve Bank building and opened to the public in 1999. It holds archaeological pieces from Santa Ana, Ahuachapán and Sonsonate, tells the recent history of western El Salvador and has a collection of Salvadoran coins in the bank’s old vault.',
+          fr: 'Le Musée régional de l’Ouest occupe l’ancien bâtiment de la Banque centrale de réserve et a ouvert au public en 1999. Il conserve des pièces archéologiques de Santa Ana, Ahuachapán et Sonsonate, raconte l’histoire récente de l’ouest du pays et présente une collection de monnaies salvadoriennes dans l’ancien coffre de la banque.',
+          pt: 'O Museu Regional do Ocidente funciona no antigo edifício do Banco Central de Reserva e abriu ao público em 1999. Guarda peças arqueológicas de Santa Ana, Ahuachapán e Sonsonate, conta a história recente do ocidente do país e tem uma coleção de moedas salvadorenhas no antigo cofre do banco.',
         },
         tip: {
           es: 'Pregunta en la entrada por los horarios y las visitas guiadas.',
