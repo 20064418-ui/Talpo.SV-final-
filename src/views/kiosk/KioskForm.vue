@@ -7,6 +7,7 @@ import QrCode from '@/components/kiosk/QrCode.vue';
 import { insforge, isConfigured } from '@/lib/insforge';
 import { trashTypes } from '@/data/stands';
 import { normalizeUsername } from '@/stores/passport';
+import { enqueue, isNetworkError, notifyUrgent } from '@/lib/kioskQueue';
 import { useKioskI18n } from '@/i18n/kiosk';
 const { t, locale } = useKioskI18n();
 
@@ -42,24 +43,40 @@ function pickUrgency(u) { form.urgency = u; setTimeout(next, 180); }
 
 async function submit() {
   error.value = ''; sending.value = true;
+  const payload = {
+    p_stand: props.stand.id,
+    p_passport: form.passport.trim(),
+    p_zone: form.zone,
+    p_has_trash: !!form.hasTrash,
+    p_trash: form.trash,
+    p_urgency: form.urgency,
+    p_comment: form.comment.trim(),
+  };
+  const saveOffline = () => {
+    enqueue(payload);
+    result.value = { offline: true };
+    step.value = TOTAL;
+  };
   try {
     if (!isConfigured) throw new Error(t('notConnected'));
-    const { data, error: e } = await insforge.database.rpc('stand_submit', {
-      p_stand: props.stand.id,
-      p_passport: form.passport.trim(),
-      p_zone: form.zone,
-      p_has_trash: !!form.hasTrash,
-      p_trash: form.trash,
-      p_urgency: form.urgency,
-      p_comment: form.comment.trim(),
-    });
-    if (e) throw new Error(e.message);
+    if (!navigator.onLine) { saveOffline(); return; }
+    const { data, error: e } = await insforge.database.rpc('stand_submit', payload);
+    if (e) {
+      if (isNetworkError(e)) { saveOffline(); return; }
+      throw new Error(e.message);
+    }
     result.value = Array.isArray(data) ? data[0] : data;
     step.value = TOTAL;
-    homeTimer = setTimeout(() => router.replace({ name: 'kiosk-home', params: { stand: props.stand.id } }), 15000);
+    if (form.urgency === 'high') notifyUrgent(); // 🔴 avisa al equipo por correo
   } catch (e) {
-    error.value = e.message || t('genericError');
-  } finally { sending.value = false; }
+    if (isNetworkError(e)) saveOffline();
+    else error.value = e.message || t('genericError');
+  } finally {
+    sending.value = false;
+    if (step.value === TOTAL) {
+      homeTimer = setTimeout(() => router.replace({ name: 'kiosk-home', params: { stand: props.stand.id } }), 15000);
+    }
+  }
 }
 function restart() {
   clearTimeout(homeTimer);
@@ -164,7 +181,12 @@ const registerUrl = computed(() => `${location.origin}/register`);
 
       <!-- 5 · RESULTADO -->
       <div v-else key="s5" class="q done">
-        <template v-if="result?.passport_found">
+        <template v-if="result?.offline">
+          <span class="big">📶</span>
+          <h1>{{ t('savedOffline') }}</h1>
+          <p>{{ t('savedOfflineText') }}</p>
+        </template>
+        <template v-else-if="result?.passport_found">
           <div class="stamp" :class="{ again: result.already_stamped }">
             <span>TALAPO.SV</span><b>{{ stand.name.toUpperCase() }}</b><small>{{ new Date().toLocaleDateString(locale) }}</small>
           </div>

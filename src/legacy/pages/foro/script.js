@@ -479,6 +479,7 @@ function rowToPost(r) {
     body: r.body,
     imageUrl: r.image_url,
     createdAt: r.created_at,
+    hidden: !!r.hidden,
     reactions,
     saved: (r.saves || []).map((x) => x.user_id),
     comments: (r.comments || [])
@@ -486,7 +487,7 @@ function rowToPost(r) {
       .map((c) => ({
         id: c.id, userId: c.user_id, authorName: c.author_name,
         authorAvatar: c.author_avatar || DEFAULT_AVATAR, body: c.body,
-        createdAt: c.created_at, parentId: c.parent_id,
+        createdAt: c.created_at, parentId: c.parent_id, hidden: !!c.hidden,
       })),
   };
 }
@@ -729,6 +730,76 @@ const DEPARTMENT_COLORS = {
   "San Salvador": "#0a2540"
 };
 
+/* ---------------------------------------------------------
+   NUEVO: MODERACIÓN (reportar · ocultar · borrar)
+   --------------------------------------------------------- */
+const REASONS = [
+  ["spam", "🚫 Spam or advertising"],
+  ["offensive", "🤬 Offensive or hateful"],
+  ["false", "❌ False information"],
+  ["inappropriate", "🔞 Inappropriate content"],
+  ["other", "💬 Other"],
+];
+function modButtons(kind, id, authorId, hidden) {
+  if (!__talapo.online || !UUID_RE.test(String(id))) return "";
+  const me = __talapo.user();
+  const isAuthor = me && me.id === authorId;
+  const admin = me && me.isAdmin;
+  const b = [];
+  if (!isAuthor) b.push(`<button class="mod-btn" data-action="mod-report" data-kind="${kind}" data-id="${id}"><i class="fas fa-flag"></i> Report</button>`);
+  if (admin) b.push(`<button class="mod-btn" data-action="mod-hide" data-kind="${kind}" data-id="${id}" data-hidden="${hidden}"><i class="fas ${hidden ? "fa-eye" : "fa-eye-slash"}"></i> ${hidden ? "Show" : "Hide"}</button>`);
+  if (admin || isAuthor) b.push(`<button class="mod-btn danger" data-action="mod-delete" data-kind="${kind}" data-id="${id}"><i class="fas fa-trash"></i> Delete</button>`);
+  return b.length ? `<div class="mod-row">${b.join("")}</div>` : "";
+}
+
+function openReportDialog(kind, id) {
+  if (!__talapo.requireLogin("Sign in to report content")) return;
+  document.getElementById("modDialog")?.remove();
+  const wrap = document.createElement("div");
+  wrap.id = "modDialog";
+  wrap.className = "mod-dialog";
+  wrap.innerHTML = `
+    <form class="mod-card">
+      <h3>⚑ Report ${kind === "post" ? "post" : "comment"}</h3>
+      <p>Why should the Talapo team review it?</p>
+      ${REASONS.map(([v, l], i) => `<label class="mod-opt"><input type="radio" name="reason" value="${v}" ${i === 0 ? "checked" : ""}> ${l}</label>`).join("")}
+      <textarea name="details" maxlength="300" placeholder="More details (optional)"></textarea>
+      <div class="mod-actions"><button type="button" class="mod-cancel">Cancel</button><button type="submit" class="mod-send">Send report</button></div>
+    </form>`;
+  document.getElementById("feedList").closest(".legacy-host, body").appendChild(wrap);
+  wrap.querySelector(".mod-cancel").onclick = () => wrap.remove();
+  wrap.onclick = (e) => { if (e.target === wrap) wrap.remove(); };
+  wrap.querySelector("form").onsubmit = async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const row = { reporter_id: __talapo.user().id, reason: fd.get("reason"), details: String(fd.get("details") || "").trim() || null };
+    row[kind === "post" ? "post_id" : "comment_id"] = id;
+    const { error } = await db.from("forum_reports").insert([row]);
+    wrap.remove();
+    if (error && /duplicate|unique/i.test(error.message)) return __talapo.toast("You already reported this. Thank you!", "info");
+    if (error) return reportError(error, "The report could not be sent");
+    __talapo.toast("Thank you! The Talapo team will review it 🙏");
+  };
+}
+
+async function modHide(kind, id, hiddenNow) {
+  const table = kind === "post" ? "forum_posts" : "forum_comments";
+  const { error } = await db.from(table).update({ hidden: !hiddenNow }).eq("id", id);
+  if (error) return reportError(error, "Could not change visibility");
+  if (hiddenNow) await db.from("forum_reports").update({ resolved: true }).eq(kind === "post" ? "post_id" : "comment_id", id);
+  __talapo.toast(hiddenNow ? "Visible again" : "Hidden from the forum");
+  await loadPosts();
+}
+
+async function modDelete(kind, id) {
+  if (!confirm(`Delete this ${kind}? This cannot be undone.`)) return;
+  const table = kind === "post" ? "forum_posts" : "forum_comments";
+  const { error } = await db.from(table).delete().eq("id", id);
+  if (error) return reportError(error, "Could not delete");
+  __talapo.toast("Deleted");
+  await loadPosts();
+}
+
 // NUEVO: enlace al perfil público del autor (solo usuarios reales de InsForge)
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 function profileLink(userId, inner, extraClass = "") {
@@ -745,7 +816,9 @@ function renderCommentNode(post, comment) {
         <div class="comment-bubble">
           <p class="comment-author">${profileLink(comment.userId, escapeHtml(comment.authorName))}</p>
           <p class="comment-text">${escapeHtml(comment.body)}</p>
+          ${comment.hidden ? '<span class="mod-hidden">🙈 Hidden · under review</span>' : ''}
         </div>
+        ${modButtons('comment', comment.id, comment.userId, comment.hidden)}
         ${
           !isReply
             ? `<div class="comment-actions"><button data-action="show-reply" data-comment-id="${comment.id}">Reply</button></div>
@@ -815,6 +888,8 @@ function renderPostCard(post, isTopPopular) {
             <i class="fas fa-comment"></i> ${post.comments.length} comments
           </button>
         </div>
+        ${post.hidden ? '<p class="mod-hidden big">🙈 This post is hidden while the Talapo team reviews it.</p>' : ''}
+        ${modButtons('post', post.id, post.userId, post.hidden)}
       </div>
 
       <div class="comments-section" id="comments-${post.id}">
@@ -897,6 +972,14 @@ function initFeedDelegation() {
   const feedList = document.getElementById("feedList");
 
   feedList.addEventListener("click", (event) => {
+    const modBtn = event.target.closest('[data-action^="mod-"]');
+    if (modBtn) {
+      const { kind, id, action } = { kind: modBtn.dataset.kind, id: modBtn.dataset.id, action: modBtn.dataset.action };
+      if (action === "mod-report") openReportDialog(kind, id);
+      if (action === "mod-hide") modHide(kind, id, modBtn.dataset.hidden === "true");
+      if (action === "mod-delete") modDelete(kind, id);
+      return;
+    }
     const reactBtn = event.target.closest('[data-action="react"]');
     if (reactBtn) {
       toggleReaction(reactBtn.dataset.postId, reactBtn.dataset.type);

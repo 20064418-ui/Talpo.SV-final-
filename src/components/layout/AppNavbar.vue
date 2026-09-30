@@ -103,7 +103,7 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
           <li><RouterLink to="/itineraries"><i class="fas fa-calendar-days"></i> My itineraries</RouterLink></li>
           <li><RouterLink to="/contests"><i class="fas fa-trophy"></i> My contests</RouterLink></li>
           <li><RouterLink to="/travelers"><i class="fas fa-user-group"></i> Travelers</RouterLink></li>
-          <li v-if="passport.profile?.is_admin"><RouterLink to="/admin/news"><i class="fas fa-newspaper"></i> Admin · News</RouterLink></li>
+          <li v-if="passport.profile?.is_admin"><RouterLink to="/admin/news"><i class="fas fa-user-shield"></i> Talapo Admin</RouterLink></li>
           <li><a href="#" @click.prevent="logout"><i class="fas fa-sign-out-alt"></i> Sign out</a></li>
         </ul>
       </div>

@@ -426,3 +426,23 @@
 .lg-foro .author-link:hover { text-decoration: underline; text-underline-offset: 3px; }
 .lg-foro .author-link img { transition: transform .2s, box-shadow .2s; }
 .lg-foro .author-link:hover img { transform: scale(1.06); box-shadow: 0 0 0 3px rgba(28,110,107,.35); }
+
+/* NUEVO: moderación */
+.lg-foro .mod-row { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 2px; }
+.lg-foro .mod-btn { background: none; border: 1px solid #dde6e5; color: #58717f; border-radius: 20px; padding: 3px 10px; font-size: 12px; cursor: pointer; transition: all .2s; }
+.lg-foro .mod-btn:hover { border-color: #E46D5C; color: #E46D5C; }
+.lg-foro .mod-btn.danger:hover { background: #fdecea; }
+.lg-foro .mod-hidden { display: inline-block; font-size: 12px; color: #8a5a00; background: #fff1c2; padding: 2px 8px; border-radius: 8px; margin-top: 4px; }
+.lg-foro .mod-hidden.big { display: block; margin: 8px 0; font-size: 13px; }
+.lg-foro .mod-dialog { position: fixed; inset: 0; z-index: 2500; background: rgba(10,47,68,.55); display: grid; place-items: center; padding: 16px; animation: modIn .2s ease; }
+.lg-foro .mod-card { background: #fff; border-radius: 20px; padding: 20px; width: min(100%, 420px); box-shadow: 0 30px 60px -20px rgba(0,0,0,.5); font-family: inherit; }
+.lg-foro .mod-card h3 { margin: 0 0 4px; color: #0A2F44; }
+.lg-foro .mod-card p { margin: 0 0 10px; color: #58717f; font-size: 14px; }
+.lg-foro .mod-opt { display: flex; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 10px; cursor: pointer; font-size: 14px; }
+.lg-foro .mod-opt:hover { background: #f4f8fa; }
+.lg-foro .mod-card textarea { width: 100%; margin-top: 8px; border: 1.5px solid #dde6e5; border-radius: 10px; padding: 8px; font: inherit; resize: vertical; min-height: 60px; }
+.lg-foro .mod-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+.lg-foro .mod-actions button { border: 0; border-radius: 20px; padding: 8px 16px; font-weight: 700; cursor: pointer; }
+.lg-foro .mod-cancel { background: #eef6f6; color: #1C6E6B; }
+.lg-foro .mod-send { background: #E46D5C; color: #fff; }
+@keyframes modIn { from { opacity: 0; } to { opacity: 1; } }

@@ -3,6 +3,7 @@
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import FollowButton from '@/components/social/FollowButton.vue';
+import { publicBadges, tierColors } from '@/data/badges';
 import { useSocialStore } from '@/stores/social';
 
 const route = useRoute();
@@ -74,6 +75,9 @@ const since = (d) => (d ? new Date(d).toLocaleDateString('en-US', { month: 'long
             <div class="stat"><b>📍 {{ p.stamps_visited }}</b><span>Places visited</span></div>
           </div>
 
+          <div v-if="publicBadges(p).length" class="pub-badges">
+            <span v-for="b in publicBadges(p)" :key="b.id" class="pub-badge" :style="{ background: tierColors[b.tier][0], color: tierColors[b.tier][1] }" :title="b.desc">{{ b.emoji }} {{ b.name }}</span>
+          </div>
           <Transition name="fade">
             <div v-if="list" class="people">
               <p v-if="listLoading" class="muted-note">Loading…</p>
@@ -133,6 +137,8 @@ button.stat:hover { transform: translateY(-2px); border-color: #1C6E6B; }
 .stat.on { border-color: #1C6E6B; background: #EEF6F6; }
 .stat b { display: block; font-size: 1.4rem; color: #1e3a8a; }
 .stat span { font-size: .78rem; color: #64748b; }
+.pub-badges { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
+.pub-badge { font-size: .8rem; font-weight: 700; padding: .3rem .7rem; border-radius: 20px; }
 .people { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
 .mini { display: inline-flex; align-items: center; gap: .5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 40px; padding: .3rem .8rem .3rem .3rem; text-decoration: none; color: #0A2F44; font-weight: 600; font-size: .9rem; transition: border-color .2s; }
 .mini:hover { border-color: #1C6E6B; }

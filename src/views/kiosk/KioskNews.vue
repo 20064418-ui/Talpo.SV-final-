@@ -16,11 +16,18 @@ const mailto = computed(() => {
   return `mailto:${props.stand.newsEmail}?subject=${encodeURIComponent(t('mailSubject'))}&body=${encodeURIComponent(t('mailBody'))}`;
 });
 
+const CACHE_KEY = computed(() => `talapo_news_${props.stand.id}`);
+const fromCache = ref(false);
 onMounted(async () => {
-  if (isConfigured) {
-    const { data } = await insforge.database.from('municipal_news').select('*')
+  try {
+    if (!isConfigured) throw new Error('offline');
+    const { data, error } = await insforge.database.from('municipal_news').select('*')
       .eq('stand_id', props.stand.id).order('published_at', { ascending: false }).limit(30);
+    if (error) throw error;
     news.value = data || [];
+    localStorage.setItem(CACHE_KEY.value, JSON.stringify(news.value)); // copia para usar sin internet
+  } catch {
+    try { news.value = JSON.parse(localStorage.getItem(CACHE_KEY.value) || '[]'); fromCache.value = news.value.length > 0; } catch { news.value = []; }
   }
   loading.value = false;
 });
@@ -36,6 +43,7 @@ const fmt = (d) => (d ? new Date(d).toLocaleDateString(locale.value, { weekday: 
 
     <div class="layout">
       <div class="list">
+        <p v-if="fromCache" class="note">📴 {{ t('newsOffline') }}</p>
         <p v-if="loading" class="note"><i class="fas fa-spinner fa-spin"></i> {{ t('loadingNews') }}</p>
         <div v-else-if="!news.length" class="empty">
           <span>🗞️</span>

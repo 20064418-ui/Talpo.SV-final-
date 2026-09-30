@@ -17,3 +17,8 @@ L.Icon.Default.mergeOptions({ iconUrl: markerIcon, iconRetinaUrl: markerIcon2x, 
 window.L = L;
 
 createApp(App).use(createPinia()).use(router).mount('#app');
+
+// Funciona sin internet (sobre todo el Stand): service worker solo en producción
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+}

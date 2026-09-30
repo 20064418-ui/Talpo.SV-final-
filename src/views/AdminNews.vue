@@ -7,6 +7,7 @@ import { usePassportStore } from '@/stores/passport';
 import { useAuthStore } from '@/stores/auth';
 import { stands } from '@/data/stands';
 import { toast } from '@/composables/useToast';
+import AdminTabs from '@/components/admin/AdminTabs.vue';
 
 const passport = usePassportStore();
 const auth = useAuthStore();
@@ -111,7 +112,7 @@ async function remove(n) {
 
 const fmt = (d) => (d ? new Date(d).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '');
 const standName = (id) => { const s = stands[id]; return s ? `${s.name}, ${s.city}` : id; };
-onMounted(async () => { await passport.load(); if (isAdmin.value) load(); else loading.value = false; });
+onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); else loading.value = false; });
 </script>
 
 <template>
@@ -119,7 +120,7 @@ onMounted(async () => { await passport.load(); if (isAdmin.value) load(); else l
     <section class="hero">
       <div class="hero-inner">
         <div class="hero-badge">✦ TALAPO ADMIN ✦</div>
-        <h1>Municipal News</h1>
+        <h1>Talapo Admin</h1>
         <p>Publish the news that people send to <b>avisos.talapo@gmail.com</b>, with photos, on the Talapo Stands.</p>
       </div>
     </section>
@@ -135,6 +136,7 @@ onMounted(async () => { await passport.load(); if (isAdmin.value) load(); else l
       </div>
 
       <template v-else>
+        <AdminTabs />
         <!-- Formulario -->
         <form class="card-box editor" @submit.prevent="save">
           <h2>{{ editingId ? '✏️ Edit news' : '➕ New news' }}</h2>

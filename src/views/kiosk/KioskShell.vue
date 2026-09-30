@@ -5,6 +5,7 @@ import { computed, ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { stands } from '@/data/stands';
 import { useKioskI18n, DEFAULT_LANG } from '@/i18n/kiosk';
+import { startQueue, pending, online } from '@/lib/kioskQueue';
 
 const { t, lang, setLang, languages, locale } = useKioskI18n();
 
@@ -27,7 +28,20 @@ function resetIdle() {
   }, IDLE_MS);
 }
 const events = ['pointerdown', 'keydown', 'scroll', 'touchstart'];
+/** Deja listo el stand para funcionar sin internet: pantallas y fotos guardadas en la tablet. */
+function prepareOffline() {
+  // Carga por adelantado todas las pantallas del stand
+  ['KioskHome', 'KioskNews', 'KioskHistory', 'KioskPlace', 'KioskMap', 'KioskForm'].forEach((v) => {
+    import(`./${v}.vue`).catch(() => {});
+  });
+  // Pide al service worker guardar las fotos del stand
+  const urls = [stand.value.cover, ...stand.value.places.map((p) => p.image)].filter(Boolean);
+  navigator.serviceWorker?.ready.then((reg) => reg.active?.postMessage({ type: 'precache', urls })).catch(() => {});
+}
+
 onMounted(() => {
+  startQueue();
+  if (stand.value) prepareOffline();
   events.forEach((e) => window.addEventListener(e, resetIdle, { passive: true }));
   clock = setInterval(() => (now.value = new Date()), 30_000);
   resetIdle();
@@ -67,6 +81,13 @@ function choose(code) { setLang(code); langOpen.value = false; }
       </div>
       <RouterLink v-if="!isHome" :to="{ name: 'kiosk-home', params: { stand: stand.id } }" class="k-home"><i class="fas fa-house"></i> {{ t('home') }}</RouterLink>
     </header>
+    <!-- Aviso de "sin conexión" -->
+    <Transition name="kfade">
+      <div v-if="!online || pending" class="k-offline" :class="{ ok: online }">
+        <template v-if="!online">📴 <b>{{ t('offline') }}</b> · {{ t('offlineText') }}</template>
+        <template v-if="pending"> <span class="k-pending">{{ t('pendingForms', { n: pending }) }}</span></template>
+      </div>
+    </Transition>
     <main class="k-main">
       <RouterView v-slot="{ Component }">
         <Transition name="kfade" mode="out-in"><component :is="Component" :stand="stand" /></Transition>
@@ -99,6 +120,9 @@ function choose(code) { setLang(code); langOpen.value = false; }
 .k-lang-menu button:hover, .k-lang-menu button.on { background: #EEF6F6; }
 .k-lang-menu .flag { font-size: 1.6rem; }
 .k-lang-menu i { margin-left: auto; color: #1C6E6B; }
+.k-offline { background: #fff4d6; color: #7a4b00; padding: 10px clamp(14px, 3vw, 28px); font-size: 1rem; border-bottom: 1px solid #f7d9a4; }
+.k-offline.ok { background: #e6f5ee; color: #166534; border-color: #bfe6cf; }
+.k-pending { display: inline-block; margin-left: 6px; background: rgba(0,0,0,.08); padding: 2px 10px; border-radius: 20px; font-weight: 700; }
 .k-main { flex: 1; display: flex; flex-direction: column; }
 .k-missing { padding: 4rem; text-align: center; font-family: 'Outfit', sans-serif; }
 .kfade-enter-active, .kfade-leave-active { transition: opacity .25s ease, transform .3s ease; }

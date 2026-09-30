@@ -11,6 +11,7 @@ export const usePassportStore = defineStore('passport', {
     profile: null,       // fila de public.profiles
     activity: [],        // fechas activas (últimas 12 semanas) para el calendario de racha
     stamps: [],          // lugares visitados
+    badgeStats: null,    // datos para las insignias (my_badge_stats)
     loaded: false,
     loading: false,
   }),
@@ -82,6 +83,7 @@ export const usePassportStore = defineStore('passport', {
         this.stamps = stamps;
         this.loaded = true;
         this.sendWelcomeOnce();
+        this.loadBadges();
         // Usuarios que se registraron antes: copiar el @usuario que eligieron al registrarse
         const pending = auth.user.profile?.username;
         if (!this.profile?.username && pending) this.setUsername(pending).catch(() => {});
@@ -97,6 +99,12 @@ export const usePassportStore = defineStore('passport', {
       insforge.functions.invoke('welcome-email', { body: {} })
         .then(({ data }) => { if (data?.sent && this.profile) this.profile.welcome_sent_at = new Date().toISOString(); })
         .catch((e) => console.warn('[Talapo] welcome email', e));
+    },
+
+    /** Datos verificados para calcular las insignias */
+    async loadBadges() {
+      const { data, error } = await insforge.database.rpc('my_badge_stats');
+      if (!error) this.badgeStats = Array.isArray(data) ? data[0] : data;
     },
 
     /** Mostrar u ocultar mi perfil en la comunidad de viajeros. */

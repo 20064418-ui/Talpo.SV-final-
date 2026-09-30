@@ -22,6 +22,7 @@ export function createLegacyBridge(router) {
         id: auth.user.id,
         name: passport.profile?.display_name || auth.displayName,
         avatar: passport.profile?.photo_url || auth.avatar || null,
+        isAdmin: !!passport.profile?.is_admin,
       };
     },
     /** Si no hay sesión, avisa y manda al login volviendo a la página actual. */

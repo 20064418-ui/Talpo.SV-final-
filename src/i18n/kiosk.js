@@ -14,6 +14,7 @@ export const DEFAULT_LANG = 'es';
 
 const messages = {
   es: {
+    offline: 'Sin conexión', offlineText: 'Los formularios se guardan en la tablet y se enviarán solos cuando vuelva el internet.', pendingForms: '{n} pendiente(s)', savedOffline: '¡Guardado! 📶', savedOfflineText: 'No hay internet en este momento. Tu reporte quedó guardado en la tablet y se enviará automáticamente; el sello llegará a tu pasaporte cuando se envíe.', newsOffline: 'Mostrando las últimas noticias guardadas (sin conexión).',
     back: 'Atrás', home: 'Inicio', standOf: 'Stand', notFound: 'Stand no encontrado', goTalapo: 'Ir a Talapo.SV',
     badge: '✦ STAND TALAPO ✦', welcome: 'Bienvenido a {name}', tagline: 'El corazón del Santa Ana histórico', country: 'El Salvador',
     touch: '👆 Toca un botón para empezar', chooseLang: 'Idioma',
@@ -49,6 +50,7 @@ const messages = {
     notConnected: 'Talapo no está conectado (falta .env.local).', genericError: 'Algo salió mal. Intenta de nuevo.',
   },
   en: {
+    offline: 'Offline', offlineText: 'Forms are saved on the tablet and will be sent automatically when the internet is back.', pendingForms: '{n} pending', savedOffline: 'Saved! 📶', savedOfflineText: 'There is no internet right now. Your report was saved on the tablet and will be sent automatically; the stamp will reach your passport once it is sent.', newsOffline: 'Showing the last saved news (offline).',
     back: 'Back', home: 'Home', standOf: 'Stand', notFound: 'Stand not found', goTalapo: 'Go to Talapo.SV',
     badge: '✦ TALAPO STAND ✦', welcome: 'Welcome to {name}', tagline: 'The heart of historic Santa Ana', country: 'El Salvador',
     touch: '👆 Touch a button to start', chooseLang: 'Language',
@@ -84,6 +86,7 @@ const messages = {
     notConnected: 'Talapo is not connected (missing .env.local).', genericError: 'Something went wrong. Please try again.',
   },
   fr: {
+    offline: 'Hors ligne', offlineText: 'Les formulaires sont enregistrés sur la tablette et seront envoyés automatiquement au retour d’internet.', pendingForms: '{n} en attente', savedOffline: 'Enregistré ! 📶', savedOfflineText: 'Pas d’internet pour le moment. Votre signalement est enregistré sur la tablette et sera envoyé automatiquement ; le tampon arrivera dans votre passeport à l’envoi.', newsOffline: 'Dernières actualités enregistrées (hors ligne).',
     back: 'Retour', home: 'Accueil', standOf: 'Stand', notFound: 'Stand introuvable', goTalapo: 'Aller sur Talapo.SV',
     badge: '✦ STAND TALAPO ✦', welcome: 'Bienvenue au {name}', tagline: 'Le cœur historique de Santa Ana', country: 'Salvador',
     touch: '👆 Touchez un bouton pour commencer', chooseLang: 'Langue',
@@ -119,6 +122,7 @@ const messages = {
     notConnected: 'Talapo n’est pas connecté (.env.local manquant).', genericError: 'Une erreur s’est produite. Réessayez.',
   },
   pt: {
+    offline: 'Sem conexão', offlineText: 'Os formulários ficam salvos no tablet e serão enviados sozinhos quando a internet voltar.', pendingForms: '{n} pendente(s)', savedOffline: 'Salvo! 📶', savedOfflineText: 'Sem internet no momento. Seu relato ficou salvo no tablet e será enviado automaticamente; o carimbo chegará ao seu passaporte quando for enviado.', newsOffline: 'Mostrando as últimas notícias salvas (sem conexão).',
     back: 'Voltar', home: 'Início', standOf: 'Stand', notFound: 'Stand não encontrado', goTalapo: 'Ir para Talapo.SV',
     badge: '✦ STAND TALAPO ✦', welcome: 'Bem-vindo ao {name}', tagline: 'O coração histórico de Santa Ana', country: 'El Salvador',
     touch: '👆 Toque em um botão para começar', chooseLang: 'Idioma',

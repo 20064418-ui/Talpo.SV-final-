@@ -11,6 +11,7 @@ import { useSocialStore } from '@/stores/social';
 import { challenges } from '@/data/contests';
 import { toast } from '@/composables/useToast';
 import { stands } from '@/data/stands';
+import { badges, tierColors } from '@/data/badges';
 import '@/styles/pages/passport.css';
 
 const router = useRouter();
@@ -133,6 +134,25 @@ const visitedStamps = computed(() => passport.stamps.filter((st) => st.visited_a
 const pendingStands = computed(() => Object.values(stands).filter((st) => !passport.stamps.some((x) => x.visited_at && x.place_name === `${st.name}, ${st.city}`)));
 
 /* ---------- 4. Paneles nuevos ---------- */
+// ---------- Insignias ----------
+const badgeList = computed(() => {
+  const st = passport.badgeStats || {};
+  return badges.map((b) => {
+    const v = Number(b.value(st) || 0);
+    return { ...b, current: Math.min(v, b.goal), earned: v >= b.goal, pct: Math.min(100, Math.round((v / b.goal) * 100)) };
+  });
+});
+const earnedBadges = computed(() => badgeList.value.filter((b) => b.earned));
+// Aviso cuando se gana una insignia nueva
+watch(() => passport.badgeStats, () => {
+  if (!passport.badgeStats) return;
+  const key = `talapo_badges_seen_${passport.profile?.id}`;
+  const seen = new Set(JSON.parse(localStorage.getItem(key) || '[]'));
+  const fresh = earnedBadges.value.filter((b) => !seen.has(b.id));
+  if (seen.size && fresh.length) fresh.forEach((b) => toast(`New badge: ${b.emoji} ${b.name}!`));
+  localStorage.setItem(key, JSON.stringify(earnedBadges.value.map((b) => b.id)));
+});
+
 const plans = computed(() => itineraries.items.filter((i) => i.source === 'planner'));
 const tourRoutes = computed(() => itineraries.items.filter((i) => i.source !== 'planner'));
 const tabs = computed(() => [
@@ -141,6 +161,7 @@ const tabs = computed(() => [
   { id: 'tours', emoji: '🧭', count: tourRoutes.value.length, label: 'Tours' },
   { id: 'contests', emoji: '🏆', count: contests.count, label: 'Contests' },
   { id: 'community', emoji: '🤝', count: social.followersCount, label: 'Followers' },
+  { id: 'badges', emoji: '🏅', count: earnedBadges.value.length, label: 'Badges' },
 ]);
 
 /** 12 semanas en columnas (lunes arriba), terminando en la semana actual. */
@@ -397,6 +418,22 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
               </div>
             </div>
 
+            <!-- BADGES -->
+            <div v-else-if="panel === 'badges'" key="badges" class="card-box panel">
+              <div class="panel-head"><h2>My badges</h2><span class="badge-count">{{ earnedBadges.length }} / {{ badgeList.length }}</span></div>
+              <div class="badges-grid">
+                <div v-for="b in badgeList" :key="b.id" class="medal" :class="{ earned: b.earned }"
+                     :style="{ '--bg': tierColors[b.tier][0], '--fg': tierColors[b.tier][1] }" :title="b.desc">
+                  <div class="medal-icon">{{ b.emoji }}</div>
+                  <b>{{ b.name }}</b>
+                  <small>{{ b.desc }}</small>
+                  <div v-if="!b.earned" class="progress"><span :style="{ width: b.pct + '%' }"></span></div>
+                  <small class="prog-txt">{{ b.earned ? '✓ Earned' : `${b.current} / ${b.goal}` }}</small>
+                </div>
+              </div>
+              <p class="panel-note">Badges use verified data: stamps come only from Talapo Stands. 🛂</p>
+            </div>
+
             <!-- CONTESTS -->
             <div v-else key="contests" class="card-box panel">
               <div class="panel-head"><h2>Talapo Contests</h2></div>
@@ -428,7 +465,7 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
 .actions-row > * { flex: 1; }
 
 /* Panel del perfil: mismos colores, radios y tipografía del pasaporte */
-.panel-tabs { width: 100%; max-width: 860px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 28px; }
+.panel-tabs { width: 100%; max-width: 860px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 28px; }
 .panel-tabs button { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28); color: #e2e8f0; border-radius: 16px; padding: 12px 8px; cursor: pointer; display: grid; justify-items: center; gap: 2px; font-family: 'Inter', sans-serif; backdrop-filter: blur(6px); transition: background .25s, transform .25s, color .25s; }
 .panel-tabs button:hover { transform: translateY(-3px); background: rgba(255,255,255,.2); }
 .panel-tabs button.on { background: #ffffff; color: #0f172a; box-shadow: 0 14px 30px -14px rgba(0,0,0,.5); }
@@ -479,6 +516,21 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
 .place-stamp-card.locked { text-decoration: none; opacity: .75; border-style: dashed; }
 .place-stamp-card.locked:hover { opacity: 1; }
 .no-stamps { font-size: 11px; color: #475569; background: #f1f5f9; border-radius: 8px; padding: 8px 10px; margin: 8px 0 0; line-height: 1.5; }
+.badge-count { font-weight: 800; color: #1e3a8a; }
+.badges-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.medal { display: grid; justify-items: center; text-align: center; gap: 4px; padding: 14px 10px; border-radius: 14px; background: #f1f5f9; border: 1px solid #e2e8f0; filter: grayscale(1); opacity: .75; transition: transform .2s; }
+.medal:hover { transform: translateY(-3px); }
+.medal.earned { background: var(--bg); border-color: transparent; filter: none; opacity: 1; box-shadow: 0 10px 20px -14px rgba(0,0,0,.5); }
+.medal-icon { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; font-size: 1.8rem; background: #fff; box-shadow: inset 0 -3px 0 rgba(0,0,0,.08), 0 4px 10px -6px rgba(0,0,0,.4); }
+.medal.earned .medal-icon { animation: medalPop .6s cubic-bezier(.2,1.6,.4,1) both; }
+.medal b { font-size: 13px; color: var(--fg); }
+.medal:not(.earned) b { color: #334155; }
+.medal small { font-size: 11px; color: #64748b; line-height: 1.3; }
+.progress { width: 100%; height: 6px; background: #e2e8f0; border-radius: 6px; overflow: hidden; margin-top: 4px; }
+.progress span { display: block; height: 100%; background: #1C6E6B; border-radius: 6px; }
+.prog-txt { font-weight: 700; }
+.medal.earned .prog-txt { color: var(--fg); }
+@keyframes medalPop { from { transform: scale(.4) rotate(-20deg); } to { transform: none; } }
 /* Usuario */
 .user-input { display: flex; align-items: center; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; overflow: hidden; }
 .user-input span { padding: 0 4px 0 12px; font-weight: 700; color: #1e3a8a; }
@@ -510,6 +562,7 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
 
 @media (max-width: 640px) {
   .panel-tabs { grid-template-columns: repeat(3, 1fr); }
+  .badges-grid { grid-template-columns: repeat(2, 1fr); }
   .streak-hero { grid-template-columns: 1fr; justify-items: center; }
   .streak-text h2, .streak-text > p { text-align: center; }
   .streak-stats { grid-template-columns: repeat(2, 1fr); }
