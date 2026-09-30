@@ -44,7 +44,10 @@ const fmt = (d) => (d ? new Date(d).toLocaleDateString(locale.value, { weekday: 
         </div>
         <TransitionGroup v-else name="card" tag="div" class="cards">
           <article v-for="n in news" :key="n.id" class="news" :class="{ open: openId === n.id }" @click="openId = openId === n.id ? null : n.id">
-            <img v-if="n.image_url" :src="n.image_url" alt="" class="cover" />
+            <div v-if="n.image_url" class="cover-box" :style="{ '--bg': `url('${n.image_url}')` }" @click.stop="big = n.image_url">
+              <img :src="n.image_url" :alt="n.title" class="cover" loading="lazy" />
+              <span class="zoom"><i class="fas fa-magnifying-glass-plus"></i></span>
+            </div>
             <div class="news-body">
               <small>{{ fmt(n.published_at || n.created_at) }}<template v-if="n.author"> · {{ n.author }}</template></small>
               <h2>{{ n.title }}</h2>
@@ -92,11 +95,15 @@ const fmt = (d) => (d ? new Date(d).toLocaleDateString(locale.value, { weekday: 
 .empty h2 { margin: 8px 0; }
 .empty p { color: #58717f; font-size: 1.05rem; }
 .cards { display: grid; gap: 14px; }
-.news { display: grid; grid-template-columns: auto 1fr; gap: 16px; background: #fff; border-radius: 22px; padding: 16px; box-shadow: 0 18px 30px -22px rgba(0,32,64,.35); cursor: pointer; transition: transform .2s; }
+.news { display: grid; grid-template-columns: 220px 1fr; gap: 20px; align-items: start; background: #fff; border-radius: 24px; padding: 18px; box-shadow: 0 18px 30px -22px rgba(0,32,64,.35); cursor: pointer; transition: transform .2s, box-shadow .2s; }
 .news:active { transform: scale(.99); }
-.news img.cover { width: 160px; height: 130px; object-fit: cover; border-radius: 14px; transition: all .3s ease; }
-.news.open { grid-template-columns: 1fr; }
-.news.open img.cover { width: 100%; height: clamp(200px, 32vh, 340px); }
+.cover-box { position: relative; width: 100%; aspect-ratio: 4 / 5; border-radius: 16px; overflow: hidden; background: #0A2F44; cursor: zoom-in; transition: aspect-ratio .3s ease; }
+.cover-box::before { content: ''; position: absolute; inset: -20px; background: var(--bg) center/cover; filter: blur(18px) brightness(.7); transform: scale(1.1); }
+.cover-box img.cover { position: relative; width: 100%; height: 100%; object-fit: contain; display: block; }
+.zoom { position: absolute; right: 8px; bottom: 8px; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.92); color: #0A2F44; display: grid; place-items: center; box-shadow: 0 4px 10px rgba(0,0,0,.3); }
+/* Al abrir: el afiche se ve grande y completo */
+.news.open { grid-template-columns: minmax(0, 1.1fr) 1fr; }
+.news.open .cover-box { aspect-ratio: auto; height: min(70vh, 620px); }
 .gallery { display: flex; gap: 8px; overflow-x: auto; margin-top: 12px; padding-bottom: 4px; }
 .gallery img { width: 120px; height: 90px; object-fit: cover; border-radius: 10px; flex-shrink: 0; cursor: zoom-in; }
 .photos-count { display: inline-block; margin: 6px 10px 0 0; font-weight: 700; color: #58717f; }
@@ -105,11 +112,12 @@ const fmt = (d) => (d ? new Date(d).toLocaleDateString(locale.value, { weekday: 
 .lightbox span { position: absolute; top: 18px; right: 22px; color: #fff; font-size: 1.8rem; }
 .fadebig-enter-active, .fadebig-leave-active { transition: opacity .2s; }
 .fadebig-enter-from, .fadebig-leave-to { opacity: 0; }
-.news:not(:has(img)) { grid-template-columns: 1fr; }
+.news:not(:has(.cover-box)) { grid-template-columns: 1fr; }
+.news:hover { box-shadow: 0 24px 38px -22px rgba(0,32,64,.45); }
 .news small { color: #1C6E6B; font-weight: 700; }
-.news h2 { margin: 4px 0 6px; font-size: 1.3rem; }
-.news p { margin: 0; color: #4a6472; font-size: 1.05rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-line; }
-.news.open p { -webkit-line-clamp: unset; }
+.news h2 { margin: 6px 0 8px; font-size: 1.6rem; line-height: 1.15; }
+.news p { margin: 0; color: #4a6472; font-size: 1.05rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-line; }
+.news.open p { -webkit-line-clamp: unset; line-clamp: unset; }
 .more { display: inline-block; margin-top: 8px; color: #E46D5C; font-weight: 700; }
 .send { position: sticky; top: 96px; background: #0A2F44; color: #fff; border-radius: 26px; padding: 22px; display: grid; justify-items: center; text-align: center; gap: 10px; box-shadow: 0 24px 40px -22px rgba(0,0,0,.6); animation: rise .6s .1s ease both; }
 .send h2 { margin: 0; }
@@ -119,5 +127,5 @@ const fmt = (d) => (d ? new Date(d).toLocaleDateString(locale.value, { weekday: 
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 .card-enter-active { transition: opacity .35s ease, transform .35s ease; }
 .card-enter-from { opacity: 0; transform: translateY(12px); }
-@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } .send { position: static; } .news img.cover { width: 96px; height: 84px; } .news.open img.cover { width: 100%; height: 220px; } }
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } .send { position: static; } .news, .news.open { grid-template-columns: 1fr; } .cover-box { aspect-ratio: 4 / 3; } .news.open .cover-box { height: min(65vh, 520px); } }
 </style>
