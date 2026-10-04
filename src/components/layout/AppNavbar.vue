@@ -1,6 +1,6 @@
 <script setup>
 // Navbar ORIGINAL de main.html (mismo marcado y CSS), ahora un único componente global.
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { usePassportStore } from '@/stores/passport';
@@ -14,7 +14,10 @@ const menuOpen = ref(false);   // menú móvil (antes #menuToggle / #navLinks.ac
 const openGroup = ref(null);   // desplegable abierto con toque (en escritorio abre con hover)
 const root = ref(null);
 
-const groups = [
+// Solo los administradores (p. ej. rocio.calderon) ven el enlace al Talapo Stand
+const isAdmin = computed(() => !!auth.isAuthenticated && !!passport.profile?.is_admin);
+
+const allGroups = [
   { label: 'Maps Tours', items: [
     { label: 'Bus route', to: '/buses' },
     { label: 'Tourist attractions', to: '/turisticattractions' },
@@ -42,13 +45,17 @@ const groups = [
     { label: 'Chatbot Talapo', href: 'https://talapo-gu-a-de-el-salvador-298518227672.us-west1.run.app/' },
     { label: 'Talapo Contests', to: '/contests' },
     { label: 'Talapo Travelers', to: '/travelers' },
-    { label: 'Talapo Stand · Santa Ana', to: '/kiosk/parque-libertad' },
+    { label: 'Talapo Stand · Santa Ana', to: '/kiosk/parque-libertad', adminOnly: true },
     { label: 'Forum', to: '/foro' },
     { label: 'The journalistic corner', to: '/planguide' },
     { label: 'Emergency services', to: '/emergency' },
     { label: 'Passport', to: '/passport' },
   ] },
 ];
+
+const groups = computed(() => allGroups.map((g) => ({
+  ...g, items: g.items.filter((i) => !i.adminOnly || isAdmin.value),
+})));
 
 const photo = () => passport.profile?.photo_url || auth.avatar || '/assets/img/integrantes/daniel.png';
 
@@ -95,7 +102,7 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
           <img :src="photo()" alt="Profile" class="nav-profile-img">
           <!-- Muestra el @usuario; si todavía no tiene, su nombre -->
           <span class="badge-name">{{ passport.profile?.username ? `@${passport.profile.username}` : (passport.profile?.display_name || auth.displayName) }}</span>
-          <span v-if="passport.streak" class="streak-chip" :title="`Talapo streak: ${passport.streak} day(s)`">🔥{{ passport.streak }}</span>
+          <span v-if="passport.streak" class="streak-chip" :title="`Talapo streak: ${passport.streak} day(s)`"><i class="fas fa-fire"></i> {{ passport.streak }}</span>
           <i class="fas fa-chevron-down text-xs"></i>
         </a>
         <ul class="dropdown-menu dropdown-menu-right">
@@ -103,7 +110,14 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
           <li><RouterLink to="/itineraries"><i class="fas fa-calendar-days"></i> My itineraries</RouterLink></li>
           <li><RouterLink to="/contests"><i class="fas fa-trophy"></i> My contests</RouterLink></li>
           <li><RouterLink to="/travelers"><i class="fas fa-user-group"></i> Travelers</RouterLink></li>
-          <li v-if="passport.profile?.is_admin"><RouterLink to="/admin/news"><i class="fas fa-user-shield"></i> Talapo Admin</RouterLink></li>
+          <template v-if="isAdmin">
+            <li class="menu-sep" role="separator"></li>
+            <li><RouterLink to="/admin/overview"><i class="fas fa-gauge-high"></i> Admin dashboard</RouterLink></li>
+            <li><RouterLink to="/admin/reports"><i class="fas fa-clipboard-list"></i> Stand reports</RouterLink></li>
+            <li><RouterLink to="/admin/users"><i class="fas fa-users-gear"></i> Users</RouterLink></li>
+            <li><RouterLink to="/kiosk/parque-libertad"><i class="fas fa-tablet-screen-button"></i> Talapo Stand</RouterLink></li>
+            <li class="menu-sep" role="separator"></li>
+          </template>
           <li><a href="#" @click.prevent="logout"><i class="fas fa-sign-out-alt"></i> Sign out</a></li>
         </ul>
       </div>
@@ -310,11 +324,12 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
 .nav-item-dropdown.open > a i { transform: rotate(180deg); }
 .nav-links a.router-link-exact-active:not(.nav-profile-badge):not(.btn-sign) { color: #1C6E6B; }
 .menu-toggle { display: none; }
+.menu-sep { height: 1px; background: rgba(28, 110, 107, .15); margin: .35rem 0; padding: 0; }
 .dropdown-menu { margin: 0; }
 .nav-item-plain { position: relative; display: inline-block; }
 
-/* ===== Responsive original ===== */
-@media (max-width: 768px) {
+/* ===== Responsive: celular y TABLET (hasta 1100 px) usan el menú hamburguesa ===== */
+@media (max-width: 1100px) {
   .main-nav { padding: 1rem 5%; flex-direction: row; justify-content: space-between; align-items: center; }
   .menu-toggle { display: block; background: none; border: none; color: #0A2F44; font-size: 1.5rem; cursor: pointer; padding: 0.5rem; }
   .nav-links {
@@ -333,6 +348,17 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
   .nav-item-dropdown.open .dropdown-menu { display: block; transform: none; }
   .nav-item-dropdown .dropdown-menu li a { text-align: center; }
   .profile-dropdown .nav-profile-badge { justify-content: center; }
+  .nav-links { gap: 1rem; }
+  .nav-links a { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+  .nav-item-dropdown .dropdown-menu li a { min-height: 44px; justify-content: center; }
+}
+/* Tablet: el menú ocupa un ancho cómodo y se lee en dos columnas */
+@media (min-width: 769px) and (max-width: 1100px) {
+  .main-nav { padding: 1rem 4%; }
+  .nav-links { padding: 1.5rem 4%; display: none; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 1rem 1.5rem; }
+  .nav-links.active { display: flex; }
+  .nav-item-dropdown, .nav-item-plain { width: calc(50% - 1rem); }
+  .profile-dropdown, .btn-sign { width: 100%; }
 }
 @keyframes navDrop { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
 </style>

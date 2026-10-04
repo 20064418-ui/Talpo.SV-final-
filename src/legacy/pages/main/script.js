@@ -69,17 +69,17 @@ carouselContainer?.addEventListener('mouseleave', startAutoPlay);
 
 document.getElementById('googlePlayBtn')?.addEventListener('click', (e) => {
     e.preventDefault();
-    alert('📱 Google Play Store - Talapo App (demo)');
+    alert('Google Play Store - Talapo App (demo)');
 });
 
 document.getElementById('appStoreBtn')?.addEventListener('click', (e) => {
     e.preventDefault();
-    alert('🍎 App Store - Talapo App (demo)');
+    alert('App Store - Talapo App (demo)');
 });
 
 document.getElementById('qrBtn')?.addEventListener('click', (e) => {
     e.preventDefault();
-    alert('📲 Scan QR code to download Talapo App');
+    alert('Scan QR code to download Talapo App');
 });
 
 document.getElementById('buttonstart')?.addEventListener('click', () => {

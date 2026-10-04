@@ -119,3 +119,39 @@ html, body { max-width: 100%; overflow-x: hidden; }
 @media (max-width: 768px) {
   html body .lg-talapo-itinerario #routeTrack { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
+
+/* =====================================================================
+   TABLET (769–1100 px): página principal (/main) y ajustes generales.
+   El celular (<=768) y el escritorio (>1100) conservan su diseño.
+   ===================================================================== */
+@media (min-width: 769px) and (max-width: 1100px) {
+  /* Hero: texto arriba y carrusel abajo, ambos a todo el ancho */
+  html body .lg-main .hero { padding: 3.5rem 4%; gap: 2rem; flex-direction: column; align-items: stretch; }
+  html body .lg-main .hero-content { min-width: 0; text-align: center; }
+  html body .lg-main .hero-content h1 { font-size: clamp(2.4rem, 5.6vw, 3.2rem); }
+  html body .lg-main .hero-content p { max-width: 640px; margin-left: auto; margin-right: auto; }
+  html body .lg-main .hero-stats { justify-content: center; }
+  html body .lg-main .carousel-container { min-width: 0; flex: none; height: 460px; }
+  html body .lg-main .carousel-view { height: 360px; }
+
+  /* Secciones: 2 columnas cómodas y márgenes laterales más chicos */
+  html body .lg-main .container { padding: 3rem 4%; }
+  html body .lg-main .destinations-grid { grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+  html body .lg-main .members-grid { grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+  html body .lg-main .features-grid { grid-template-columns: repeat(2, 1fr); gap: 1.6rem; padding: 1.5rem 0; }
+  html body .lg-main .branch-container { grid-template-columns: 1fr; gap: 0; }
+  html body .lg-main .branch-image img { max-height: 320px; width: 100%; }
+  html body .lg-main .social-grid { gap: 1rem; }
+  html body .lg-main .social-card { flex: 1 1 calc(50% - 1rem); min-width: 220px; }
+  html body .lg-main .partners-grid { gap: 1rem; }
+
+  /* Botones y controles más fáciles de tocar */
+  html body .lg-main .nav-btn,
+  html body .lg-main .btn-learn-more,
+  html body .lg-main .app-btn { min-height: 44px; }
+}
+
+/* Tablet vertical y menores (hasta 900 px): los paneles de administración pasan a una columna */
+@media (max-width: 900px) {
+  .tp.admin .content { padding-left: 4%; padding-right: 4%; }
+}

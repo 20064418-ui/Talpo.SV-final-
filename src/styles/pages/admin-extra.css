@@ -1,0 +1,28 @@
+/* Estilos compartidos de Overview, Stand reports y Users (administrador) */
+.tp.admin { font-family: 'Outfit', 'Inter', sans-serif; background: #F8FBFE; min-height: 100vh; }
+.tp.admin .hero { background: linear-gradient(rgba(10,47,68,.72), rgba(10,47,68,.85)), url('/assets/img/stand/parksantaana.jpg') center/cover; color: #fff; padding: clamp(2.5rem, 5vw, 4rem) 5%; }
+.tp.admin .hero-inner { max-width: 1200px; margin: 0 auto; }
+.tp.admin .hero-badge { display: inline-block; background: #0A2F44; font-size: .75rem; font-weight: 700; letter-spacing: 1px; padding: .4rem 1rem; border-radius: 40px; margin-bottom: 1rem; }
+.tp.admin .hero h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 800; text-transform: uppercase; margin: 0 0 .4rem; }
+.tp.admin .hero p { margin: 0; opacity: .9; max-width: 62ch; }
+.tp.admin .content { max-width: 1200px; margin: 0 auto; padding: 2rem 5% 4rem; }
+.tp.admin .note { color: #58717f; }
+.tp.admin .box { background: #fff; border-radius: 20px; padding: 1rem 1.2rem; box-shadow: 0 16px 28px -22px rgba(0,32,64,.35); }
+.tp.admin .box h2 { color: #0A2F44; font-size: 1.2rem; margin: 0 0 .6rem; }
+.tp.admin .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
+.tp.admin .filters select, .tp.admin .filters input { font: inherit; padding: .55rem .8rem; border: 1.5px solid #dce7ea; border-radius: 12px; background: #fff; min-height: 44px; }
+.tp.admin .filters input { flex: 1; min-width: 200px; }
+.tp.admin .list { list-style: none; padding: 0; margin: 0; display: grid; gap: .7rem; }
+.tp.admin .row { background: #fff; border-radius: 18px; padding: .9rem 1rem; box-shadow: 0 14px 26px -22px rgba(0,32,64,.35); border-left: 5px solid #dce7ea; }
+.tp.admin .row.high { border-left-color: #E46D5C; }
+.tp.admin .row.medium { border-left-color: #E2B13C; }
+.tp.admin .row.done { opacity: .72; border-left-color: #1C6E6B; }
+.tp.admin .chip { display: inline-flex; align-items: center; gap: .3rem; font-size: .75rem; font-weight: 800; padding: .15rem .6rem; border-radius: 20px; background: #EEF6F6; color: #1C6E6B; }
+.tp.admin .chip.high { background: #fdecea; color: #b4432f; }
+.tp.admin .chip.medium { background: #fdf3d9; color: #8a6410; }
+.tp.admin .chip.admin { background: #0A2F44; color: #fff; }
+.tp.admin .btn-s { border: 0; border-radius: 30px; padding: .55rem 1.1rem; min-height: 40px; font: inherit; font-weight: 800; background: #E46D5C; color: #fff; cursor: pointer; }
+.tp.admin .btn-s.alt { background: #EEF6F6; color: #1C6E6B; }
+.tp.admin .btn-s.danger { background: #fff; color: #b4432f; border: 1.5px solid #f0c9c2; }
+.tp.admin .btn-s:disabled { opacity: .5; cursor: default; }
+@media (max-width: 1100px) { .tp.admin .content { padding: 1.5rem 4% 3rem; } }

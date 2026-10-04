@@ -68,10 +68,22 @@ export const useAuthStore = defineStore('auth', {
       return data.user;
     },
 
+    /** Paso 1: envía el correo de recuperación (enlace o código, según la config de InsForge). */
     async sendPasswordReset(email) {
       return unwrap(insforge.auth.sendResetPasswordEmail({
-        email, redirectTo: `${location.origin}/login`,
+        email, redirectTo: `${location.origin}/reset-password`,
       }));
+    },
+
+    /** Paso 2 (solo si el correo trae un código de 6 dígitos): lo cambia por un token. */
+    async exchangeResetCode(email, code) {
+      const data = await unwrap(insforge.auth.exchangeResetPasswordToken({ email, code }));
+      return data.token;
+    },
+
+    /** Paso 3: guarda la contraseña nueva. `token` viene del enlace o del paso 2. */
+    async resetPassword(token, newPassword) {
+      return unwrap(insforge.auth.resetPassword({ newPassword, otp: token }));
     },
 
     async signOut() {

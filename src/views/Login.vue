@@ -11,7 +11,9 @@ const auth = useAuthStore();
 const route = useRoute();
 const router = useRouter();
 const form = reactive({ email: '', password: '' });
-const msg = ref(route.query.verified ? { type: 'success', text: 'Email verified. Sign in to continue.' } : null);
+const msg = ref(route.query.verified ? { type: 'success', text: 'Email verified. Sign in to continue.' }
+  : route.query.reset ? { type: 'success', text: 'Password updated. Sign in with your new password.' } : null);
+const resetSent = ref(false);
 const busy = ref(false);
 const showPass = ref(false);
 const unverified = ref(false);
@@ -51,8 +53,11 @@ async function submit() {
 
 async function forgot() {
   if (!form.email) { msg.value = { type: 'warning', text: 'Type your email first, then tap “Forgot password?”' }; return; }
-  try { await auth.sendPasswordReset(form.email); msg.value = { type: 'success', text: 'If that email has an account, we sent you a link to reset your password.' }; }
-  catch (e) { msg.value = { type: 'error', text: e.message }; }
+  try {
+    await auth.sendPasswordReset(form.email);
+    resetSent.value = true;
+    msg.value = { type: 'success', text: 'If that email has an account, we sent you a message to reset your password. Check your spam folder too.' };
+  } catch (e) { msg.value = { type: 'error', text: e.message }; }
 }
 const icon = { error: 'fa-exclamation-circle', success: 'fa-check-circle', warning: 'fa-exclamation-triangle' };
 </script>
@@ -123,6 +128,11 @@ const icon = { error: 'fa-exclamation-circle', success: 'fa-check-circle', warni
               <p class="verify-help"><button type="button" class="link-inline" @click="resendCode">Resend the code</button></p>
             </form>
           </Transition>
+
+          <p v-if="resetSent" class="verify-help">
+            Did the email include a 6-digit code?
+            <RouterLink class="link-inline" :to="{ path: '/reset-password', query: { email: form.email } }">Enter it here</RouterLink>
+          </p>
 
           <div class="login-footer">
             <a href="#" @click.prevent="forgot">Forgot password?</a>
