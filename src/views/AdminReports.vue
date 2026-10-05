@@ -5,6 +5,7 @@ import { insforge, unwrap } from '@/lib/insforge';
 import { usePassportStore } from '@/stores/passport';
 import { stands } from '@/data/stands';
 import { toast } from '@/composables/useToast';
+import { downloadCsv } from '@/lib/csv';
 import AdminTabs from '@/components/admin/AdminTabs.vue';
 import '@/styles/pages/admin-extra.css';
 
@@ -60,6 +61,26 @@ async function remove(r) {
   } catch (e) { toast(e.message, 'error'); busy[r.id] = false; }
 }
 
+async function resolveAllShown() {
+  const todo = shown.value.filter((r) => !r.resolved);
+  if (!todo.length) return;
+  if (!confirm(`Mark ${todo.length} report(s) as resolved?`)) return;
+  let ok = 0;
+  for (const r of todo) {
+    try { await unwrap(insforge.database.rpc('admin_resolve_report', { p_id: r.id, p_resolved: true, p_note: notes[r.id] || null })); r.resolved = true; r.resolved_at = new Date().toISOString(); ok++; }
+    catch (e) { toast(e.message, 'error'); break; }
+  }
+  if (ok) toast(`${ok} report(s) resolved`);
+}
+function exportCsv() {
+  downloadCsv('talapo-stand-reports', shown.value, [
+    { label: 'Date', value: (r) => new Date(r.created_at).toISOString() }, { label: 'Stand', value: (r) => standName(r.stand_id) },
+    { label: 'Zone', value: (r) => ZONE[r.zone_status] || r.zone_status }, { label: 'Urgency', value: (r) => URG[r.urgency] || r.urgency },
+    { label: 'Trash types', value: (r) => (r.trash_types || []).map((t) => TRASH[t] || t) }, { label: 'Comment', key: 'comment' },
+    { label: 'Sent by', value: (r) => (r.username ? '@' + r.username : r.display_name || 'Anonymous') }, { label: 'Passport', key: 'passport_number' },
+    { label: 'Status', value: (r) => (r.resolved ? 'Resolved' : 'Pending') }, { label: 'Internal note', key: 'admin_note' },
+  ]);
+}
 const fmt = (d) => new Date(d).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
 const standName = (id) => { const s = stands[id]; return s ? `${s.name}, ${s.city}` : id; };
 onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); else loading.value = false; });
@@ -69,7 +90,7 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
   <div class="tp admin">
     <section class="hero">
       <div class="hero-inner">
-        <div class="hero-badge">TALAPO ADMIN</div>
+        <div class="hero-badge">✦ TALAPO ADMIN ✦</div>
         <h1>Stand reports</h1>
         <p>Zone status reports sent from the Talapo Stands. Urgent ones appear first.</p>
       </div>
@@ -95,6 +116,8 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
             <option v-for="s in Object.values(stands)" :key="s.id" :value="s.id">{{ s.name }}, {{ s.city }}</option>
           </select>
           <input v-model="f.q" type="search" placeholder="Search comment, user, passport…" />
+          <button class="btn-s alt" :disabled="!shown.length" @click="exportCsv"><i class="fas fa-file-csv"></i> Export CSV</button>
+          <button v-if="f.status !== 'resolved'" class="btn-s alt" :disabled="!shown.some((r) => !r.resolved)" @click="resolveAllShown"><i class="fas fa-check-double"></i> Resolve all shown</button>
         </div>
 
         <p v-if="loading" class="note"><i class="fas fa-spinner fa-spin"></i> Loading reports…</p>

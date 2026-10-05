@@ -102,7 +102,7 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
           <img :src="photo()" alt="Profile" class="nav-profile-img">
           <!-- Muestra el @usuario; si todavía no tiene, su nombre -->
           <span class="badge-name">{{ passport.profile?.username ? `@${passport.profile.username}` : (passport.profile?.display_name || auth.displayName) }}</span>
-          <span v-if="passport.streak" class="streak-chip" :title="`Talapo streak: ${passport.streak} day(s)`"><i class="fas fa-fire"></i> {{ passport.streak }}</span>
+          <span v-if="passport.streak" class="streak-chip" :title="`Talapo streak: ${passport.streak} day(s)`">🔥{{ passport.streak }}</span>
           <i class="fas fa-chevron-down text-xs"></i>
         </a>
         <ul class="dropdown-menu dropdown-menu-right">
@@ -115,6 +115,8 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
             <li><RouterLink to="/admin/overview"><i class="fas fa-gauge-high"></i> Admin dashboard</RouterLink></li>
             <li><RouterLink to="/admin/reports"><i class="fas fa-clipboard-list"></i> Stand reports</RouterLink></li>
             <li><RouterLink to="/admin/users"><i class="fas fa-users-gear"></i> Users</RouterLink></li>
+            <li><RouterLink to="/admin/announcements"><i class="fas fa-bullhorn"></i> Announcements</RouterLink></li>
+            <li><RouterLink to="/admin/activity"><i class="fas fa-clock-rotate-left"></i> Activity log</RouterLink></li>
             <li><RouterLink to="/kiosk/parque-libertad"><i class="fas fa-tablet-screen-button"></i> Talapo Stand</RouterLink></li>
             <li class="menu-sep" role="separator"></li>
           </template>

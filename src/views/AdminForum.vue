@@ -4,6 +4,7 @@ import { ref, computed, onMounted } from 'vue';
 import { insforge, unwrap } from '@/lib/insforge';
 import { usePassportStore } from '@/stores/passport';
 import { toast } from '@/composables/useToast';
+import { logAdmin } from '@/composables/useAdminLog';
 import AdminTabs from '@/components/admin/AdminTabs.vue';
 
 const passport = usePassportStore();
@@ -64,6 +65,7 @@ async function keep(i) {
     if (i.hidden) await unwrap(insforge.database.from(table(i)).update({ hidden: false }).eq('id', i.id));
     i.hidden = false;
     await resolveReports(i);
+    logAdmin('forum.keep', 'forum_' + i.kind, i.id, { title: (i.title || i.body || '').slice(0, 80) });
     toast('Kept visible — reports dismissed');
   } catch (e) { toast(e.message, 'error'); }
 }
@@ -72,6 +74,7 @@ async function hide(i) {
     await unwrap(insforge.database.from(table(i)).update({ hidden: true }).eq('id', i.id));
     i.hidden = true;
     await resolveReports(i);
+    logAdmin('forum.hide', 'forum_' + i.kind, i.id, { title: (i.title || i.body || '').slice(0, 80) });
     toast('Hidden from the forum');
   } catch (e) { toast(e.message, 'error'); }
 }
@@ -80,6 +83,7 @@ async function remove(i) {
   try {
     await unwrap(insforge.database.from(table(i)).delete().eq('id', i.id));
     items.value = items.value.filter((x) => x !== i);
+    logAdmin('forum.delete', 'forum_' + i.kind, i.id, { title: (i.title || i.body || '').slice(0, 80) });
     toast('Deleted');
   } catch (e) { toast(e.message, 'error'); }
 }

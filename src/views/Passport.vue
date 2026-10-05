@@ -187,7 +187,7 @@ const streakMessage = computed(() => {
 });
 function fmtDate(d) { return d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''; }
 const challengeName = (slug) => challenges.find((c) => c.slug === slug)?.title || slug;
-const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji || '🏆';
+const challengeIcon = (slug) => challenges.find((c) => c.slug === slug)?.icon || 'fa-trophy';
 </script>
 
 <template>
@@ -439,7 +439,7 @@ const challengeEmoji = (slug) => challenges.find((c) => c.slug === slug)?.emoji 
               <div class="panel-head"><h2>Talapo Contests</h2></div>
               <ul v-if="contests.entries.length" class="panel-list">
                 <li v-for="e in contests.entries" :key="e.id">
-                  <span class="emoji">{{ challengeEmoji(e.challenge) }}</span>
+                  <span class="emoji"><i class="fas" :class="challengeIcon(e.challenge)"></i></span>
                   <div><b>{{ challengeName(e.challenge) }}</b><small>{{ e.institution }} · {{ e.grade }} · {{ e.status }}</small></div>
                   <span class="score">{{ e.score }} pts</span>
                 </li>

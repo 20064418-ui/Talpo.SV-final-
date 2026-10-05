@@ -21,10 +21,10 @@
 <circle cx="11" cy="11" r="7"></circle>
 <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
 </svg>
-<input autocomplete="off" class="search-input" id="route-search" placeholder="Ej. Metrocentro, Hospital, Ruta 4…" type="search"/>
-<button aria-label="Limpiar búsqueda" class="clear-btn" hidden="" id="clear-search" type="button">×</button>
+<input autocomplete="off" class="search-input" id="route-search" placeholder="e.g. Metrocentro, Hospital, Route 4…" type="search"/>
+<button aria-label="Clear search" class="clear-btn" hidden="" id="clear-search" type="button">×</button>
 </div>
-<div aria-label="Filtrar por tipo de ruta" class="filter-chips" id="filter-chips" role="group">
+<div aria-label="Filter by route type" class="filter-chips" id="filter-chips" role="group">
 <button class="chip is-active" data-filter="todas">All</button>
 <button class="chip" data-filter="Urbana">Urban</button>
 <button class="chip" data-filter="Interurbana">Interurban</button>
@@ -50,10 +50,10 @@
 <div aria-labelledby="map-modal-title" aria-modal="true" class="map-modal-panel" role="dialog">
 <div class="map-modal-header">
 <div>
-<p class="map-modal-eyebrow" id="map-modal-category">Ruta</p>
+<p class="map-modal-eyebrow" id="map-modal-category">Route</p>
 <h2 class="map-modal-title" id="map-modal-title">Route</h2>
 </div>
-<button aria-label="Cerrar mapa" class="map-modal-close" id="map-modal-close" type="button">×</button>
+<button aria-label="Close map" class="map-modal-close" id="map-modal-close" type="button">×</button>
 </div>
 <div class="leaflet-container-box" id="leaflet-map"></div>
 <p class="map-modal-note" id="map-modal-note">

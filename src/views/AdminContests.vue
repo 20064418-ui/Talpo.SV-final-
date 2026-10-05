@@ -5,6 +5,8 @@ import { insforge, unwrap } from '@/lib/insforge';
 import { usePassportStore } from '@/stores/passport';
 import { challenges } from '@/data/contests';
 import { toast } from '@/composables/useToast';
+import { logAdmin } from '@/composables/useAdminLog';
+import { downloadCsv } from '@/lib/csv';
 import AdminTabs from '@/components/admin/AdminTabs.vue';
 
 const passport = usePassportStore();
@@ -20,9 +22,9 @@ const STATUS = [
   { id: 'registered', label: 'Registered', color: '#EEF6F6', text: '#1C6E6B' },
   { id: 'submitted', label: 'Submitted', color: '#e8eefc', text: '#1e3a8a' },
   { id: 'reviewed', label: 'Reviewed', color: '#fff1c2', text: '#8a5a00' },
-  { id: 'winner', label: '🏆 Winner', color: '#d9f2e3', text: '#166534' },
+  { id: 'winner', label: 'Winner', color: '#d9f2e3', text: '#166534' },
 ];
-const ch = (slug) => challenges.find((c) => c.slug === slug) || { emoji: '🏆', title: slug };
+const ch = (slug) => challenges.find((c) => c.slug === slug) || { icon: 'fa-trophy', title: slug };
 
 async function load() {
   loading.value = true;
@@ -52,10 +54,18 @@ async function save(x) {
     const rows = await unwrap(insforge.database.from('contest_entries')
       .update({ score, status: d.status, review_note: d.review_note.trim() || null }).eq('id', x.id).select());
     Object.assign(x, rows[0]); d.score = x.score;
+    logAdmin('contest.grade', 'contest_entry', x.id, { who: x.participant_name, score: x.score, status: x.status });
     toast(`Saved: ${x.participant_name} · ${x.score} pts`);
     ranking.value = await unwrap(insforge.database.from('ranking_talapo').select('*').limit(10));
   } catch (e) { toast(e.message, 'error'); }
   finally { saving.value = { ...saving.value, [x.id]: false }; }
+}
+function exportCsv() {
+  downloadCsv('talapo-contest-entries', shown.value, [
+    { label: 'Participant', key: 'participant_name' }, { label: 'School / institution', key: 'institution' }, { label: 'Grade', key: 'grade' },
+    { label: 'Challenge', value: (x) => ch(x.challenge).title }, { label: 'Status', key: 'status' }, { label: 'Score', key: 'score' },
+    { label: 'Review note', key: 'review_note' }, { label: 'Date', value: (x) => new Date(x.created_at).toISOString().slice(0, 10) },
+  ]);
 }
 const fmt = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); else loading.value = false; });
@@ -65,14 +75,14 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
   <div class="tp admin">
     <section class="hero">
       <div class="hero-inner">
-        <div class="hero-badge">✦ TALAPO ADMIN ✦</div>
+        <div class="hero-badge">TALAPO ADMIN</div>
         <h1>Talapo Admin</h1>
         <p>Grade the contest entries sent to avisos.talapo@gmail.com. The Ranking Talapo updates automatically.</p>
       </div>
     </section>
     <div class="content">
       <p v-if="!passport.loaded" class="note">Loading…</p>
-      <div v-else-if="!isAdmin" class="box"><h2>🔒 Admins only</h2></div>
+      <div v-else-if="!isAdmin" class="box"><h2>Admins only</h2></div>
       <template v-else>
         <AdminTabs :counts="{ contests: toReview }" />
         <div class="layout">
@@ -80,20 +90,21 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
             <div class="filters box">
               <select v-model="f.challenge" aria-label="Challenge">
                 <option value="all">All challenges</option>
-                <option v-for="c in challenges" :key="c.slug" :value="c.slug">{{ c.emoji }} {{ c.title }}</option>
+                <option v-for="c in challenges" :key="c.slug" :value="c.slug">{{ c.title }}</option>
               </select>
               <select v-model="f.status" aria-label="Status">
                 <option value="all">All statuses</option>
                 <option v-for="s in STATUS" :key="s.id" :value="s.id">{{ s.label }}</option>
               </select>
               <input v-model="f.q" type="search" placeholder="Search name, school, grade…" />
+              <button class="export" :disabled="!shown.length" @click="exportCsv"><i class="fas fa-file-csv"></i> Export CSV</button>
             </div>
             <p v-if="loading" class="note"><i class="fas fa-spinner fa-spin"></i> Loading entries…</p>
             <p v-else-if="!shown.length" class="note">No entries match.</p>
             <TransitionGroup v-else name="ph" tag="ul" class="list">
               <li v-for="x in shown" :key="x.id" class="entry" :class="{ dirty: dirty(x) }">
                 <div class="who">
-                  <span class="emoji">{{ ch(x.challenge).emoji }}</span>
+                  <span class="emoji"><i class="fas" :class="ch(x.challenge).icon"></i></span>
                   <div>
                     <b>{{ x.participant_name }}</b>
                     <small>{{ ch(x.challenge).title }} · {{ x.institution }} · {{ x.grade }} · {{ fmt(x.created_at) }}</small>
@@ -113,7 +124,7 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
             </TransitionGroup>
           </div>
           <aside class="box rank">
-            <h2>🏆 Ranking Talapo</h2>
+            <h2>Ranking Talapo</h2>
             <ol v-if="ranking.length">
               <li v-for="(r, i) in ranking" :key="r.participant_name">
                 <span class="pos" :class="`p${i + 1}`">{{ i + 1 }}</span>
@@ -143,6 +154,8 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
 .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
 .filters select, .filters input { font: inherit; padding: .55rem .8rem; border: 1.5px solid #dce7ea; border-radius: 12px; background: #fff; }
 .filters input { flex: 1; min-width: 180px; }
+.export { border: 0; border-radius: 30px; padding: .55rem 1.1rem; min-height: 44px; font: inherit; font-weight: 800; background: #EEF6F6; color: #1C6E6B; cursor: pointer; }
+.export:disabled { opacity: .5; cursor: default; }
 .list { list-style: none; padding: 0; margin: 0; display: grid; gap: .7rem; }
 .entry { background: #fff; border-radius: 18px; padding: .9rem 1rem; box-shadow: 0 14px 26px -22px rgba(0,32,64,.35); border-left: 5px solid #dce7ea; transition: border-color .2s; }
 .entry.dirty { border-left-color: #E46D5C; }

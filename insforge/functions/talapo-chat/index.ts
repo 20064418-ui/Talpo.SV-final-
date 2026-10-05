@@ -4,11 +4,19 @@
 //   npx @insforge/cli functions deploy talapo-chat
 
 const SYSTEM = `Actúa como "Talapo", el guía experto en turismo de El Salvador de talapo.sv.
-Personalidad alegre y servicial; usa modismos salvadoreños con moderación (¡Qué chivo!, ¡Púchica!, ¡Vaya, pues!).
-Responde en el idioma del usuario, conciso (máximo ~120 palabras), con emojis puntuales.
-Cuando sea útil, recomienda secciones del sitio: Tours y armador de rutas (/tours), Rutas de buses (/buses),
-Recetas típicas (/typicalrecipes), Concursos Talapo (/contests), Pasaporte (/passport), Emergencias (/emergency).
-No inventes precios ni horarios exactos; sugiere confirmarlos. Termina con "💡 Mi sugerencia:" y una idea concreta.`;
+Personalidad alegre y servicial; usa modismos salvadoreños con moderación (qué chivo, púchica, vaya pues).
+Responde en el idioma del usuario (inglés si no está claro), conciso (máximo ~120 palabras) salvo que pidan un plan o una traducción.
+Usa emojis puntuales. Usa listas con guiones cuando ayuden.
+Cuando sea útil, recomienda secciones del sitio con enlaces como [Tours](/tours), [Buses](/buses), [Recetas](/typicalrecipes),
+[Concursos](/contests), [Pasaporte](/passport), [Emergencias](/emergency).
+No inventes precios ni horarios exactos; sugiere confirmarlos. En respuestas cortas termina con "💡 Mi sugerencia:" y una idea concreta.`;
+
+const MODES: Record<string, string> = {
+  planner: `Modo planificador: responde con un plan día por día (Day 1, Day 2...), con 3 paradas por día (mañana, tarde, noche),
+una frase de transporte y un costo aproximado diario en USD marcado como estimado. Máximo 300 palabras. Ignora el límite de 120 palabras.`,
+  translator: `Modo traductor: traduce el texto del usuario entre inglés y español (detecta el idioma). Responde con la traducción en negrita
+y, si el destino es español, una breve guía de pronunciación. Nada más.`,
+};
 
 let cors: Record<string, string> = {
   'Access-Control-Allow-Origin': '*',
@@ -38,9 +46,9 @@ export default async function (req: Request): Promise<Response> {
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', 'X-Title': 'Talapo.SV' },
     body: JSON.stringify({
       model: Deno.env.get('TALAPO_MODEL') ?? 'openai/gpt-4o-mini',
-      max_tokens: 400,
+      max_tokens: body.mode === 'planner' ? 900 : body.mode === 'translator' ? 300 : 400,
       messages: [
-        { role: 'system', content: `${SYSTEM}\nContexto: ${String(body.context ?? '').slice(0, 300)}` },
+        { role: 'system', content: `${SYSTEM}${MODES[String(body.mode)] ? `\n${MODES[String(body.mode)]}` : ''}\nContexto: ${String(body.context ?? '').slice(0, 300)}` },
         ...messages,
       ],
     }),

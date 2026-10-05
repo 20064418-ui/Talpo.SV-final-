@@ -66,7 +66,7 @@ const destinos = [
 ];
 
 const departamentos = [
-  {id:'all', label:'Todos'},
+  {id:'all', label:'All'},
   {id:'ahuachapan', label:'Ahuachapán'},
   {id:'santa-ana', label:'Santa Ana'},
   {id:'sonsonate', label:'Sonsonate'},
@@ -147,7 +147,7 @@ function renderGrid(){
     const q = searchTerm.toLowerCase();
     list = list.filter(d => d.nombre.toLowerCase().includes(q) || d.tag.toLowerCase().includes(q) || d.deptoLabel.toLowerCase().includes(q));
   }
-  document.getElementById('resultsCount').textContent = `${list.length} destino${list.length===1?'':'s'} encontrado${list.length===1?'':'s'}`;
+  document.getElementById('resultsCount').textContent = `${list.length} destination${list.length===1?'':'s'} found`;
   if(list.length===0){
     grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">No places match that search. Try another term or clear the department filter.</div>`;
     return;
@@ -597,14 +597,14 @@ __ready( ()=>{
     ['initHeroSearch', initHeroSearch],
   ];
   steps.forEach(([name, fn])=>{
-    try{ fn(); } catch(err){ console.error(`[Talapo] Falló ${name}:`, err); }
+    try{ fn(); } catch(err){ console.error(`[Talapo] ${name} failed:`, err); }
   });
 
   try{
     document.getElementById('detailBackdrop').addEventListener('click', closeDetail);
     document.getElementById('detailClose').addEventListener('click', closeDetail);
     __listen(document, 'keydown', (e)=>{ if(e.key==='Escape') closeDetail(); });
-  } catch(err){ console.error('[Talapo] Falló el panel de detalle:', err); }
+  } catch(err){ console.error('[Talapo] Detail panel failed:', err); }
 
   try{
     let searchDebounce;
@@ -615,7 +615,7 @@ __ready( ()=>{
         renderGrid();
       }, 180);
     });
-  } catch(err){ console.error('[Talapo] Falló el buscador:', err); }
+  } catch(err){ console.error('[Talapo] Search failed:', err); }
 });
 
 /* [migración] listener del carrusel de main.js eliminado */
@@ -704,7 +704,7 @@ async function saveItinerary(){
   if(error){ btn.textContent = 'Save tour'; __talapo.toast(error.message || 'Could not save', 'error'); return; }
   btn.textContent = 'Saved ✓';
   document.getElementById('viewSavedBtn').hidden = false;
-  __talapo.toast('Tour saved to your passport ✈️');
+  __talapo.toast('Tour saved to your passport');
   __talapo.onSaved && __talapo.onSaved();
 }
 __expose('saveItinerary', saveItinerary);

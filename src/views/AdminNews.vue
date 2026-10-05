@@ -7,6 +7,7 @@ import { usePassportStore } from '@/stores/passport';
 import { useAuthStore } from '@/stores/auth';
 import { stands } from '@/data/stands';
 import { toast } from '@/composables/useToast';
+import { logAdmin } from '@/composables/useAdminLog';
 import AdminTabs from '@/components/admin/AdminTabs.vue';
 
 const passport = usePassportStore();
@@ -78,8 +79,8 @@ async function save() {
     published: form.published,
   };
   try {
-    if (editingId.value) await unwrap(insforge.database.from('municipal_news').update(row).eq('id', editingId.value));
-    else await unwrap(insforge.database.from('municipal_news').insert([row]));
+    if (editingId.value) { await unwrap(insforge.database.from('municipal_news').update(row).eq('id', editingId.value)); logAdmin('news.edit', 'news', editingId.value, { title: row.title }); }
+    else { await unwrap(insforge.database.from('municipal_news').insert([row])); logAdmin('news.create', 'news', null, { title: row.title, status: row.published ? 'published' : 'draft' }); }
     toast(form.published ? 'News published on the stand 📰' : 'Saved as draft');
     cancel();
     await load();
@@ -101,12 +102,13 @@ async function togglePublish(n) {
   try {
     await unwrap(insforge.database.from('municipal_news').update({ published: !n.published }).eq('id', n.id));
     n.published = !n.published;
+    logAdmin(n.published ? 'news.publish' : 'news.unpublish', 'news', n.id, { title: n.title });
     toast(n.published ? 'Published' : 'Hidden from the stand');
   } catch (e) { toast(e.message, 'error'); }
 }
 async function remove(n) {
   if (!confirm(`Delete “${n.title}”?`)) return;
-  try { await unwrap(insforge.database.from('municipal_news').delete().eq('id', n.id)); news.value = news.value.filter((x) => x.id !== n.id); toast('Deleted'); }
+  try { await unwrap(insforge.database.from('municipal_news').delete().eq('id', n.id)); news.value = news.value.filter((x) => x.id !== n.id); logAdmin('news.delete', 'news', n.id, { title: n.title }); toast('Deleted'); }
   catch (e) { toast(e.message, 'error'); }
 }
 

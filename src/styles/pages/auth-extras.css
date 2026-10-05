@@ -35,3 +35,39 @@
 .pg-auth .link-inline:disabled { color: var(--text-gray); cursor: default; text-decoration: none; }
 
 .pg-auth .field-hint { display: block; margin-top: 6px; font-size: 0.8rem; color: var(--text-gray); }
+
+
+/* =====================================================================
+   TABLET (Login, Registro y Nueva contraseña)
+   El diseño original empujaba el panel azul 75 px a la derecha (left: 75px),
+   y en tablet se montaba sobre el formulario. Aquí se reparte el espacio.
+   ===================================================================== */
+@media (min-width: 901px) and (max-width: 1280px) {
+  html body .pg-auth .main-container { align-items: stretch; gap: 0; padding: 20px 0; }
+  html body .pg-auth .info-section {
+    left: 0; margin: 0 0 0 20px; flex: 1 1 52%; min-width: 0; width: auto; height: auto;
+    padding: 44px 40px; border-radius: 56px;
+  }
+  html body .pg-auth .info-content { max-width: 100%; }
+  html body .pg-auth .info-content h1 { font-size: clamp(2rem, 3.6vw, 2.6rem); }
+  html body .pg-auth .image-grid { gap: 10px; margin: 28px 0; }
+  html body .pg-auth .stats-row { flex-wrap: wrap; gap: 14px 24px; }
+  html body .pg-auth .stat-item strong { font-size: 1.5rem; white-space: nowrap; }
+  html body .pg-auth .login-section { flex: 1 1 48%; min-width: 0; padding: 32px 36px 96px; }
+  html body .pg-auth .login-box { max-width: 420px; }
+}
+
+/* Tablet vertical (601–900 px): una columna centrada, sin estirarse demasiado */
+@media (min-width: 601px) and (max-width: 900px) {
+  html body .pg-auth .main-container { align-items: stretch; }
+  html body .pg-auth .info-section { padding: 48px 6%; }
+  html body .pg-auth .info-content { max-width: 640px; margin: 0 auto; }
+  html body .pg-auth .image-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  html body .pg-auth .login-section { padding: 40px 6% 110px; }
+  html body .pg-auth .login-box { max-width: 480px; margin: 0 auto; }
+}
+
+/* Los campos y botones se tocan con el dedo: altura mínima cómoda */
+@media (max-width: 1280px) {
+  html body .pg-auth input, html body .pg-auth .btn-login { min-height: 48px; }
+}

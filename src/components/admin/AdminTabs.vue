@@ -8,6 +8,8 @@ const tabs = [
   { to: '/admin/forum', icon: 'fa-comments', label: 'Forum', key: 'forum' },
   { to: '/admin/contests', icon: 'fa-trophy', label: 'Contests', key: 'contests' },
   { to: '/admin/users', icon: 'fa-users-gear', label: 'Users', key: 'users' },
+  { to: '/admin/announcements', icon: 'fa-bullhorn', label: 'Announcements', key: 'announcements' },
+  { to: '/admin/activity', icon: 'fa-clock-rotate-left', label: 'Activity log', key: 'activity' },
 ];
 </script>
 

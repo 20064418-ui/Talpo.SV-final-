@@ -256,7 +256,7 @@ const ROUTES = [
     categoria: "Interurbana",
     departamento: "Santa Ana",
     origenDestino: "Santa Ana Centro ↔ Chalchuapa",
-    recorrido: "Terminal Francisco Lara Pineda, Carretera Panamericana Occidental, entrada a Chalchuapa, zona arqueológica Tazumal, Mercado de Chalchuapa.",
+    recorrido: "Terminal Francisco Lara Pineda, Carretera Panamericana Occidental, Chalchuapa entrance, Tazumal archaeological site, Mercado de Chalchuapa.",
     tarifa: "$0.35 (variable por tramo largo)",
     tracks: {
       ida: [[13.988047,-89.563427], [13.9886,-89.565099], [13.988864,-89.565177], [13.986227,-89.568093], [13.984409,-89.570492], [13.982275,-89.57526], [13.981869,-89.578419], [13.982137,-89.579721], [13.982125,-89.580227], [13.981994,-89.580625], [13.981369,-89.581339], [13.981268,-89.581768], [13.981453,-89.582184], [13.98244,-89.58338], [13.984739,-89.58772], [13.98536,-89.593638], [13.985046,-89.596], [13.985181,-89.596621], [13.985,-89.596809], [13.98486,-89.59822], [13.985888,-89.602953], [13.987415,-89.606815], [13.987958,-89.608806], [13.988108,-89.614438], [13.988743,-89.620713], [13.988243,-89.623996], [13.988101,-89.628222], [13.987258,-89.634561], [13.987216,-89.638658], [13.987936,-89.646117], [13.987958,-89.652399], [13.988079,-89.653848], [13.988836,-89.659194], [13.990149,-89.663756], [13.989957,-89.664712], [13.988115,-89.668203], [13.987587,-89.669616], [13.987694,-89.671208], [13.988379,-89.675169], [13.987872,-89.675519], [13.980798,-89.67634], [13.981848,-89.682886], [13.981733,-89.683457], [13.977543,-89.689831], [13.977501,-89.690831], [13.976465,-89.691616], [13.974103,-89.695092], [13.973503,-89.696684], [13.970969,-89.751241], [13.970612,-89.75224], [13.97012,-89.75294], [13.965392,-89.757719], [13.964086,-89.759767], [13.963543,-89.761152], [13.949995,-89.812661], [13.949988,-89.814296], [13.950388,-89.815452], [13.950766,-89.816109], [13.946605,-89.819264], [13.946005,-89.82022], [13.945562,-89.822169], [13.945234,-89.823019], [13.94492,-89.823283], [13.943935,-89.823697], [13.943214,-89.824896], [13.941722,-89.826345], [13.940323,-89.828137], [13.939802,-89.828472], [13.938945,-89.828529], [13.938274,-89.828815], [13.937111,-89.82995], [13.935605,-89.830528], [13.933078,-89.832619], [13.932378,-89.833654], [13.931693,-89.83596], [13.931108,-89.836874], [13.928988,-89.838915], [13.92806,-89.839465], [13.927396,-89.840036], [13.925619,-89.841992], [13.924269,-89.843177], [13.924391,-89.84332], [13.925526,-89.843027], [13.92604,-89.844826], [13.925404,-89.845118]],
@@ -295,7 +295,7 @@ const ROUTES = [
     categoria: "Interdepartamental",
     departamento: "Santa Ana",
     origenDestino: "Santa Ana (Centro) ↔ San Salvador (Terminal de Occidente)",
-    recorrido: "Viaje directo por Autopista Panamericana, El Congo, directo por Los Chorros sin paradas locales hasta Santa Tecla, Salvador del Mundo y Terminal de Occidente.",
+    recorrido: "Direct trip along the Pan-American Highway, El Congo, straight through Los Chorros with no local stops to Santa Tecla, Salvador del Mundo y Terminal de Occidente.",
     tarifa: "$1.50 (servicio especial directo, con aire acondicionado)",
     tracks: {
       ida: [[13.693677,-89.219422], [13.693184,-89.219536], [13.69322,-89.219765], [13.69302,-89.219808], [13.692756,-89.219008], [13.691971,-89.217702], [13.691871,-89.216995], [13.69619,-89.216574], [13.695947,-89.218216], [13.696511,-89.218209], [13.696454,-89.218937], [13.697011,-89.221128], [13.696789,-89.222284], [13.695647,-89.22327], [13.694933,-89.225175], [13.694569,-89.225432], [13.693948,-89.225411], [13.692414,-89.228973], [13.692192,-89.230386], [13.690065,-89.231842], [13.685204,-89.238474], [13.68327,-89.240037], [13.682349,-89.241971], [13.681135,-89.242999], [13.680207,-89.244348], [13.678837,-89.245134], [13.678209,-89.245762], [13.677923,-89.246768], [13.677117,-89.247703], [13.675496,-89.250544], [13.674839,-89.251244], [13.674647,-89.251744], [13.674804,-89.254121], [13.674604,-89.255434], [13.672648,-89.258525], [13.670949,-89.262101], [13.670728,-89.262915], [13.670514,-89.266612], [13.670878,-89.271638], [13.671649,-89.275271], [13.672562,-89.298684], [13.672905,-89.299612], [13.676838,-89.305637], [13.677324,-89.306729], [13.677231,-89.307585], [13.676346,-89.309056], [13.676938,-89.313067], [13.677338,-89.313696], [13.67863,-89.314431], [13.679436,-89.316387], [13.680357,-89.316972], [13.681863,-89.317564], [13.683869,-89.317686], [13.684883,-89.318364], [13.688745,-89.31942], [13.693441,-89.31992], [13.69494,-89.321084], [13.696975,-89.323104], [13.698167,-89.324567], [13.698931,-89.326337], [13.699737,-89.330113], [13.700765,-89.333447], [13.700437,-89.334839], [13.700558,-89.33531], [13.703014,-89.338051], [13.703342,-89.339907], [13.705227,-89.342148], [13.707506,-89.346418], [13.711967,-89.350436], [13.714402,-89.353613], [13.7163,-89.355041], [13.72074,-89.356197], [13.734917,-89.360444], [13.736894,-89.361322], [13.747658,-89.36452], [13.778902,-89.373614], [13.780608,-89.374228], [13.782135,-89.375291], [13.809881,-89.404465], [13.815865,-89.413233], [13.816479,-89.414903], [13.817707,-89.415624], [13.821719,-89.420371], [13.826858,-89.427495], [13.830084,-89.429886], [13.83249,-89.431157], [13.833232,-89.431828], [13.833825,-89.432827], [13.833932,-89.43469], [13.834167,-89.435318], [13.834781,-89.435847], [13.835809,-89.435982], [13.83628,-89.436389], [13.83618,-89.436967], [13.835231,-89.437389], [13.834896,-89.43811], [13.836266,-89.43988], [13.836159,-89.441086], [13.837979,-89.444077], [13.838122,-89.444719], [13.838036,-89.44584], [13.838665,-89.446461], [13.844546,-89.44866], [13.846738,-89.450273], [13.847694,-89.451965], [13.849986,-89.4524], [13.850293,-89.452607], [13.851549,-89.45447], [13.853512,-89.454506], [13.854625,-89.45482], [13.856331,-89.454663], [13.859415,-89.455684], [13.859922,-89.456405], [13.859458,-89.457625], [13.860236,-89.458596], [13.860357,-89.460238], [13.860543,-89.46058], [13.86212,-89.460709], [13.863848,-89.462329], [13.864626,-89.463486], [13.865368,-89.465327], [13.867281,-89.466926], [13.86853,-89.468418], [13.869551,-89.468497], [13.869972,-89.468746], [13.870258,-89.469303], [13.870465,-89.470531], [13.871778,-89.471859], [13.873134,-89.472408], [13.875069,-89.472223], [13.87584,-89.472615], [13.876703,-89.47365], [13.877803,-89.474407], [13.879737,-89.477048], [13.881879,-89.479154], [13.884006,-89.481895], [13.886654,-89.483315], [13.888481,-89.485457], [13.890401,-89.487263], [13.891358,-89.487648], [13.893314,-89.48762], [13.893885,-89.487413], [13.894784,-89.48647], [13.895127,-89.486342], [13.897011,-89.48717], [13.899103,-89.487505], [13.90622,-89.486884], [13.907219,-89.488398], [13.909432,-89.490539], [13.91238,-89.494008], [13.913807,-89.496071], [13.915306,-89.497442], [13.91637,-89.497699], [13.917319,-89.497306], [13.918197,-89.497428], [13.918904,-89.496821], [13.920889,-89.496821], [13.921217,-89.497549], [13.920881,-89.498156], [13.920881,-89.498634], [13.921731,-89.499291], [13.921888,-89.499697], [13.921617,-89.500961], [13.921845,-89.501368], [13.922209,-89.501539], [13.923094,-89.501325], [13.924008,-89.501618], [13.925635,-89.501032], [13.926106,-89.501182], [13.926642,-89.504459], [13.926935,-89.504908], [13.929419,-89.505251], [13.929647,-89.505501], [13.929904,-89.506543], [13.931046,-89.5073], [13.931317,-89.507342], [13.932616,-89.50675], [13.933452,-89.506671], [13.934173,-89.506272], [13.935479,-89.507278], [13.936921,-89.507742], [13.937685,-89.509348], [13.938084,-89.509534], [13.938905,-89.50942], [13.939355,-89.509669], [13.939526,-89.51029], [13.939105,-89.512096], [13.939491,-89.512667], [13.941261,-89.51361], [13.941468,-89.513881], [13.941475,-89.514523], [13.940704,-89.515251], [13.940668,-89.515665], [13.941047,-89.516108], [13.941903,-89.516322], [13.942274,-89.517129], [13.942146,-89.517914], [13.940697,-89.52027], [13.939048,-89.524867], [13.938961,-89.525353], [13.93927,-89.526037], [13.942637,-89.528315], [13.946551,-89.529404], [13.952178,-89.533937], [13.954272,-89.534103], [13.956003,-89.535061], [13.9563,-89.535638], [13.956384,-89.536423], [13.955069,-89.538553], [13.955087,-89.53904], [13.955408,-89.539338], [13.956955,-89.53926], [13.9621,-89.541348], [13.96802,-89.541441], [13.968327,-89.541855], [13.96827,-89.542391], [13.967113,-89.54374], [13.966928,-89.544204], [13.966935,-89.544518], [13.967263,-89.544917], [13.968855,-89.545117], [13.970682,-89.543947], [13.971296,-89.543804], [13.972024,-89.543897], [13.973438,-89.544682], [13.974701,-89.545046], [13.977806,-89.544596], [13.980505,-89.545808], [13.981918,-89.545808], [13.984589,-89.547146], [13.985045,-89.547581], [13.985709,-89.547596], [13.986416,-89.548409], [13.987729,-89.550836], [13.988034,-89.552073], [13.983772,-89.553002], [13.981917,-89.555349], [13.981738,-89.557262], [13.98348,-89.563706], [13.98774,-89.562763], [13.988047,-89.563427]],
@@ -308,7 +308,7 @@ const ROUTES = [
     categoria: "Interdepartamental",
     departamento: "Santa Ana",
     origenDestino: "Santa Ana ↔ Sonsonate",
-    recorrido: "Terminal de Santa Ana, Los Naranjos, Juayúa (zona alta del departamento), Nahuizalco, ingresando por el desvío principal hasta la Terminal de Buses de Sonsonate.",
+    recorrido: "Terminal de Santa Ana, Los Naranjos, Juayúa (upper part of the department), Nahuizalco, entering by the main detour to the Sonsonate Bus Terminal.",
     tarifa: "$0.90 (variable)",
     tracks: {
       ida: [[13.973986,-89.75552], [13.974557,-89.755499], [13.974493,-89.754678], [13.968704,-89.754985], [13.968295,-89.75477], [13.970362,-89.752604], [13.970776,-89.751876], [13.971026,-89.750884], [13.973503,-89.696684], [13.974103,-89.695092], [13.976465,-89.691616], [13.977329,-89.690931], [13.977862,-89.69071], [13.982266,-89.690318], [13.982994,-89.690375], [13.985243,-89.690939], [13.986999,-89.690589], [13.987698,-89.690168], [13.988319,-89.689218], [13.988362,-89.688512], [13.987805,-89.684778], [13.987877,-89.683879], [13.98914,-89.680738], [13.989169,-89.680174], [13.987887,-89.6725], [13.98758,-89.669902], [13.987751,-89.668974], [13.989957,-89.664712], [13.990149,-89.663756], [13.988836,-89.659194], [13.988079,-89.653848], [13.987958,-89.652399], [13.987936,-89.646117], [13.987216,-89.638658], [13.987258,-89.634561], [13.988101,-89.628222], [13.988243,-89.623996], [13.988743,-89.620713], [13.988108,-89.614438], [13.987958,-89.608806], [13.987415,-89.606815], [13.985888,-89.602953], [13.98486,-89.59822], [13.985,-89.596809], [13.985181,-89.596621], [13.985046,-89.596], [13.98536,-89.593638], [13.984739,-89.58772], [13.983838,-89.585937], [13.983148,-89.584873], [13.981359,-89.583202], [13.980874,-89.582495], [13.980724,-89.582003], [13.981202,-89.580354], [13.981702,-89.579426], [13.981911,-89.578734], [13.981893,-89.577931], [13.982275,-89.57526], [13.984409,-89.570492], [13.985059,-89.569643], [13.984146,-89.566262], [13.981515,-89.567484], [13.980791,-89.565402], [13.980746,-89.564377], [13.98348,-89.563706], [13.983259,-89.562971], [13.98754,-89.561993], [13.988047,-89.563427]],
@@ -359,7 +359,7 @@ const ROUTES = [
     numero: "Ruta 235",
     categoria: "Interurbana",
     departamento: "Santa Ana",
-    origenDestino: "Parque Colón, Santa Ana ↔ La Virgen, Frontera Anguiatu (límite con Guatemala)",
+    origenDestino: "Parque Colón, Santa Ana ↔ La Virgen, Frontera Anguiatu (Guatemala border)",
     recorrido: "Parque Ecológico San Lorenzo, Terminal de Buses Santa Ana, Texistepeque, Hacienda San Francisco, Belén Güijat, Metapán, Tecomapa, San Jerónimo.",
     tarifa: "$0.80",
     waypoints: [
@@ -433,7 +433,7 @@ const ROUTES = [
     categoria: "Urbana",
     departamento: "Ahuachapán",
     origenDestino: "Mercado municipal de Ahuachapán ↔ Terminal de Sonsonate",
-    recorrido: "Concepción de Ataco, Jujutla, Guaymango, Los Platanares, San Julián, Hacienda Santa Clara (pasa por Metrocentro Sonsonate y Fenadesal).",
+    recorrido: "Concepción de Ataco, Jujutla, Guaymango, Los Platanares, San Julián, Hacienda Santa Clara (passes through Metrocentro Sonsonate and Fenadesal).",
     tarifa: "$0.90",
     waypoints: [
       { lat: 13.9214, lng: -89.8450, label: "Mercado municipal de Ahuachapán" },
@@ -464,7 +464,7 @@ const ROUTES = [
     numero: "Ruta 406",
     categoria: "Interdepartamental",
     departamento: "Ahuachapán",
-    origenDestino: "Frontera Las Chinamas (o Palo Pique), Ahuachapán ↔ Terminal de Occidente, San Salvador",
+    origenDestino: "Frontera Las Chinamas (or Palo Pique), Ahuachapán ↔ Terminal de Occidente, San Salvador",
     recorrido: "Las Chinamas, Ahuachapán, Ashamuco, Atiquizaya, Chalchuapa, Santa Ana, El Congo, Desvío Opico, Lourdes, Santa Tecla.",
     tarifa: "$0.90",
     waypoints: [
@@ -684,7 +684,7 @@ const ROUTES = [
     categoria: "Interdepartamental",
     departamento: "Cabañas",
     origenDestino: "Ilobasco ↔ Terminal de Oriente Plaza Amanecer, San Salvador",
-    recorrido: "Agua Zarca, San Rafael Cedros, El Carmen, Cojutepeque, Santa Cruz Michapa, San Martín por Carretera de Oro, Ilopango, Soyapango.",
+    recorrido: "Agua Zarca, San Rafael Cedros, El Carmen, Cojutepeque, Santa Cruz Michapa, San Martín via Carretera de Oro, Ilopango, Soyapango.",
     tarifa: "$0.74",
     waypoints: [
       { lat: 13.8422, lng: -88.8500, label: "Ilobasco" },
@@ -700,7 +700,7 @@ const ROUTES = [
     categoria: "Interdepartamental",
     departamento: "Cabañas",
     origenDestino: "Sensuntepeque ↔ Terminal de Oriente Plaza Amanecer, San Salvador",
-    recorrido: "San Isidro, Agua Zarca, San Rafael Cedros, El Carmen, Cojutepeque, Santa Cruz Michapa, San Martín por Carretera de Oro, Ilopango, Soyapango.",
+    recorrido: "San Isidro, Agua Zarca, San Rafael Cedros, El Carmen, Cojutepeque, Santa Cruz Michapa, San Martín via Carretera de Oro, Ilopango, Soyapango.",
     tarifa: "$1.04",
     waypoints: [
       { lat: 13.8703, lng: -88.6314, label: "Sensuntepeque" },
@@ -716,7 +716,7 @@ const ROUTES = [
     categoria: "Interdepartamental",
     departamento: "Cabañas",
     origenDestino: "Dolores ↔ Terminal de Oriente Plaza Amanecer, San Salvador",
-    recorrido: "Sensuntepeque, San Isidro, Agua Zarca, San Rafael Cedros, El Carmen, Cojutepeque, Santa Cruz Michapa, San Martín por Carretera de Oro, Ilopango, Soyapango.",
+    recorrido: "Sensuntepeque, San Isidro, Agua Zarca, San Rafael Cedros, El Carmen, Cojutepeque, Santa Cruz Michapa, San Martín via Carretera de Oro, Ilopango, Soyapango.",
     tarifa: "$1.14",
     waypoints: [
       { lat: 13.8333, lng: -88.7333, label: "Dolores" },
@@ -732,7 +732,7 @@ const ROUTES = [
     categoria: "Interdepartamental",
     departamento: "Cabañas",
     origenDestino: "Tejutepeque ↔ Terminal de Oriente Plaza Amanecer, San Salvador",
-    recorrido: "Ilobasco, Agua Zarca, San Rafael Cedros, El Carmen, Cojutepeque, Santa Cruz Michapa, San Martín por Carretera de Oro, Ilopango, Soyapango.",
+    recorrido: "Ilobasco, Agua Zarca, San Rafael Cedros, El Carmen, Cojutepeque, Santa Cruz Michapa, San Martín via Carretera de Oro, Ilopango, Soyapango.",
     tarifa: "$0.99",
     waypoints: [
       { lat: 13.8000, lng: -88.8000, label: "Tejutepeque" },
@@ -748,7 +748,7 @@ const ROUTES = [
     categoria: "Interdepartamental",
     departamento: "Cabañas",
     origenDestino: "Jutiapa ↔ Terminal de Oriente Plaza Amanecer, San Salvador",
-    recorrido: "Tejutepeque, Ilobasco, Agua Zarca, San Rafael Cedros, El Carmen, Cojutepeque, Santa Cruz Michapa, San Martín por Carretera de Oro, Ilopango, Soyapango.",
+    recorrido: "Tejutepeque, Ilobasco, Agua Zarca, San Rafael Cedros, El Carmen, Cojutepeque, Santa Cruz Michapa, San Martín via Carretera de Oro, Ilopango, Soyapango.",
     tarifa: "$1.30",
     waypoints: [
       { lat: 13.9333, lng: -88.9667, label: "Jutiapa" },
@@ -834,7 +834,7 @@ const ROUTES = [
     numero: "Ruta 119",
     categoria: "Interdepartamental",
     departamento: "Chalatenango",
-    origenDestino: "Citalá (cerca de Frontera El Poy) ↔ Terminal de Oriente Fenadesal, San Salvador",
+    origenDestino: "Citalá (near the El Poy border) ↔ Terminal de Oriente Fenadesal, San Salvador",
     recorrido: "San Ignacio, La Palma, Tejutla, Aguaje Escondido, Colima, Aguilares, Guazapa, Apopa, Delgado.",
     tarifa: "$1.67",
     waypoints: [
@@ -1198,6 +1198,20 @@ let currentDepartamento = "Santa Ana";
 // ficha completa (recorrido, tarifa y mapa) verificada en Cartorux.
 // Las rutas sin ficha completa no se muestran acá: quedan solo en el
 // índice de "Rutas por departamento" más abajo, junto a su número.
+
+/* ---- Display helpers (English UI; internal data keys stay in Spanish so filters keep working) ---- */
+const CATEGORY_EN = { Urbana: "Urban", Interurbana: "Interurban", Interdepartamental: "Interdepartmental" };
+const catEn = (c) => CATEGORY_EN[c] || c;
+const routeEn = (n) => String(n).replace(/^Ruta\s+/i, "Route ");
+const fareEn = (t) => String(t)
+  .replace("No especificada por Cartorux", "Not specified by Cartorux")
+  .replace("servicio ordinario", "regular service")
+  .replace("servicio especial directo, con aire acondicionado", "special direct service, air-conditioned")
+  .replace("variable por tramo largo", "varies on long stretches")
+  .replace("(variable)", "(varies)")
+  .replace("Microbús", "Minibus")
+  .replace(" y ", " and ");
+
 function getCardsForDepartment(nombreDepartamento) {
   return ROUTES.filter((r) => r.departamento === nombreDepartamento);
 }
@@ -1282,9 +1296,9 @@ function createRouteCard(route) {
 
   article.innerHTML = `
     <div class="route-card-head">
-      <span class="route-badge">${route.numero}</span>
+      <span class="route-badge">${routeEn(route.numero)}</span>
       <div class="route-heading">
-        <p class="route-category">${route.categoria}</p>
+        <p class="route-category">${catEn(route.categoria)}</p>
         <p class="route-endpoints">${highlightMatch(route.origenDestino, currentQuery)}</p>
       </div>
     </div>
@@ -1293,8 +1307,8 @@ function createRouteCard(route) {
       <p class="route-stops">${highlightMatch(route.recorrido, currentQuery)}</p>
     </div>
     <div class="route-footer">
-      <span class="route-fare-label">Tarifa</span>
-      <span class="route-fare-value">${route.tarifa}</span>
+      <span class="route-fare-label">Fare</span>
+      <span class="route-fare-value">${fareEn(route.tarifa)}</span>
     </div>
     <button type="button" class="route-map-btn" data-route-id="${route.id}">
       <svg viewBox="0 0 24 24"><path d="M9 20l-5.447-2.724A1 1 0 0 1 3 16.382V5.618a1 1 0 0 1 1.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0 0 21 18.382V7.618a1 1 0 0 0-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
@@ -1333,9 +1347,9 @@ function updateResultsCount(count) {
   const prefix = `${currentDepartamento}: `;
   if (currentQuery || currentCategory !== "todas") {
     resultsCountEl.textContent =
-      count === 1 ? `${prefix}1 ruta encontrada` : `${prefix}${count} rutas encontradas`;
+      count === 1 ? `${prefix}1 route found` : `${prefix}${count} routes found`;
   } else {
-    resultsCountEl.textContent = `${prefix}mostrando las ${count} rutas disponibles`;
+    resultsCountEl.textContent = `${prefix}showing all ${count} available routes`;
   }
 }
 
@@ -1432,8 +1446,8 @@ function drawRealTracks(tracks) {
   }
 
   mapModalNote.innerHTML = tracks.regreso
-    ? 'Recorrido real (traza GPS oficial). <span style="color:#204d78">&#9644;</span> Ida &nbsp; <span style="color:#f2a93b">&#9644;</span> Regreso'
-    : "Recorrido real (traza GPS oficial).";
+    ? 'Real route (official GPS track). <span style="color:#204d78">&#9644;</span> Outbound &nbsp; <span style="color:#f2a93b">&#9644;</span> Return'
+    : "Real route (official GPS track).";
 
   return bounds;
 }
@@ -1443,13 +1457,13 @@ async function drawRealStreetRoute(waypoints) {
 
   try {
     const response = await fetch(buildOsrmUrl(waypoints));
-    if (!response.ok) throw new Error("OSRM no respondió correctamente");
+    if (!response.ok) throw new Error("Routing service did not respond correctly");
 
     const data = await response.json();
     const coordsGeoJson = data.routes?.[0]?.geometry?.coordinates;
 
     if (!coordsGeoJson || coordsGeoJson.length === 0) {
-      throw new Error("Sin geometría de ruta");
+      throw new Error("No route geometry");
     }
 
     // GeoJSON usa [lng, lat]; Leaflet espera [lat, lng]
@@ -1461,7 +1475,7 @@ async function drawRealStreetRoute(waypoints) {
     }).addTo(leafletRouteLayer);
 
     mapModalNote.textContent =
-      "Recorrido calculado sobre calles reales (OSRM) a partir de los puntos de referencia de la ruta.";
+      "Route calculated over real streets (OSRM) from the route's reference points.";
 
     return polyline.getBounds();
   } catch (error) {
@@ -1485,8 +1499,8 @@ async function drawRealStreetRoute(waypoints) {
 function openRouteMap(route) {
   mapModal.hidden = false;
   document.body.style.overflow = "hidden";
-  mapModalTitle.textContent = `${route.numero} — ${route.origenDestino}`;
-  mapModalCategory.textContent = route.categoria;
+  mapModalTitle.textContent = `${routeEn(route.numero)} — ${route.origenDestino}`;
+  mapModalCategory.textContent = catEn(route.categoria);
   mapModalNote.textContent = route.tracks
     ? "Loading the real route…"
     : "Calculating the route on real streets…";
@@ -1596,9 +1610,9 @@ function renderDeptDetail(nombreDepartamento) {
   deptInfoEl.innerHTML = `<strong>${dep.nombre}</strong> · ${dep.zona} zone · ${dep.municipios} municipalities / ${dep.distritos} districts · ${totalRutas(dep)} routes registered in Cartorux, ${completas.size} with full details (route, fare and map) above`;
 
   const categorias = [
-    { key: "Interdepartamental", label: "Interdepartamentales" },
-    { key: "Interurbana", label: "Interurbanas" },
-    { key: "Urbana", label: "Urbanas" }
+    { key: "Interdepartamental", label: "Interdepartmental" },
+    { key: "Interurbana", label: "Interurban" },
+    { key: "Urbana", label: "Urban" }
   ];
 
   deptListsEl.innerHTML = categorias
@@ -1609,15 +1623,15 @@ function renderDeptDetail(nombreDepartamento) {
         ? lista
             .map((num) => {
               const isComplete = completas.has(num);
-              return `<span class="dept-route-badge${isComplete ? " dept-route-badge--complete" : ""}" title="${isComplete ? "Ficha completa disponible arriba" : "Solo listada por Cartorux, sin ficha completa todavía"}">${num}${isComplete ? " ✓" : ""}</span>`;
+              return `<span class="dept-route-badge${isComplete ? " dept-route-badge--complete" : ""}" title="${isComplete ? "Full details available above" : "Only listed by Cartorux, full details coming soon"}">${num}${isComplete ? " ✓" : ""}</span>`;
             })
             .join("")
-        : `<span class="dept-route-badge">— sin rutas listadas —</span>`;
+        : `<span class="dept-route-badge">— no routes listed —</span>`;
 
       return `
         <div class="dept-category-card" style="--card-accent: var(${colorVar})">
           <p class="dept-category-title">${label}</p>
-          <p class="dept-category-count">${lista.length} ruta${lista.length === 1 ? "" : "s"}</p>
+          <p class="dept-category-count">${lista.length} route${lista.length === 1 ? "" : "s"}</p>
           <div class="dept-badge-list">${badges}</div>
         </div>
       `;
@@ -1647,18 +1661,18 @@ function searchRouteAcrossDepartments(query) {
   deptSearchResultsEl.hidden = false;
 
   if (matches.length === 0) {
-    deptSearchResultsEl.innerHTML = `No se encontró ninguna ruta "${query}" en el índice de Cartorux.`;
+    deptSearchResultsEl.innerHTML = `No route matching "${query}" was found in the Cartorux index.`;
     return;
   }
 
   const grouped = matches.reduce((acc, m) => {
     acc[m.departamento] = acc[m.departamento] || [];
-    acc[m.departamento].push(`Ruta ${m.numero} (${m.categoria})`);
+    acc[m.departamento].push(`Route ${m.numero} (${catEn(m.categoria)})`);
     return acc;
   }, {});
 
   deptSearchResultsEl.innerHTML =
-    `<strong>${matches.length} coincidencia${matches.length === 1 ? "" : "s"} para "${query}":</strong><br>` +
+    `<strong>${matches.length} match${matches.length === 1 ? "" : "es"} for "${query}":</strong><br>` +
     Object.entries(grouped)
       .map(([depName, items]) => `${depName}: ${items.join(", ")}`)
       .join("<br>");

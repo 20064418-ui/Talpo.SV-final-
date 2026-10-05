@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router';
 import AppNavbar from '@/components/layout/AppNavbar.vue';
 import AppFooter from '@/components/layout/AppFooter.vue';
 import TalapoAI from '@/components/layout/TalapoAI.vue';
+import AnnouncementBanner from '@/components/layout/AnnouncementBanner.vue';
 import ToastHost from '@/components/ui/ToastHost.vue';
 import { useAuthStore } from '@/stores/auth';
 import { usePassportStore } from '@/stores/passport';
@@ -45,6 +46,7 @@ watch(() => auth.user?.id, (id) => {
 <template>
   <a class="skip-link" href="#content">Skip to content</a>
   <div class="route-progress" :style="{ width: progress.width + '%', opacity: progress.visible ? 1 : 0 }"></div>
+  <AnnouncementBanner v-if="!route.meta.kiosk && !route.meta.bare" />
   <AppNavbar v-if="showNavbar" />
   <main id="content" class="app-main">
     <!-- Transición entre páginas (lo único nuevo a nivel visual) -->

@@ -31,7 +31,7 @@ async function join() {
   busy.value = true;
   try {
     await contests.join({ ...form });
-    toast(`You’re in the Ranking Talapo with ${form.challenges.length} challenge(s)! 🏆`);
+    toast(`You’re in the Ranking Talapo with ${form.challenges.length} challenge(s)!`);
   } catch (e) { toast(e.message, 'error'); }
   finally { busy.value = false; }
 }
@@ -58,7 +58,7 @@ const guide = [
     <header class="hero">
       <div class="wrap hero-grid">
         <div>
-          <div class="hero-badge">✦ TALAPO CONTESTS ✦</div>
+          <div class="hero-badge">TALAPO CONTESTS</div>
           <h1>Join Talapo Contests!</h1>
           <p>Five creative challenges about El Salvador for students and teams. Make something funny, useful or beautiful — and climb the Ranking Talapo.</p>
           <div class="ctas">
@@ -96,7 +96,7 @@ const guide = [
               <legend>Challenges you’ll take on</legend>
               <label v-for="c in challenges" :key="c.slug" class="check">
                 <input v-model="form.challenges" type="checkbox" :value="c.slug" />
-                <span>{{ c.emoji }} {{ c.title }}</span>
+                <span><i class="fas" :class="c.icon"></i> {{ c.title }}</span>
                 <em v-if="contests.joined(c.slug)">joined</em>
               </label>
             </fieldset>
@@ -154,7 +154,7 @@ const guide = [
       <div class="section-head"><h2>The five challenges</h2><p class="muted">Pick one, several, or all five.</p></div>
       <div class="challenges">
         <article v-for="(c, i) in challenges" :key="c.slug" class="ch" :style="{ '--c': c.color }">
-          <header><span class="emoji" aria-hidden="true">{{ c.emoji }}</span><span class="idx">Challenge {{ i + 1 }}</span></header>
+          <header><span class="emoji" aria-hidden="true"><i class="fas" :class="c.icon"></i></span><span class="idx">Challenge {{ i + 1 }}</span></header>
           <h3>{{ c.title }}</h3>
           <p><strong>Creative challenge:</strong> {{ c.challenge }}</p>
           <p><strong>Submit:</strong> {{ c.submit }}</p>

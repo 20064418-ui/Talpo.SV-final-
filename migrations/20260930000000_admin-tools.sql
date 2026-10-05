@@ -21,7 +21,7 @@ $$;
 grant execute on function public.talapo_is_owner() to authenticated;
 
 -- rocio.calderon queda como administradora (si ya existe su perfil)
-update public.profiles set is_admin = true where username in ('rocio.calderon', 'daniel6310') and is_admin = true;
+update public.profiles set is_admin = true where username = 'rocio.calderon';
 
 -- 2) Reportes del stand: estado de revisión
 alter table public.stand_reports add column if not exists resolved    boolean not null default false;
@@ -52,7 +52,7 @@ begin
     'forum_hidden',       (select count(*) from forum_posts where hidden) + (select count(*) from forum_comments where hidden),
     'forum_reports',      (select count(*) from forum_reports where not resolved),
     'contest_entries',    (select count(*) from contest_entries),
-    'contest_to_review',  (select count(*) from contest_entries where status = 'registered')
+    'contest_to_review',  (select count(*) from contest_entries where status = 'submitted')
   );
 end $$;
 grant execute on function public.admin_overview() to authenticated;
