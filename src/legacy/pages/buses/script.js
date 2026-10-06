@@ -233,7 +233,7 @@ const ROUTES = [
   },
   {
     id: "55",
-    numero: "Royte 55",
+    numero: "Route 55",
     categoria: "Urbana",
     departamento: "Santa Ana",
     origenDestino: "Colonia Gerardo Barrios ↔ Parcelación San Rafael",
