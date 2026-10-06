@@ -237,7 +237,7 @@
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 3px;
-    color: #0d9488;
+    color: #000000;
     margin-bottom: 8px;
     text-transform: uppercase;
 }
@@ -246,14 +246,14 @@
     font-size: 52px;
     font-weight: 800;
     letter-spacing: -1px;
-    color: #115e59;
+    color: #012928;
     margin-bottom: 5px;
 }
 
 .lg-emergency .sub-category {
     font-size: 16px;
     font-weight: 600;
-    color: #0f766e;
+    color: #000000;
 }
 
 /* Carousel Stack Wrapper */
