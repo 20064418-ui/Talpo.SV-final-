@@ -30,7 +30,7 @@ async function togglePublic() {
 
 const editing = ref(false);
 const saving = ref(false);
-const form = reactive({ nombre: '', usuario: '', nacionalidad: '', nPasaporte: '', fechaNac: '' });
+const form = reactive({ nombre: '', usuario: '', nacionalidad: '', fechaNac: '' });
 const usernameError = ref('');
 const photoFile = ref(null);
 const preview = ref('');
@@ -44,7 +44,6 @@ function fillForm() {
   form.nombre = p.value.display_name || auth.displayName;
   form.usuario = p.value.username || auth.user?.profile?.username || '';
   form.nacionalidad = p.value.nationality || '';
-  form.nPasaporte = p.value.passport_number || '';
   form.fechaNac = p.value.birth_date || '';
   preview.value = p.value.photo_url || '';
   if (preview.value) photoStatus.value = { text: 'Current photo loaded.', ok: true };
@@ -100,7 +99,8 @@ async function guardar() {
     await passport.savePassport({
       display_name: form.nombre.trim(),
       nationality: form.nacionalidad.trim(),
-      passport_number: form.nPasaporte.trim().toUpperCase(),
+      // El número lo asigna Talapo en la base de datos (fijo); aquí solo se avisa que se está creando
+      passport_number: p.value.passport_number || 'AUTO',
       birth_date: form.fechaNac || null,
       photo_url,
     });
@@ -216,7 +216,8 @@ const challengeIcon = (slug) => challenges.find((c) => c.slug === slug)?.icon ||
             </div>
             <div class="form-group">
               <label for="nPasaporte">Passport Number:</label>
-              <input id="nPasaporte" v-model="form.nPasaporte" type="text" required placeholder="Ej. SV9876543">
+              <input id="nPasaporte" class="locked" :value="p.passport_number || 'Assigned by Talapo when you save'" type="text" readonly tabindex="-1" aria-describedby="nPasaporteHint">
+              <small id="nPasaporteHint" class="locked-hint"><i class="fas fa-lock"></i> {{ p.passport_number ? 'Your number is fixed and cannot be changed.' : 'Talapo gives you a unique number when you create your passport.' }}</small>
             </div>
             <div class="form-group">
               <label for="fechaNac">Date of Birth:</label>
@@ -568,4 +569,6 @@ const challengeIcon = (slug) => challenges.find((c) => c.slug === slug)?.icon ||
   .streak-stats { grid-template-columns: repeat(2, 1fr); }
   .actions-row { flex-direction: column; }
 }
+.locked { background: #eef3f6 !important; color: #58717f !important; font-weight: 700; letter-spacing: 1px; cursor: not-allowed; }
+.locked-hint { display: block; margin-top: 6px; color: #6b8795; font-size: .85rem; }
 </style>
