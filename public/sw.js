@@ -3,7 +3,7 @@
    · Archivos de la app (/assets/…): se guardan al usarse (tienen nombre único por versión).
    · Fotos y mapas externos (Wikimedia, OpenStreetMap, fuentes): se guardan al verse.
    · Las llamadas a InsForge NO se guardan aquí (los formularios usan su propia cola). */
-const VERSION = 'talapo-v1';
+const VERSION = 'talapo-v2';
 const PAGES = `${VERSION}-pages`;
 const ASSETS = `${VERSION}-assets`;
 const MEDIA = `${VERSION}-media`;

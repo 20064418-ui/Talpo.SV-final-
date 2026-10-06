@@ -1224,3 +1224,17 @@
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
     
+
+/* ---- Top Destinations: información y botón Tours ---- */
+.lg-main .dest-card { display: flex; flex-direction: column; }
+.lg-main .dest-content { display: flex; flex-direction: column; flex: 1; }
+.lg-main .dest-info { font-size: 0.92rem; line-height: 1.55; color: var(--slate-gray); margin: 0.7rem 0 0.5rem; }
+.lg-main .dest-tip { font-size: 0.82rem; color: var(--rich-teal); margin: 0 0 1rem; line-height: 1.45; }
+.lg-main .dest-tip i { margin-right: 0.3rem; }
+.lg-main .dest-btn {
+    margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--deep-navy); color: #fff; text-decoration: none; font-weight: 700;
+    padding: 0.65rem 1.4rem; border-radius: 50px; min-height: 44px; transition: all 0.3s ease;
+}
+.lg-main .dest-btn:hover { background: var(--rich-teal); transform: translateY(-2px); }
+.lg-main .dest-more { text-align: center; margin: 2rem 0 0.5rem; }

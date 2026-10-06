@@ -720,7 +720,15 @@ __ready(async () => {
     preset = JSON.parse(sessionStorage.getItem(PENDING_KEY));
     sessionStorage.removeItem(PENDING_KEY);
   }
-  if(!preset) return;
+  // /tours?place=ataco,boqueron  →  deja esos destinos ya marcados (sin armar la ruta todavía)
+  if(!preset){
+    const place = (params.get('place') || '').split(',').map(x=>x.trim()).filter(id=>destinos.some(d=>d.id===id));
+    if(place.length){
+      selected = new Set(place);
+      try{ renderGrid(); renderSelection(); refreshCounts(); }catch(e){}
+    }
+    return;
+  }
   selected = new Set(preset.ids.filter(id=>destinos.some(d=>d.id===id)));
   document.getElementById('lat').value = preset.lat;
   document.getElementById('lng').value = preset.lng;

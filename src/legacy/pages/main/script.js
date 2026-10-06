@@ -67,19 +67,29 @@ prevBtn?.addEventListener('click', () => {
 carouselContainer?.addEventListener('mouseenter', stopAutoPlay);
 carouselContainer?.addEventListener('mouseleave', startAutoPlay);
 
+document.getElementById('installBtn')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (window.__talapoInstall) {            // Android / Chrome / Edge: instalación directa
+        window.__talapoInstall.prompt();
+        await window.__talapoInstall.userChoice.catch(() => {});
+        window.__talapoInstall = null;
+    } else if (window.matchMedia('(display-mode: standalone)').matches) {
+        alert('Talapo is already installed on this device.');
+    } else if (/iphone|ipad|ipod/i.test(navigator.userAgent)) {
+        alert('To install on iPhone/iPad: tap the Share button in Safari, then "Add to Home Screen".');
+    } else {
+        alert('To install: open the browser menu and choose "Install app" or "Add to Home screen".');
+    }
+});
+
 document.getElementById('googlePlayBtn')?.addEventListener('click', (e) => {
     e.preventDefault();
-    alert('Google Play Store - Talapo App (demo)');
+    alert('The Google Play version is coming soon. For now, tap "Install Talapo" to add it to your phone.');
 });
 
 document.getElementById('appStoreBtn')?.addEventListener('click', (e) => {
     e.preventDefault();
-    alert('App Store - Talapo App (demo)');
-});
-
-document.getElementById('qrBtn')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    alert('Scan QR code to download Talapo App');
+    alert('The App Store version is coming soon. On iPhone, open Talapo in Safari, tap Share and "Add to Home Screen".');
 });
 
 document.getElementById('buttonstart')?.addEventListener('click', () => {

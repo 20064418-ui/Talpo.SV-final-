@@ -17,6 +17,7 @@ function htmlToRoute(page) {
 const routes = [
   // index, main y tours usan su HTML/CSS/JS ORIGINAL (diseño sin cambios)
   { path: '/', name: 'index', component: () => import('@/views/LegacyPage.vue'), props: { name: 'index' }, meta: { ownNavbar: true, ownFooter: true } },
+  { path: '/what-is-talapo', name: 'what-is-talapo', component: () => import('@/views/WhatIsTalapo.vue'), meta: { title: 'What is Talapo?' } },
   { path: '/main', name: 'main', component: () => import('@/views/LegacyPage.vue'), props: { name: 'main' } },
   { path: '/tours', name: 'tours', component: () => import('@/views/LegacyPage.vue'), props: { name: 'tours' } },
   { path: '/login', name: 'login', component: () => import('@/views/Login.vue'), meta: { guestOnly: true, title: 'Sign in', noNavbar: true } },

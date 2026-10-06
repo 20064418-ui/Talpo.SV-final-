@@ -16,6 +16,14 @@ delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({ iconUrl: markerIcon, iconRetinaUrl: markerIcon2x, shadowUrl: markerShadow });
 window.L = L;
 
+// Instalar Talapo como app: el navegador avisa cuando se puede y se guarda el evento para usarlo en un botón
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  window.__talapoInstall = e;
+  window.dispatchEvent(new Event('talapo-installable'));
+});
+window.addEventListener('appinstalled', () => { window.__talapoInstall = null; });
+
 createApp(App).use(createPinia()).use(router).mount('#app');
 
 // Funciona sin internet (sobre todo el Stand): service worker solo en producción
