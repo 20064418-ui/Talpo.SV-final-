@@ -53,7 +53,7 @@ const allGroups = [
   ] },
 ];
 
-const groups = computed(() => allGroups.map((g) => ({
+const groups = computed(() => !auth.isAuthenticated ? [] : allGroups.map((g) => ({
   ...g, items: g.items.filter((i) => !i.adminOnly || isAdmin.value),
 })));
 
@@ -85,6 +85,8 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
     </button>
 
     <div class="nav-links" :class="{ active: menuOpen }">
+
+      <div class="nav-item-plain"><RouterLink to="/what-is-talapo">What is Talapo?</RouterLink></div>
 
       <div v-for="g in groups" :key="g.label" class="nav-item-dropdown" :class="{ open: openGroup === g.label }">
         <a href="#" @click.prevent.stop="toggleGroup(g.label)">{{ g.label }} <i class="fas fa-chevron-down text-xs"></i></a>

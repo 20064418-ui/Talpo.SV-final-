@@ -57,6 +57,6 @@ watch(() => auth.user?.id, (id) => {
     </RouterView>
   </main>
   <AppFooter v-if="!bare && !route.meta.ownFooter" />
-  <TalapoAI v-if="!route.meta.kiosk" />
+  <TalapoAI v-if="!route.meta.kiosk && auth.isAuthenticated" />
   <ToastHost />
 </template>

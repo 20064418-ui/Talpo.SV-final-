@@ -3,8 +3,12 @@
 // para que cualquier persona encuentre rápido lo que necesita.
 import { ref, computed } from 'vue';
 import { useInstall } from '@/composables/useInstall';
+import { useAuthStore } from '@/stores/auth';
 
 const { canPrompt, installed, isIOS, install } = useInstall();
+const auth = useAuthStore();
+// Sin sesión, "Open" lleva a iniciar sesión y después abre la función elegida
+const dest = (to) => (auth.isAuthenticated ? to : { name: 'login', query: { redirect: to } });
 
 const CATS = [
   { id: 'all', label: 'Everything' },
@@ -105,14 +109,19 @@ const countOf = (id) => (id === 'all' ? features.length : features.filter((f) =>
         <span class="badge">WHAT IS TALAPO?</span>
         <h1>One place to plan, explore and enjoy <span>El Salvador</span></h1>
         <p>Talapo personalizes travel itineraries to each person's tastes, interests and dreams. Below you will find every tool we have and exactly where to find it.</p>
-        <div class="cta">
+        <div v-if="auth.isAuthenticated" class="cta">
           <RouterLink class="btn main" to="/tours"><i class="fas fa-route"></i> Plan with Tours</RouterLink>
           <RouterLink class="btn ghost" to="/passport"><i class="fas fa-passport"></i> Get my passport</RouterLink>
+        </div>
+        <div v-else class="cta">
+          <RouterLink class="btn main" to="/register"><i class="fas fa-user-plus"></i> Create free account</RouterLink>
+          <RouterLink class="btn ghost" to="/login"><i class="fas fa-right-to-bracket"></i> Sign in</RouterLink>
         </div>
       </div>
     </section>
 
     <section class="wrap">
+      <p v-if="!auth.isAuthenticated" class="gate"><i class="fas fa-lock"></i> Create a free account or sign in to open these tools. Everything below shows you what is waiting for you.</p>
       <div class="finder">
         <label class="search">
           <i class="fas fa-magnifying-glass"></i>
@@ -134,8 +143,8 @@ const countOf = (id) => (id === 'all' ? features.length : features.filter((f) =>
           <p>{{ f.text }}</p>
           <p class="where"><i class="fas fa-location-dot"></i> {{ f.where }}</p>
           <div class="acts">
-            <RouterLink v-if="f.to" class="open" :to="f.to">Open <i class="fas fa-arrow-right"></i></RouterLink>
-            <RouterLink v-for="l in f.links || []" :key="l.to" class="mini" :to="l.to">{{ l.t }}</RouterLink>
+            <RouterLink v-if="f.to" class="open" :to="dest(f.to)"><template v-if="auth.isAuthenticated">Open <i class="fas fa-arrow-right"></i></template><template v-else><i class="fas fa-lock"></i> Sign in to open</template></RouterLink>
+            <RouterLink v-for="l in f.links || []" :key="l.to" class="mini" :to="dest(l.to)">{{ l.t }}</RouterLink>
           </div>
         </article>
       </div>
@@ -176,6 +185,8 @@ const countOf = (id) => (id === 'all' ? features.length : features.filter((f) =>
 .btn.main { background: #E46D5C; color: #fff; }
 .btn.ghost { background: rgba(255,255,255,.14); color: #fff; border: 1.5px solid rgba(255,255,255,.6); }
 .wrap { max-width: 1200px; margin: 0 auto; padding: 2rem 5% 4rem; }
+.gate { background: #fff7ed; border: 1px solid #f5d9b8; color: #8a5a00; border-radius: 16px; padding: .9rem 1.2rem; margin: 0 0 1rem; font-weight: 600; }
+.gate i { margin-right: .4rem; }
 .finder { display: grid; gap: 1rem; margin-bottom: 1.6rem; position: sticky; top: 0; z-index: 5; background: #F8FBFE; padding: .8rem 0; }
 .search { display: flex; align-items: center; gap: .7rem; background: #fff; border: 2px solid #dce7ea; border-radius: 40px; padding: 0 1.2rem; transition: border-color .2s; }
 .search:focus-within { border-color: #1C6E6B; }

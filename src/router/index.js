@@ -77,10 +77,14 @@ const router = createRouter({
   },
 });
 
+const PUBLIC_ROUTES = new Set(['index', 'what-is-talapo', 'login', 'register', 'reset-password', 'auth-callback', 'not-found']);
+
 router.beforeEach(async (to) => {
   const auth = useAuthStore();
   await auth.init();
-  if (to.meta.requiresAuth && !auth.isAuthenticated) {
+  // Sin sesión solo se ve: inicio, "What is Talapo?", las pantallas para entrar y el Stand (la tablet no inicia sesión).
+  // Todo lo demás pide iniciar sesión y, al entrar, vuelve a la página que quería abrir.
+  if (!auth.isAuthenticated && !to.meta.kiosk && !PUBLIC_ROUTES.has(to.name)) {
     return { name: 'login', query: { redirect: to.fullPath } };
   }
   if (to.meta.guestOnly && auth.isAuthenticated) return { name: 'main' };
