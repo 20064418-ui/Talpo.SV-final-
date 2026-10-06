@@ -15,7 +15,7 @@ const loading = ref(true);
 const reports = ref([]);
 const notes = reactive({});
 const busy = reactive({});
-const f = reactive({ status: 'pending', urgency: 'all', stand: 'all', q: '' });
+const f = reactive({ status: 'pending', urgency: 'all', stand: 'all', who: 'all', q: '' });
 
 const ZONE = { clean: 'Clean', dirty: 'Dirty', very_dirty: 'Very dirty' };
 const URG = { low: 'Low', medium: 'Medium', high: 'High' };
@@ -38,6 +38,8 @@ const shown = computed(() => reports.value.filter((r) => {
   if (f.status === 'resolved' && !r.resolved) return false;
   if (f.urgency !== 'all' && r.urgency !== f.urgency) return false;
   if (f.stand !== 'all' && r.stand_id !== f.stand) return false;
+  if (f.who === 'identified' && !(r.username || r.passport_number)) return false;
+  if (f.who === 'anonymous' && (r.username || r.passport_number)) return false;
   const q = f.q.trim().toLowerCase();
   return !q || [r.comment, r.username, r.display_name, r.passport_number].some((v) => (v || '').toLowerCase().includes(q));
 }).sort((a, b) => (a.resolved - b.resolved) || (['high', 'medium', 'low'].indexOf(a.urgency) - ['high', 'medium', 'low'].indexOf(b.urgency)) || (new Date(b.created_at) - new Date(a.created_at))));
@@ -115,6 +117,11 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
             <option value="all">All stands</option>
             <option v-for="s in Object.values(stands)" :key="s.id" :value="s.id">{{ s.name }}, {{ s.city }}</option>
           </select>
+          <select v-model="f.who" aria-label="Who sent it">
+            <option value="all">Everyone</option>
+            <option value="identified">With passport</option>
+            <option value="anonymous">Anonymous</option>
+          </select>
           <input v-model="f.q" type="search" placeholder="Search comment, user, passport…" />
           <button class="btn-s alt" :disabled="!shown.length" @click="exportCsv"><i class="fas fa-file-csv"></i> Export CSV</button>
           <button v-if="f.status !== 'resolved'" class="btn-s alt" :disabled="!shown.some((r) => !r.resolved)" @click="resolveAllShown"><i class="fas fa-check-double"></i> Resolve all shown</button>
@@ -134,7 +141,7 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
             <p v-if="r.comment" class="comment">{{ r.comment }}</p>
             <p v-else class="comment muted">No comment.</p>
             <small class="by">
-              <template v-if="r.username || r.display_name">Sent by <b>{{ r.username ? '@' + r.username : r.display_name }}</b><span v-if="r.passport_number"> · {{ r.passport_number }}</span></template>
+              <template v-if="r.username || r.display_name || r.passport_number">Sent by <b>{{ r.username ? '@' + r.username : (r.display_name || 'Traveler') }}</b><span v-if="r.passport_number"> · Passport N° <b>{{ r.passport_number }}</b></span></template>
               <template v-else>Anonymous report</template>
             </small>
             <div class="actions">

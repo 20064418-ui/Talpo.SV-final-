@@ -1,3 +1,4 @@
+// @ts-nocheck  (corre en Deno, el servidor de InsForge; VS Code lo revisaba como Node y mostraba falsos errores)
 // Edge function de InsForge: AVISO AUTOMÁTICO DE URGENCIAS del Stand.
 // Busca reportes 🔴 urgentes que todavía no se avisaron y manda un correo al equipo.
 //

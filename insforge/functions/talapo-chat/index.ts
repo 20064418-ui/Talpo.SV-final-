@@ -1,3 +1,4 @@
+// @ts-nocheck  (corre en Deno, el servidor de InsForge; VS Code lo revisaba como Node y mostraba falsos errores)
 // Edge function de InsForge (Deno): chat del asistente "Talapo".
 // La clave OPENROUTER_API_KEY se guarda como secreto del proyecto; el navegador nunca la ve.
 //   npx @insforge/cli secrets add OPENROUTER_API_KEY <clave>

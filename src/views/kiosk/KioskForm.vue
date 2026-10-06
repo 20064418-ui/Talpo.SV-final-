@@ -1,7 +1,8 @@
 <script setup>
-// Formulario del stand: sella el pasaporte (con el NOMBRE DE USUARIO) y reporta la zona.
+// Formulario del stand: SIEMPRE se puede llenar (sin cuenta). Al final la persona escribe su
+// @usuario y recibe el sello; el reporte queda ligado a su N° de pasaporte para saber quién es.
 // Se guarda en InsForge con la función segura stand_submit (tabla stand_reports).
-import { ref, reactive, computed, onBeforeUnmount } from 'vue';
+import { ref, reactive, computed, watch, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import QrCode from '@/components/kiosk/QrCode.vue';
 import { insforge, isConfigured } from '@/lib/insforge';
@@ -14,7 +15,7 @@ const { t, locale } = useKioskI18n();
 const props = defineProps({ stand: { type: Object, required: true } });
 const router = useRouter();
 
-const step = ref(0);           // 0 pasaporte · 1 zona · 2 basura · 3 urgencia · 4 comentario · 5 resultado
+const step = ref(0);           // 0 zona · 1 basura · 2 urgencia · 3 comentario · 4 usuario y envío · 5 resultado
 const TOTAL = 5;
 const form = reactive({ passport: '', zone: '', hasTrash: null, trash: [], urgency: '', comment: '' });
 const sending = ref(false);
@@ -33,7 +34,7 @@ const urgencies = computed(() => [
   { id: 'high', emoji: '🔴', label: t('uHigh'), text: t('uHighT') },
 ]);
 
-const canNext = computed(() => [true, !!form.zone, form.hasTrash === false || (form.hasTrash && form.trash.length), !!form.urgency, true][step.value]);
+const canNext = computed(() => [!!form.zone, form.hasTrash === false || (form.hasTrash && form.trash.length), !!form.urgency, true, true][step.value]);
 function next() { if (canNext.value) step.value = Math.min(step.value + 1, TOTAL - 1); }
 function back() { step.value = Math.max(step.value - 1, 0); }
 function pickZone(z) { form.zone = z; if (z === 'clean' && form.hasTrash === null) form.hasTrash = false; setTimeout(next, 180); }
@@ -41,7 +42,23 @@ function pickTrash(v) { form.hasTrash = v; if (!v) { form.trash = []; setTimeout
 function toggleType(id) { form.trash = form.trash.includes(id) ? form.trash.filter((t) => t !== id) : [...form.trash, id]; }
 function pickUrgency(u) { form.urgency = u; setTimeout(next, 180); }
 
-async function submit() {
+/* Confirma quién es mientras escribe el usuario (nombre + pasaporte parcialmente oculto) */
+const lookup = ref(null);
+let lookupTimer; let lookupSeq = 0;
+watch(() => form.passport, (v) => {
+  clearTimeout(lookupTimer); lookup.value = null;
+  if (v.length < 3 || !isConfigured || !navigator.onLine) return;
+  lookupTimer = setTimeout(async () => {
+    const seq = ++lookupSeq;
+    try {
+      const { data, error: e } = await insforge.database.rpc('stand_lookup_user', { p_user: v });
+      if (seq === lookupSeq && !e) lookup.value = Array.isArray(data) ? data[0] : data;
+    } catch { /* sin conexión: se envía igual */ }
+  }, 450);
+});
+
+async function submit(withUser = true) {
+  if (!withUser) form.passport = '';
   error.value = ''; sending.value = true;
   const payload = {
     p_stand: props.stand.id,
@@ -78,12 +95,27 @@ async function submit() {
     }
   }
 }
+/* Si se equivocó al escribir el usuario, lo corrige y recibe el sello igual */
+const retry = reactive({ user: '', busy: false, error: '' });
+async function claim() {
+  retry.error = ''; retry.busy = true;
+  try {
+    const { data, error: e } = await insforge.database.rpc('stand_claim_stamp', { p_report: result.value.report_id, p_user: retry.user.trim() });
+    if (e) throw new Error(e.message);
+    const r = Array.isArray(data) ? data[0] : data;
+    if (r?.passport_found) { form.passport = retry.user.trim(); result.value = { ...result.value, ...r }; }
+    else retry.error = t('lookupNone', { user: retry.user.trim() });
+  } catch (e) { retry.error = e.message || t('genericError'); }
+  finally { retry.busy = false; }
+}
+function holdHome() { clearTimeout(homeTimer); } // mientras corrige su usuario no regresa al inicio
 function restart() {
   clearTimeout(homeTimer);
+  Object.assign(retry, { user: '', busy: false, error: '' }); lookup.value = null;
   Object.assign(form, { passport: '', zone: '', hasTrash: null, trash: [], urgency: '', comment: '' });
   result.value = null; step.value = 0;
 }
-onBeforeUnmount(() => clearTimeout(homeTimer));
+onBeforeUnmount(() => { clearTimeout(homeTimer); clearTimeout(lookupTimer); });
 const registerUrl = computed(() => `${location.origin}/register`);
 </script>
 
@@ -94,25 +126,8 @@ const registerUrl = computed(() => `${location.origin}/register`);
     </div>
 
     <Transition name="slide" mode="out-in">
-      <!-- 0 · USUARIO -->
+      <!-- 0 · ESTADO DE LA ZONA -->
       <div v-if="step === 0" key="s0" class="q">
-        <span class="big">🛂</span>
-        <h1>{{ t('formStamp') }}</h1>
-        <p v-html="t('formStampText', { name: stand.name })"></p>
-        <div class="user-box">
-          <span>@</span>
-          <input v-model="form.passport" class="pass-input" autocomplete="off" autocapitalize="none" spellcheck="false"
-                 placeholder="your.username" maxlength="24" @input="form.passport = normalizeUsername(form.passport)" @keyup.enter="next" />
-        </div>
-        <p class="hint">{{ t('formUserHint') }}</p>
-        <div class="nav">
-          <button class="btn ghost" @click="form.passport = ''; next()">{{ t('noAccount') }}</button>
-          <button class="btn main" :disabled="form.passport.length < 3" @click="next">{{ t('continue') }} <i class="fas fa-arrow-right"></i></button>
-        </div>
-      </div>
-
-      <!-- 1 · ESTADO DE LA ZONA -->
-      <div v-else-if="step === 1" key="s1" class="q">
         <span class="big">🌳</span>
         <h1>{{ t('zoneQ') }}</h1>
         <div class="options three">
@@ -120,11 +135,10 @@ const registerUrl = computed(() => `${location.origin}/register`);
             <span class="oe">{{ z.emoji }}</span><b>{{ z.label }}</b><small>{{ z.text }}</small>
           </button>
         </div>
-        <div class="nav"><button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> {{ t('backBtn') }}</button></div>
       </div>
 
-      <!-- 2 · BASURA -->
-      <div v-else-if="step === 2" key="s2" class="q">
+      <!-- 1 · BASURA -->
+      <div v-else-if="step === 1" key="s1" class="q">
         <span class="big">🗑️</span>
         <h1>{{ t('trashQ') }}</h1>
         <div class="options two">
@@ -147,8 +161,8 @@ const registerUrl = computed(() => `${location.origin}/register`);
         </div>
       </div>
 
-      <!-- 3 · URGENCIA -->
-      <div v-else-if="step === 3" key="s3" class="q">
+      <!-- 2 · URGENCIA -->
+      <div v-else-if="step === 2" key="s2" class="q">
         <span class="big">🚨</span>
         <h1>{{ t('urgQ') }}</h1>
         <div class="options three">
@@ -159,22 +173,41 @@ const registerUrl = computed(() => `${location.origin}/register`);
         <div class="nav"><button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> {{ t('backBtn') }}</button></div>
       </div>
 
-      <!-- 4 · COMENTARIO Y ENVÍO -->
-      <div v-else-if="step === 4" key="s4" class="q">
+      <!-- 3 · COMENTARIO -->
+      <div v-else-if="step === 3" key="s3" class="q">
         <span class="big">💬</span>
         <h1>{{ t('commentQ') }} <small>{{ t('optional') }}</small></h1>
         <textarea v-model="form.comment" maxlength="500" rows="4" :placeholder="t('commentPh')"></textarea>
+        <div class="nav">
+          <button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> {{ t('backBtn') }}</button>
+          <button class="btn main" @click="next">{{ t('continue') }} <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- 4 · USUARIO (sello) Y ENVÍO -->
+      <div v-else-if="step === 4" key="s4" class="q">
+        <span class="big">🛂</span>
+        <h1>{{ t('formStamp') }}</h1>
+        <p v-html="t('formStampText', { name: stand.name })"></p>
+        <div class="user-box">
+          <span>@</span>
+          <input v-model="form.passport" class="pass-input" autocomplete="off" autocapitalize="none" spellcheck="false"
+                 placeholder="your.username" maxlength="24" @input="form.passport = normalizeUsername(form.passport)" @keyup.enter="form.passport.length >= 3 && submit(true)" />
+        </div>
+        <p v-if="lookup?.found" class="found"><i class="fas fa-circle-check"></i> {{ t('lookupFound', { name: lookup.first_name || t('traveler'), num: lookup.passport_masked || '—' }) }}</p>
+        <p v-else-if="lookup && !lookup.found" class="notfound"><i class="fas fa-circle-exclamation"></i> {{ t('lookupNone', { user: form.passport }) }}</p>
+        <p v-else class="hint">{{ t('formUserHint') }} {{ t('stampStepHint') }}</p>
         <div class="summary">
-          <span v-if="form.passport">🛂 @{{ form.passport }}</span>
           <span>{{ zones.find((z) => z.id === form.zone)?.emoji }} {{ zones.find((z) => z.id === form.zone)?.label }}</span>
           <span>🗑️ {{ form.hasTrash ? form.trash.map((id) => t(trashTypes.find((x) => x.id === id)?.key)).join(', ') : t('noTrash') }}</span>
           <span>{{ urgencies.find((u) => u.id === form.urgency)?.emoji }} {{ urgencies.find((u) => u.id === form.urgency)?.label }}</span>
         </div>
         <p v-if="error" class="err"><i class="fas fa-triangle-exclamation"></i> {{ error }}</p>
         <div class="nav">
-          <button class="btn ghost" @click="back"><i class="fas fa-arrow-left"></i> {{ t('backBtn') }}</button>
-          <button class="btn main" :disabled="sending" @click="submit">
-            <i class="fas" :class="sending ? 'fa-spinner fa-spin' : 'fa-paper-plane'"></i> {{ sending ? t('sending') : t('send') }}
+          <button class="btn ghost" :disabled="sending" @click="back"><i class="fas fa-arrow-left"></i> {{ t('backBtn') }}</button>
+          <button class="btn ghost" :disabled="sending" @click="submit(false)">{{ t('sendNoStamp') }}</button>
+          <button class="btn main" :disabled="sending || form.passport.length < 3" @click="submit(true)">
+            <i class="fas" :class="sending ? 'fa-spinner fa-spin' : 'fa-stamp'"></i> {{ sending ? t('sending') : t('sendStamp') }}
           </button>
         </div>
       </div>
@@ -191,6 +224,7 @@ const registerUrl = computed(() => `${location.origin}/register`);
             <span>TALAPO.SV</span><b>{{ stand.name.toUpperCase() }}</b><small>{{ new Date().toLocaleDateString(locale) }}</small>
           </div>
           <h1>{{ t(result.already_stamped ? 'welcomeBack' : 'stamped', { name: result.first_name || t('traveler') }) }}</h1>
+          <p v-if="result.passport_masked" class="pno"><i class="fas fa-passport"></i> {{ t('passportNo') }} <b>{{ result.passport_masked }}</b></p>
           <p v-html="t('stampedText', { stamp: result.stamp_name })"></p>
         </template>
         <template v-else>
@@ -198,6 +232,16 @@ const registerUrl = computed(() => `${location.origin}/register`);
           <h1>{{ t('thanks') }}</h1>
           <p v-if="form.passport" v-html="t('userNotFound', { user: form.passport })"></p>
           <p v-else>{{ t('reportSaved') }}</p>
+          <div v-if="form.passport && result?.report_id" class="retry">
+            <div class="user-box"><span>@</span>
+              <input v-model="retry.user" class="pass-input" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="your.username" maxlength="24"
+                     @focus="holdHome" @input="retry.user = normalizeUsername(retry.user)" @keyup.enter="retry.user.length >= 3 && claim()" />
+            </div>
+            <p v-if="retry.error" class="err">{{ retry.error }}</p>
+            <button class="btn main" :disabled="retry.busy || retry.user.length < 3" @click="claim">
+              <i class="fas" :class="retry.busy ? 'fa-spinner fa-spin' : 'fa-stamp'"></i> {{ t('getStamp') }}
+            </button>
+          </div>
           <div class="qr-join">
             <QrCode :value="registerUrl" :size="130" :label="t('createPassport')" />
             <span><b>{{ t('createPassport') }}</b><br>{{ t('createPassportText') }}</span>
@@ -227,6 +271,11 @@ const registerUrl = computed(() => `${location.origin}/register`);
 .user-box:focus-within { border-color: #C98A1B; }
 .user-box span { padding-left: 18px; font-size: 2rem; font-weight: 800; color: #C98A1B; }
 .pass-input { flex: 1; min-width: 0; font: inherit; font-size: 2rem; font-weight: 800; letter-spacing: 1px; padding: 16px 16px 16px 6px; border: 0; background: none; outline: none; }
+.found, .notfound { margin: 10px auto 0 !important; font-weight: 700; font-size: 1.05rem !important; }
+.found { color: #1C6E6B !important; } .notfound { color: #b4432f !important; }
+.pno { background: #EEF6F6; color: #1C6E6B !important; display: inline-block; border-radius: 30px; padding: 8px 16px; margin: 0 auto 10px !important; }
+.pno b { letter-spacing: 2px; color: #0A2F44; }
+.retry { display: grid; gap: 12px; justify-items: center; margin: 6px auto 12px; }
 .hint { color: #8aa0ab !important; font-size: .95rem !important; margin-top: 10px !important; }
 .options { display: grid; gap: 14px; margin: 18px 0; }
 .options.three { grid-template-columns: repeat(3, 1fr); }

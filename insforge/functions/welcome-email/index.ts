@@ -1,3 +1,4 @@
+// @ts-nocheck  (corre en Deno, el servidor de InsForge; VS Code lo revisaba como Node y mostraba falsos errores)
 // Edge function de InsForge: correo de BIENVENIDA a Talapo.SV (una sola vez por usuario).
 // Se envía con emails.send(), que usa tu Custom SMTP (avisos.talapo@gmail.com).
 //   npx @insforge/cli functions deploy welcome-email --file insforge/functions/welcome-email/index.ts
