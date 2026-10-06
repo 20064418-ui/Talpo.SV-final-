@@ -55,7 +55,7 @@ body {
 
 .nav-links a {
     text-decoration: none;
-    color: #1A3A4A;
+    color: #000000;
     font-weight: 500;
     font-size: 0.95rem;
     transition: all 0.25s;
@@ -70,7 +70,7 @@ body {
     left: 0;
     width: 0;
     height: 2.5px;
-    background: linear-gradient(90deg, #012a18, #053049);
+    background: linear-gradient(90deg, #001a0f, #011b2b);
     transition: width 0.3s ease;
     border-radius: 2px;
 }
@@ -80,7 +80,7 @@ body {
 }
 
 .nav-links a:hover {
-    color: #1C6E6B;
+    color: #000000;
     transform: translateY(-1px);
 }
 
