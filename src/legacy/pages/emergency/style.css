@@ -56,7 +56,7 @@
 
 .lg-emergency .nav-links a {
     text-decoration: none;
-    color: #000000;
+    color: #1A3A4A;
     font-weight: 500;
     font-size: 0.95rem;
     transition: all 0.25s;
@@ -71,7 +71,7 @@
     left: 0;
     width: 0;
     height: 2.5px;
-    background: linear-gradient(90deg, #002113, #00131d);
+    background: linear-gradient(90deg, #012a18, #053049);
     transition: width 0.3s ease;
     border-radius: 2px;
 }
@@ -81,7 +81,7 @@
 }
 
 .lg-emergency .nav-links a:hover {
-    color: #000000;
+    color: #1C6E6B;
     transform: translateY(-1px);
 }
 
@@ -213,7 +213,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, rgba(2, 64, 97, 0.75) 0%, rgba(88, 160, 184, 0.534) 100%);
+    background: linear-gradient(180deg, rgba(3, 24, 42, 0.88) 0%, rgba(3, 38, 62, 0.72) 55%, rgba(3, 24, 42, 0.86) 100%);
     z-index: 2;
 }
 
@@ -237,23 +237,27 @@
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 3px;
-    color: #000000;
+    color: #fcd34d;
     margin-bottom: 8px;
     text-transform: uppercase;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .lg-emergency .main-title {
-    font-size: 52px;
+    font-size: 64px;
     font-weight: 800;
     letter-spacing: -1px;
-    color: #012928;
+    color: #ffffff;
     margin-bottom: 5px;
+    text-shadow: 0 3px 14px rgba(0, 0, 0, 0.65);
 }
 
 .lg-emergency .sub-category {
     font-size: 16px;
-    font-weight: 600;
-    color: #000000;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.65);
 }
 
 /* Carousel Stack Wrapper */
@@ -413,31 +417,32 @@
 }
 
 .lg-emergency .active-info-box p {
-    font-size: 14px;
-    color: #319795;
+    font-size: 15px;
+    color: #1e3a4a;
     margin-bottom: 15px;
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
 .lg-emergency .tel-link {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: #0d9488;
+    background: #dc2626;
     color: #ffffff;
-    padding: 12px 28px;
+    padding: 14px 32px;
     text-decoration: none;
-    font-weight: 700;
-    font-size: 14px;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.5px;
     border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(13, 148, 136, 0.25);
+    box-shadow: 0 8px 20px rgba(220, 38, 38, 0.35);
     transition: all 0.3s ease;
 }
 
 .lg-emergency .tel-link:hover {
     transform: translateY(-2px);
-    background: #0f766e;
-    box-shadow: 0 12px 22px rgba(13, 148, 136, 0.4);
+    background: #b91c1c;
+    box-shadow: 0 12px 22px rgba(185, 28, 28, 0.45);
 }
 
 /* --- SECTION 2: MAP & HOSPITALS --- */
@@ -678,4 +683,9 @@
 .lg-emergency .nav-profile-badge:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 18px -6px rgba(28, 110, 107, 0.4);
+}
+
+
+@media (max-width: 600px) {
+    .lg-emergency .main-title { font-size: 52px; }
 }
