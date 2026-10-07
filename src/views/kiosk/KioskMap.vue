@@ -1,7 +1,7 @@
 <script setup>
 // Mapa del stand: lugares cercanos, distancia caminando y cómo llegar
 import { ref, computed, onMounted, onBeforeUnmount, shallowRef, watch } from 'vue';
-import L from 'leaflet';
+import L from '@/lib/leafletSetup';
 import QrCode from '@/components/kiosk/QrCode.vue';
 import { distanceMeters, walkLabel, directionsUrl } from '@/data/stands';
 import { useKioskI18n } from '@/i18n/kiosk';

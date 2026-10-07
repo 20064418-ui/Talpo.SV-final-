@@ -50,7 +50,11 @@ onMounted(async () => {
   try {
     const { html, code, meta } = await loadLegacyPage(props.name);
     if (meta.title) document.title = `${meta.title.replace(/Talapo\.?SV/i, '').trim() || meta.name} · Talapo.SV`;
-    await Promise.all(meta.fonts.map((src) => loadExternal({ type: 'css', src })));
+    // Las fuentes se piden sin esperar: antes la página quedaba en "Loading…" hasta que
+    // Google Fonts respondía (en datos móviles lentos se sentía trabada).
+    meta.fonts.forEach((src) => loadExternal({ type: 'css', src }));
+    // Solo las páginas con mapa cargan Leaflet
+    if (/\bL\.(map|marker|tileLayer|polyline|divIcon|latLng)/.test(code)) await import('@/lib/leafletSetup');
     const c = ctx();
     // Librerías externas (p. ej. OpenLayers) antes del script; las que llaman a un
     // callback global (Google Translate ?cb=) después, cuando el callback ya existe.
@@ -97,7 +101,10 @@ function setupReveal() {
       || /modal|overlay|toast|cart|backdrop|panel/i.test(`${el.id} ${el.className}`)
       || el.getBoundingClientRect().top < innerHeight * 0.9; // lo que ya se ve no se oculta
   };
-  const blocks = [...root.children, ...root.querySelectorAll(CARD_SELECTORS)].filter((el) => !skip(el));
+  // Se mide todo de una vez (antes cada elemento forzaba un recálculo del diseño)
+  const candidates = [...root.children, ...root.querySelectorAll(CARD_SELECTORS)];
+  const hidden = new Set(candidates.filter(skip));
+  const blocks = candidates.filter((el) => !hidden.has(el));
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (!e.isIntersecting) return;
@@ -121,6 +128,10 @@ onBeforeUnmount(() => {
   cleanups.forEach((fn) => fn());
   exposed.forEach((k) => { try { delete window[k]; } catch { window[k] = undefined; } });
   document.querySelectorAll('video').forEach((v) => v.pause());
+  // Si se sale con un modal abierto, el JS viejo dejaba body { overflow: hidden }
+  // y la siguiente página no se podía mover (quedaba "trabada").
+  document.body.style.overflow = '';
+  document.documentElement.style.overflow = '';
 });
 </script>
 

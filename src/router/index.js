@@ -48,6 +48,7 @@ const routes = [
   { path: '/admin/activity', name: 'admin-activity', component: () => import('@/views/AdminActivity.vue'), meta: { requiresAuth: true, title: 'Admin · Activity log' } },
   { path: '/admin/news', name: 'admin-news', component: () => import('@/views/AdminNews.vue'), meta: { requiresAuth: true, title: 'Admin · News' } },
   { path: '/admin/forum', name: 'admin-forum', component: () => import('@/views/AdminForum.vue'), meta: { requiresAuth: true, title: 'Admin · Forum' } },
+  { path: '/admin/plans', name: 'admin-plans', component: () => import('@/views/AdminPlans.vue'), meta: { requiresAuth: true, title: 'Admin · Plans & sales' } },
   { path: '/admin/contests', name: 'admin-contests', component: () => import('@/views/AdminContests.vue'), meta: { requiresAuth: true, title: 'Admin · Contests' } },
   { path: '/travelers', name: 'travelers', component: () => import('@/views/Travelers.vue'), meta: { title: 'Travelers' } },
   { path: '/travelers/:id', name: 'traveler', component: () => import('@/views/TravelerProfile.vue'), meta: { title: 'Traveler' } },
@@ -81,6 +82,12 @@ const PUBLIC_ROUTES = new Set(['index', 'what-is-talapo', 'login', 'register', '
 
 router.beforeEach(async (to) => {
   const auth = useAuthStore();
+  // Páginas públicas (inicio, What is Talapo…) se muestran YA, sin esperar al servidor:
+  // antes la pantalla quedaba en blanco hasta que InsForge respondía la sesión.
+  if (!auth.ready && PUBLIC_ROUTES.has(to.name) && !to.meta.guestOnly) {
+    auth.init();
+    return true;
+  }
   await auth.init();
   // Sin sesión solo se ve: inicio, "What is Talapo?", las pantallas para entrar y el Stand (la tablet no inicia sesión).
   // Todo lo demás pide iniciar sesión y, al entrar, vuelve a la página que quería abrir.

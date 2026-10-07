@@ -3,7 +3,7 @@
 // Diseño con el mismo lenguaje visual de main.html (hero con foto, insignia, tarjetas redondeadas).
 import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import L from 'leaflet';
+import L from '@/lib/leafletSetup';
 import { useItinerariesStore } from '@/stores/itineraries';
 import { toast } from '@/composables/useToast';
 

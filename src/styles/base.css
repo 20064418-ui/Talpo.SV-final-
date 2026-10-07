@@ -155,3 +155,20 @@ html, body { max-width: 100%; overflow-x: hidden; }
 @media (max-width: 900px) {
   .tp.admin .content { padding-left: 4%; padding-right: 4%; }
 }
+
+/* =====================================================================
+   INICIO (index): que no se sienta trabado
+   ===================================================================== */
+/* Celular: el desenfoque (blur) del navbar fijo sobre fotos grandes hace que el
+   scroll vaya a saltos en teléfonos sencillos. Se ve igual con fondo blanco sólido. */
+@media (max-width: 768px) {
+  html body .lg-index .navbar { backdrop-filter: none; -webkit-backdrop-filter: none; background: #fff; }
+  html body .lg-index .modal-overlay { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(0, 0, 0, .7); }
+  html body .lg-index .place-rating { backdrop-filter: none; }
+}
+/* Con un anuncio arriba, el navbar fijo del inicio lo tapaba: pasa a "sticky" justo debajo */
+.ann ~ .app-main .lg-index { overflow-x: clip; }
+.ann ~ .app-main .lg-index .navbar { position: sticky; }
+.ann ~ .app-main .lg-index .hero { padding-top: 3rem; }
+/* Los enlaces #about, #places… no quedan escondidos bajo el navbar fijo */
+.lg-index section[id] { scroll-margin-top: 90px; }

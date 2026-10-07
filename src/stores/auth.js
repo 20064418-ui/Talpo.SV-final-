@@ -6,6 +6,8 @@ import { insforge, unwrap, isConfigured } from '@/lib/insforge';
  *  - Registro (primera vez, email u OAuth)  -> /passport
  *  - Inicio de sesión de usuario existente   -> /main
  */
+let initPromise = null;
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({ user: null, ready: false }),
   getters: {
@@ -17,13 +19,19 @@ export const useAuthStore = defineStore('auth', {
     /** Se llama una vez al arrancar: recupera la sesión (cookie httpOnly de refresh). */
     async init() {
       if (this.ready) return;
-      if (isConfigured) {
-        try {
-          const { data } = await insforge.auth.getCurrentUser();
-          this.user = data?.user ?? null;
-        } catch { this.user = null; }
+      // Una sola petición aunque varias partes llamen a init() a la vez
+      if (!initPromise) {
+        initPromise = (async () => {
+          if (isConfigured) {
+            try {
+              const { data } = await insforge.auth.getCurrentUser();
+              this.user = data?.user ?? null;
+            } catch { this.user = null; }
+          }
+          this.ready = true;
+        })();
       }
-      this.ready = true;
+      return initPromise;
     },
 
     async signUp({ name, email, password }) {
