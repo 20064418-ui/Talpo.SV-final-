@@ -72,7 +72,7 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
 </script>
 
 <template>
-  <div class="tp admin">
+  <div class="tp admin" data-admin="contests">
     <section class="hero">
       <div class="hero-inner">
         <div class="hero-badge">TALAPO ADMIN</div>

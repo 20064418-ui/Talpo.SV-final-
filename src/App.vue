@@ -12,6 +12,7 @@ import { usePassportStore } from '@/stores/passport';
 import { useItinerariesStore } from '@/stores/itineraries';
 import { useContestsStore } from '@/stores/contests';
 import { useSocialStore } from '@/stores/social';
+import { watchUnread } from '@/lib/siteContent';
 
 const route = useRoute();
 const router = useRouter();
@@ -32,6 +33,7 @@ const social = useSocialStore();
 
 // Persistencia: al haber sesión se cargan perfil + racha + itinerarios + concursos
 watch(() => auth.user?.id, (id) => {
+  watchUnread(id);   // contador de mensajes sin leer del navbar
   if (id) {
     passport.load().catch((e) => console.error('[Talapo] passport', e));
     itineraries.load().catch((e) => console.error('[Talapo] itineraries', e));

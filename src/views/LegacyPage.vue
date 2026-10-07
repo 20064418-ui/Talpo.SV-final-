@@ -81,7 +81,9 @@ onMounted(async () => {
     }
     // Anclas (#about, #places…) al llegar desde otra página
     if (location.hash) setTimeout(() => document.querySelector(location.hash)?.scrollIntoView({ behavior: 'smooth' }), 100);
-    requestAnimationFrame(setupReveal);
+    // En el inicio NO se usa la aparición al hacer scroll: las secciones arrancaban
+    // invisibles y al moverse rápido se veían huecos en blanco (se sentía lento).
+    if (!NO_REVEAL.has(props.name)) requestAnimationFrame(setupReveal);
   } catch (err) {
     console.error(`[legacy:${props.name}]`, err);
     failed.value = true;
@@ -91,6 +93,7 @@ onMounted(async () => {
 
 /* Transición al hacer scroll: solo opacidad + desplazamiento, sobre los bloques
    principales y las tarjetas conocidas. No cambia colores, tamaños ni tipografías. */
+const NO_REVEAL = new Set(['index']);
 const CARD_SELECTORS = '.dest-card, .member-card, .partner-card, .social-card, .feature-card, .place-card, .info-card, .testimonial-card, .stats-card, .tour-card, .recipe-card, .kit-card, .product-card, .plan-card';
 function setupReveal() {
   if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;

@@ -4,6 +4,7 @@ import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { usePassportStore } from '@/stores/passport';
+import { unreadMessages } from '@/lib/siteContent';
 
 const route = useRoute();
 const router = useRouter();
@@ -102,17 +103,22 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
           <img :src="photo()" alt="Profile" class="nav-profile-img">
           <!-- Muestra el @usuario; si todavía no tiene, su nombre -->
           <span class="badge-name">{{ passport.profile?.username ? `@${passport.profile.username}` : (passport.profile?.display_name || auth.displayName) }}</span>
+          <span v-if="unreadMessages" class="msg-dot" :title="`${unreadMessages} new message(s)`">{{ unreadMessages }}</span>
           <span v-if="passport.streak" class="streak-chip" :title="`Talapo streak: ${passport.streak} day(s)`">🔥{{ passport.streak }}</span>
           <i class="fas fa-chevron-down text-xs"></i>
         </a>
         <ul class="dropdown-menu dropdown-menu-right">
           <li><RouterLink to="/passport"><i class="fas fa-passport"></i> My passport</RouterLink></li>
+          <li><RouterLink to="/messages"><i class="fas fa-comments"></i> Messages<span v-if="unreadMessages" class="msg-count">{{ unreadMessages }}</span></RouterLink></li>
           <li><RouterLink to="/itineraries"><i class="fas fa-calendar-days"></i> My itineraries</RouterLink></li>
           <li><RouterLink to="/contests"><i class="fas fa-trophy"></i> My contests</RouterLink></li>
           <li><RouterLink to="/travelers"><i class="fas fa-user-group"></i> Travelers</RouterLink></li>
           <template v-if="isAdmin">
             <li class="menu-sep" role="separator"></li>
             <li><RouterLink to="/admin/overview"><i class="fas fa-gauge-high"></i> Admin dashboard</RouterLink></li>
+            <li><RouterLink to="/admin/messages"><i class="fas fa-inbox"></i> Messages inbox</RouterLink></li>
+            <li><RouterLink to="/admin/plans"><i class="fas fa-tags"></i> Plans &amp; sales</RouterLink></li>
+            <li><RouterLink to="/admin/site"><i class="fas fa-sliders"></i> Site &amp; home page</RouterLink></li>
             <li><RouterLink to="/admin/reports"><i class="fas fa-clipboard-list"></i> Stand reports</RouterLink></li>
             <li><RouterLink to="/admin/users"><i class="fas fa-users-gear"></i> Users</RouterLink></li>
             <li><RouterLink to="/admin/announcements"><i class="fas fa-bullhorn"></i> Announcements</RouterLink></li>
@@ -363,4 +369,7 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
   .profile-dropdown, .btn-sign { width: 100%; }
 }
 @keyframes navDrop { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+/* Mensajes sin leer */
+.msg-dot { background: #E46D5C; color: #fff; font-size: .7rem; font-weight: 800; border-radius: 20px; min-width: 18px; padding: 0 .35rem; text-align: center; line-height: 18px; }
+.msg-count { margin-left: auto; background: #E46D5C; color: #fff; font-size: .7rem; font-weight: 800; border-radius: 20px; padding: 0 .45rem; }
 </style>

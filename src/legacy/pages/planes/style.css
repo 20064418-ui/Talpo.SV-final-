@@ -526,3 +526,15 @@
     .lg-planes .plan-modal { align-items: flex-end; padding: 0; }
     .lg-planes .plan-modal-card { border-radius: 24px 24px 0 0; max-height: 92vh; }
 }
+
+/* Cupón, aviso de "cerrado" y botón de mensaje */
+.lg-planes .plan-coupon { display: flex; gap: 8px; }
+.lg-planes .plan-coupon input { flex: 1; text-transform: uppercase; }
+.lg-planes .plan-coupon-btn { border: 1.5px solid var(--talapo-teal); background: #fff; color: var(--talapo-teal); border-radius: 12px; padding: 0 16px; font: inherit; font-weight: 700; cursor: pointer; min-height: 44px; }
+.lg-planes .plan-coupon-msg { min-height: 1em; }
+.lg-planes .plan-coupon-msg.ok { color: #166534; font-weight: 700; }
+.lg-planes .plan-coupon-msg.bad { color: #b4432f; font-weight: 700; }
+.lg-planes .plan-modal-price s { color: var(--talapo-gray); font-weight: 600; font-size: 1.05rem; margin-right: 4px; }
+.lg-planes .plans-closed { max-width: 760px; margin: 0 auto 22px; background: #fff7e6; border: 1px solid #f5d48a; color: #7a5200; padding: 12px 16px; border-radius: 14px; text-align: center; font-weight: 600; }
+.lg-planes .plans-closed a { color: var(--talapo-teal); }
+.lg-planes .plan-msg { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; background: var(--talapo-teal); color: #fff; border-radius: 20px; padding: 6px 14px; font-size: 0.8rem; font-weight: 700; min-height: 36px; }

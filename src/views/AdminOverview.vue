@@ -14,7 +14,8 @@ const loading = ref(true);
 const s = ref(null);
 const a = ref(null);          // estadísticas (migración 2)
 const days = ref(30);
-const planNew = ref(0);       // solicitudes de pases sin atender (migración plans-sales)
+const planNew = ref(0);
+const msgUnread = ref(0);   // conversaciones con mensajes sin responder       // solicitudes de pases sin atender (migración plans-sales)
 
 async function load() {
   loading.value = true;
@@ -32,6 +33,10 @@ async function loadPlans() {
     const { data } = await insforge.database.from('plan_requests').select('id').eq('status', 'new').limit(999);
     planNew.value = data?.length || 0;
   } catch { planNew.value = 0; }
+  try {
+    const { data } = await insforge.database.from('support_threads').select('admin_unread').gt('admin_unread', 0).limit(999);
+    msgUnread.value = data?.length || 0;
+  } catch { msgUnread.value = 0; }
 }
 async function loadAnalytics() {
   try {
@@ -45,6 +50,7 @@ const attention = computed(() => !s.value ? [] : [
   { n: s.value.reports_pending - s.value.reports_urgent, text: 'other stand reports to review', to: '/admin/reports', icon: 'fa-clipboard-list' },
   { n: s.value.forum_reports, text: 'forum reports to moderate', to: '/admin/forum', icon: 'fa-flag' },
   { n: s.value.contest_to_review, text: 'contest entries to grade', to: '/admin/contests', icon: 'fa-trophy' },
+  { n: msgUnread.value, text: 'conversations waiting for your reply', to: '/admin/messages', icon: 'fa-comments' },
   { n: planNew.value, text: 'new travel pass requests', to: '/admin/plans', icon: 'fa-tags' },
   { n: s.value.news_drafts, text: 'news drafts not published', to: '/admin/news', icon: 'fa-newspaper' },
 ].filter((x) => x.n > 0));
@@ -98,7 +104,7 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
 </script>
 
 <template>
-  <div class="tp admin">
+  <div class="tp admin" data-admin="overview">
     <section class="hero">
       <div class="hero-inner">
         <div class="hero-badge">✦ TALAPO ADMIN ✦</div>
@@ -111,7 +117,7 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
       <p v-if="!passport.loaded" class="note"><i class="fas fa-spinner fa-spin"></i> Loading…</p>
       <div v-else-if="!isAdmin" class="box"><h2><i class="fas fa-lock"></i> Admins only</h2></div>
       <template v-else>
-        <AdminTabs :counts="{ reports: s?.reports_pending, forum: s?.forum_reports, contests: s?.contest_to_review, plans: planNew }" />
+        <AdminTabs :counts="{ reports: s?.reports_pending, forum: s?.forum_reports, contests: s?.contest_to_review, plans: planNew, messages: msgUnread }" />
         <p v-if="loading" class="note"><i class="fas fa-spinner fa-spin"></i> Loading numbers…</p>
         <template v-else-if="s">
           <!-- Qué necesita atención -->
@@ -140,6 +146,8 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
             <RouterLink to="/admin/news" class="btn-s alt"><i class="fas fa-newspaper"></i> Write news</RouterLink>
             <RouterLink to="/admin/users" class="btn-s alt"><i class="fas fa-user-plus"></i> Find a user</RouterLink>
             <RouterLink to="/admin/plans" class="btn-s alt"><i class="fas fa-tags"></i> Pass requests</RouterLink>
+            <RouterLink to="/admin/messages" class="btn-s alt"><i class="fas fa-inbox"></i> Messages</RouterLink>
+            <RouterLink to="/admin/site" class="btn-s alt"><i class="fas fa-house"></i> Edit home page</RouterLink>
             <RouterLink to="/kiosk/parque-libertad" class="btn-s alt"><i class="fas fa-tablet-screen-button"></i> Open Talapo Stand</RouterLink>
           </div>
 

@@ -3,6 +3,7 @@
 defineProps({ counts: { type: Object, default: () => ({}) } });
 const tabs = [
   { to: '/admin/overview', icon: 'fa-gauge-high', label: 'Overview', key: 'overview' },
+  { to: '/admin/messages', icon: 'fa-comments', label: 'Messages', key: 'messages' },
   { to: '/admin/news', icon: 'fa-newspaper', label: 'News', key: 'news' },
   { to: '/admin/reports', icon: 'fa-clipboard-list', label: 'Stand reports', key: 'reports' },
   { to: '/admin/forum', icon: 'fa-comments', label: 'Forum', key: 'forum' },
@@ -10,6 +11,7 @@ const tabs = [
   { to: '/admin/plans', icon: 'fa-tags', label: 'Plans & sales', key: 'plans' },
   { to: '/admin/users', icon: 'fa-users-gear', label: 'Users', key: 'users' },
   { to: '/admin/announcements', icon: 'fa-bullhorn', label: 'Announcements', key: 'announcements' },
+  { to: '/admin/site', icon: 'fa-sliders', label: 'Site', key: 'site' },
   { to: '/admin/activity', icon: 'fa-clock-rotate-left', label: 'Activity log', key: 'activity' },
 ];
 </script>

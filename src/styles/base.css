@@ -159,16 +159,37 @@ html, body { max-width: 100%; overflow-x: hidden; }
 /* =====================================================================
    INICIO (index): que no se sienta trabado
    ===================================================================== */
-/* Celular: el desenfoque (blur) del navbar fijo sobre fotos grandes hace que el
-   scroll vaya a saltos en teléfonos sencillos. Se ve igual con fondo blanco sólido. */
-@media (max-width: 768px) {
-  html body .lg-index .navbar { backdrop-filter: none; -webkit-backdrop-filter: none; background: #fff; }
-  html body .lg-index .modal-overlay { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(0, 0, 0, .7); }
-  html body .lg-index .place-rating { backdrop-filter: none; }
-}
+/* El desenfoque (blur) del navbar fijo se recalcula en CADA movimiento del scroll
+   (en celular y en laptops sin buena tarjeta gráfica se siente pesado).
+   Con blanco casi sólido se ve igual. */
+html body .lg-index .navbar { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(255, 255, 255, .98); }
+html body .lg-index .modal-overlay { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(0, 0, 0, .7); }
+html body .lg-index .place-rating { backdrop-filter: none; background: rgba(3, 33, 97, .92); }
+/* El navegador no dibuja las secciones de abajo hasta que te acercás a ellas */
+html body .lg-index .partners-section,
+html body .lg-index .testimonials-section,
+html body .lg-index .stats-section,
+html body .lg-index .footer { content-visibility: auto; contain-intrinsic-size: auto 700px; }
+/* Las tarjetas solo animan lo necesario (antes "all": recalculaba todo al pasar el mouse) */
+html body .lg-index .info-card,
+html body .lg-index .place-card { transition: transform .3s ease, box-shadow .3s ease, background-color .3s ease; }
 /* Con un anuncio arriba, el navbar fijo del inicio lo tapaba: pasa a "sticky" justo debajo */
 .ann ~ .app-main .lg-index { overflow-x: clip; }
 .ann ~ .app-main .lg-index .navbar { position: sticky; }
 .ann ~ .app-main .lg-index .hero { padding-top: 3rem; }
 /* Los enlaces #about, #places… no quedan escondidos bajo el navbar fijo */
 .lg-index section[id] { scroll-margin-top: 90px; }
+
+/* Foto distinta en la cabecera de cada sección del admin — EDITA AQUÍ para cambiarlas */
+.tp.admin[data-admin] .hero { background-position: center; background-size: cover; background-repeat: no-repeat; }
+.tp.admin[data-admin="overview"] .hero      { background-image: linear-gradient(rgba(10,47,68,.65), rgba(10,47,68,.85)), url('/assets/img/main/lago.jpg'); }
+.tp.admin[data-admin="messages"] .hero      { background-image: linear-gradient(rgba(10,47,68,.62), rgba(10,47,68,.85)), url('/assets/img/tours/el tunco.jpg'); }
+.tp.admin[data-admin="news"] .hero          { background-image: linear-gradient(rgba(10,47,68,.68), rgba(10,47,68,.85)), url('/assets/img/stand/parque.jpg'); }
+.tp.admin[data-admin="reports"] .hero       { background-image: linear-gradient(rgba(10,47,68,.68), rgba(10,47,68,.85)), url('/assets/img/stand/parquecuscatlan.jpg'); }
+.tp.admin[data-admin="forum"] .hero         { background-image: linear-gradient(rgba(10,47,68,.68), rgba(10,47,68,.85)), url('/assets/img/tours/suchitoto.jpg'); }
+.tp.admin[data-admin="contests"] .hero      { background-image: linear-gradient(rgba(10,47,68,.68), rgba(10,47,68,.85)), url('/assets/img/tours/Ruta de Volcanes.jpg'); }
+.tp.admin[data-admin="plans"] .hero         { background-image: linear-gradient(rgba(10,47,68,.62), rgba(10,47,68,.85)), url('/assets/img/tours/conchagua.jpg'); }
+.tp.admin[data-admin="users"] .hero         { background-image: linear-gradient(rgba(10,47,68,.70), rgba(10,47,68,.86)), url('/assets/img/tours/la palma.jpg'); }
+.tp.admin[data-admin="announcements"] .hero { background-image: linear-gradient(rgba(10,47,68,.62), rgba(10,47,68,.85)), url('/assets/img/tours/Centro Colonial.jpg'); }
+.tp.admin[data-admin="site"] .hero          { background-image: linear-gradient(rgba(10,47,68,.62), rgba(10,47,68,.85)), url('/assets/img/tours/laguna de la alegria.jpg'); }
+.tp.admin[data-admin="activity"] .hero      { background-image: linear-gradient(rgba(10,47,68,.65), rgba(10,47,68,.85)), url('/assets/img/tours/cinquera.jpg'); }

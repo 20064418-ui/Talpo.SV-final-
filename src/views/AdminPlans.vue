@@ -1,6 +1,7 @@
 <script setup>
 // Planes (Travel Passes) y solicitudes de compra: editar precios/beneficios y dar seguimiento a cada venta.
 import { ref, reactive, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { insforge, unwrap } from '@/lib/insforge';
 import { usePassportStore } from '@/stores/passport';
 import { toast } from '@/composables/useToast';
@@ -9,6 +10,7 @@ import { downloadCsv } from '@/lib/csv';
 import AdminTabs from '@/components/admin/AdminTabs.vue';
 import '@/styles/pages/admin-extra.css';
 
+const router = useRouter();
 const passport = usePassportStore();
 const isAdmin = computed(() => !!passport.profile?.is_admin);
 const view = ref('requests');
@@ -16,6 +18,8 @@ const loading = ref(true);
 const missing = ref(false);
 const requests = ref([]);
 const plans = ref([]);
+const coupons = ref([]);
+const couponsMissing = ref(false);
 
 const STATUSES = [
   { id: 'new', label: 'New', cls: 'high' },
@@ -26,7 +30,7 @@ const STATUSES = [
 ];
 const TIERS = [{ id: 'bronce', label: 'Bronze' }, { id: 'plata', label: 'Silver' }, { id: 'oro', label: 'Gold' }];
 const statusOf = (id) => STATUSES.find((s) => s.id === id) || STATUSES[0];
-const money = (n) => '$' + Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
+const money = (n) => { const v = Number(n || 0); return '$' + v.toLocaleString('en-US', { minimumFractionDigits: v % 1 ? 2 : 0, maximumFractionDigits: 2 }); };
 const fmt = (d) => (d ? new Date(d).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '');
 const fmtDay = (d) => (d ? new Date(`${d}T12:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—');
 const total = (r) => Number(r.price || 0) * (r.travelers || 1);
@@ -43,6 +47,7 @@ async function load() {
     requests.value = (reqs || []).map((r) => ({ ...r, _note: r.admin_note || '' }));
     plans.value = pls || [];
     missing.value = false;
+    loadCoupons();
   } catch (e) {
     if (/plan_requests|travel_plans|does not exist|relation|function/i.test(e.message)) missing.value = true;
     else toast(e.message, 'error');
@@ -118,6 +123,9 @@ function exportCsv() {
     { label: 'Date', value: (r) => new Date(r.created_at).toLocaleString() },
     { label: 'Status', value: (r) => statusOf(r.status).label },
     { label: 'Plan', key: 'plan_name' },
+    { label: 'List price', value: (r) => r.list_price ?? r.price },
+    { label: 'Coupon', key: 'coupon_code' },
+    { label: 'Discount %', key: 'discount_pct' },
     { label: 'Price', key: 'price' },
     { label: 'Travelers', key: 'travelers' },
     { label: 'Total', value: total },
@@ -130,6 +138,66 @@ function exportCsv() {
     { label: 'Admin note', key: 'admin_note' },
   ]);
 }
+
+/* ---------- Escribirle al usuario dentro de Talapo (sin WhatsApp) ---------- */
+async function messageUser(r) {
+  try {
+    const found = await unwrap(insforge.database.from('support_threads').select('id').eq('plan_request_id', r.id).limit(1));
+    let id = found?.[0]?.id;
+    if (!id) {
+      const rows = await unwrap(insforge.database.from('support_threads')
+        .insert([{ profile_id: r.profile_id, subject: `Your ${r.plan_name} request`, topic: 'plans', plan_request_id: r.id }]).select());
+      id = rows[0].id;
+    }
+    router.push({ path: '/admin/messages', query: { t: id } });
+  } catch (e) {
+    toast(/support_threads|does not exist/i.test(e.message) ? 'Run migration 20261006010000_messages-site-coupons.sql first.' : e.message, 'error');
+  }
+}
+
+/* ---------- Cupones ---------- */
+const cform = reactive({ code: '', percent: 10, plan_id: '', max_uses: '', expires_at: '', note: '' });
+async function loadCoupons() {
+  try {
+    coupons.value = await unwrap(insforge.database.from('plan_coupons').select('*').order('created_at', { ascending: false }));
+    couponsMissing.value = false;
+  } catch { couponsMissing.value = true; }
+}
+const couponState = (c) => !c.active ? 'Off' : (c.expires_at && new Date(c.expires_at) < new Date()) ? 'Expired' : (c.max_uses && c.used >= c.max_uses) ? 'Used up' : 'Active';
+async function addCoupon() {
+  const code = cform.code.trim().toUpperCase().replace(/\s+/g, '');
+  if (!/^[A-Z0-9_-]{3,24}$/.test(code)) { toast('Code: 3–24 letters, numbers, - or _', 'error'); return; }
+  const pct = Math.round(Number(cform.percent));
+  if (!(pct >= 1 && pct <= 100)) { toast('Discount must be 1–100 %', 'error'); return; }
+  try {
+    await unwrap(insforge.database.from('plan_coupons').insert([{
+      code, percent: pct, plan_id: cform.plan_id || null,
+      max_uses: cform.max_uses ? Math.max(1, parseInt(cform.max_uses, 10)) : null,
+      expires_at: cform.expires_at ? new Date(`${cform.expires_at}T23:59:59`).toISOString() : null,
+      note: cform.note.trim() || null,
+    }]));
+    logAdmin('coupon.create', 'coupon', code, { percent: pct });
+    toast(`Coupon ${code} created`);
+    Object.assign(cform, { code: '', percent: 10, plan_id: '', max_uses: '', expires_at: '', note: '' });
+    loadCoupons();
+  } catch (e) { toast(/duplicate|unique/i.test(e.message) ? 'That code already exists' : e.message, 'error'); }
+}
+async function toggleCoupon(c) {
+  try {
+    await unwrap(insforge.database.from('plan_coupons').update({ active: !c.active }).eq('code', c.code));
+    c.active = !c.active;
+    logAdmin(c.active ? 'coupon.on' : 'coupon.off', 'coupon', c.code);
+  } catch (e) { toast(e.message, 'error'); }
+}
+async function removeCoupon(c) {
+  if (!confirm(`Delete coupon ${c.code}?`)) return;
+  try {
+    await unwrap(insforge.database.from('plan_coupons').delete().eq('code', c.code));
+    coupons.value = coupons.value.filter((x) => x.code !== c.code);
+    logAdmin('coupon.delete', 'coupon', c.code);
+  } catch (e) { toast(e.message, 'error'); }
+}
+function copyCode(c) { navigator.clipboard?.writeText(c.code).then(() => toast(`${c.code} copied`), () => {}); }
 
 /* ---------- Editor de planes ---------- */
 const emptyPlan = () => ({ id: '', tier: 'bronce', name: '', tagline: '', price: 0, period: '/ trip', featuresText: '', cta_label: '', featured: false, active: true, sort: plans.value.length + 1 });
@@ -211,7 +279,7 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
 </script>
 
 <template>
-  <div class="tp admin">
+  <div class="tp admin" data-admin="plans">
     <section class="hero">
       <div class="hero-inner">
         <div class="hero-badge">✦ TALAPO ADMIN ✦</div>
@@ -247,6 +315,7 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
           <div class="seg">
             <button :class="{ on: view === 'requests' }" @click="view = 'requests'"><i class="fas fa-inbox"></i> Requests</button>
             <button :class="{ on: view === 'plans' }" @click="view = 'plans'"><i class="fas fa-tags"></i> Edit plans</button>
+            <button :class="{ on: view === 'coupons' }" @click="view = 'coupons'"><i class="fas fa-ticket"></i> Coupons</button>
           </div>
 
           <!-- SOLICITUDES -->
@@ -271,6 +340,7 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
                   <span class="chip" :class="statusOf(r.status).cls">{{ statusOf(r.status).label }}</span>
                   <b class="plan">{{ r.plan_name }}</b>
                   <span class="amt">{{ money(total(r)) }} <small>({{ r.travelers }} × {{ money(r.price) }})</small></span>
+                  <span v-if="r.coupon_code" class="chip"><i class="fas fa-ticket"></i> {{ r.coupon_code }} −{{ r.discount_pct }}%</span>
                   <small class="when">{{ fmt(r.created_at) }}</small>
                 </div>
                 <div class="det">
@@ -284,6 +354,7 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
                   <button v-if="r._note !== (r.admin_note || '')" class="btn-s alt" @click="saveNote(r)">Save note</button>
                 </div>
                 <div class="btns">
+                  <button class="btn-s" @click="messageUser(r)"><i class="fas fa-comments"></i> Message</button>
                   <a v-if="wa(r.phone)" class="btn-s wa" :href="wa(r.phone)" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> WhatsApp</a>
                   <select :value="r.status" class="st" aria-label="Change status" @change="setStatus(r, $event.target.value)">
                     <option v-for="s in STATUSES" :key="s.id" :value="s.id">{{ s.label }}</option>
@@ -292,6 +363,40 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
                 </div>
               </li>
             </ul>
+          </template>
+
+          <!-- CUPONES -->
+          <template v-else-if="view === 'coupons'">
+            <div v-if="couponsMissing" class="box"><p class="note">Run <b>migrations/20261006010000_messages-site-coupons.sql</b> in InsForge to use coupons.</p></div>
+            <template v-else>
+              <div class="box form">
+                <h2>New coupon</h2>
+                <div class="grid3">
+                  <label class="f">Code<input v-model="cform.code" maxlength="24" placeholder="WELCOME10" style="text-transform: uppercase" /></label>
+                  <label class="f">Discount %<input v-model.number="cform.percent" type="number" min="1" max="100" /></label>
+                  <label class="f">Only for plan<select v-model="cform.plan_id"><option value="">All plans</option><option v-for="p in plans" :key="p.id" :value="p.id">{{ p.name }}</option></select></label>
+                  <label class="f">Max uses (optional)<input v-model="cform.max_uses" type="number" min="1" placeholder="Unlimited" /></label>
+                  <label class="f">Expires (optional)<input v-model="cform.expires_at" type="date" /></label>
+                  <label class="f">Note (optional)<input v-model="cform.note" maxlength="120" placeholder="Instagram promo" /></label>
+                </div>
+                <div class="btns"><button class="btn-s" @click="addCoupon"><i class="fas fa-plus"></i> Create coupon</button></div>
+              </div>
+              <p v-if="!coupons.length" class="note">No coupons yet.</p>
+              <ul v-else class="list">
+                <li v-for="c in coupons" :key="c.code" class="row" :class="couponState(c) === 'Active' ? '' : 'done'">
+                  <div class="top">
+                    <button class="code" title="Copy" @click="copyCode(c)">{{ c.code }} <i class="far fa-copy"></i></button>
+                    <b class="amt">−{{ c.percent }}%</b>
+                    <span class="chip" :class="couponState(c) === 'Active' ? '' : 'medium'">{{ couponState(c) }}</span>
+                    <small>{{ c.plan_id ? plans.find((p) => p.id === c.plan_id)?.name || c.plan_id : 'All plans' }} · used {{ c.used }}{{ c.max_uses ? ' / ' + c.max_uses : '' }}<span v-if="c.expires_at"> · until {{ new Date(c.expires_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}</span><span v-if="c.note"> · {{ c.note }}</span></small>
+                  </div>
+                  <div class="btns mt">
+                    <button class="btn-s alt" @click="toggleCoupon(c)">{{ c.active ? 'Turn off' : 'Turn on' }}</button>
+                    <button class="btn-s danger" aria-label="Delete coupon" @click="removeCoupon(c)"><i class="fas fa-trash"></i></button>
+                  </div>
+                </li>
+              </ul>
+            </template>
           </template>
 
           <!-- PLANES -->
@@ -377,6 +482,8 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
 .chk { display: flex; align-items: center; gap: .5rem; font-weight: 700; color: #0A2F44; }
 .tip { margin-top: 1rem; }
 .new-plan { display: flex; align-items: center; gap: .4rem; }
+.code { border: 1.5px dashed #1C6E6B; background: #EEF6F6; color: #0A2F44; font: inherit; font-weight: 800; letter-spacing: .05em; border-radius: 10px; padding: .3rem .7rem; cursor: pointer; }
+.mt { margin-top: .6rem; }
 @media (max-width: 900px) { .sum { grid-template-columns: 1fr 1fr; } .grid3 { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .sum, .grid3 { grid-template-columns: 1fr; } .when { margin-left: 0; width: 100%; } .note-row { flex-direction: column; } }
 </style>

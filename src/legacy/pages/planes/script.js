@@ -39,7 +39,7 @@ __ready(async () => {
   if (!grid) return;
 
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const money = (n) => '$' + Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
+  const money = (n) => { const v = Number(n || 0); return '$' + v.toLocaleString('en-US', { minimumFractionDigits: v % 1 ? 2 : 0, maximumFractionDigits: 2 }); };
   const TIER = { bronce: ['Bronze', 'fa-medal'], plata: ['Silver', 'fa-medal'], oro: ['Gold', 'fa-crown'] };
   const STATUS = { new: 'Sent — we will contact you soon', contacted: 'We contacted you', confirmed: 'Confirmed', paid: 'Paid ✓', cancelled: 'Cancelled' };
 
@@ -51,6 +51,7 @@ __ready(async () => {
     price: Number((card.querySelector('.plan-price')?.textContent || '0').replace(/[^0-9.]/g, '')),
   }));
   let dbReady = false;
+  let requestsOpen = true;
 
   function renderCards(rows) {
     grid.innerHTML = rows.map((p) => {
@@ -79,6 +80,16 @@ __ready(async () => {
         plans = data; dbReady = true; renderCards(data);
       } else if (!error) { dbReady = true; }
     } catch (e) { /* sin migración: se quedan los planes del HTML */ }
+    try {
+      const { data } = await T.db.from('site_content').select('value').eq('key', 'settings').limit(1);
+      if (data && data[0] && data[0].value && data[0].value.plan_requests_open === false) requestsOpen = false;
+    } catch (e) { /* sin ajustes: abiertas */ }
+  }
+  if (!requestsOpen) {
+    const note = document.createElement('p');
+    note.className = 'plans-closed';
+    note.innerHTML = '<i class="fas fa-circle-pause"></i> We are not taking new pass requests right now. <a href="/messages?new=1">Send us a message</a> and we will let you know when they open.';
+    grid.parentNode.insertBefore(note, grid);
   }
 
   /* ---------- Modal de solicitud ---------- */
@@ -95,10 +106,14 @@ __ready(async () => {
           <label>Travelers<input name="travelers" type="number" min="1" max="50" value="1" required></label>
           <label>Trip date<input name="trip_date" type="date"></label>
         </div>
-        <label>WhatsApp / phone<input name="phone" type="tel" maxlength="30" placeholder="+503 7000 0000" required></label>
+        <label>Phone <small>(optional — we answer in your Messages)</small><input name="phone" type="tel" maxlength="30" placeholder="+503 7000 0000"></label>
+        <label>Coupon <small>(optional)</small>
+          <span class="plan-coupon"><input name="coupon" maxlength="24" autocomplete="off" placeholder="e.g. WELCOME10"><button type="button" class="plan-coupon-btn">Apply</button></span>
+          <small class="plan-coupon-msg" aria-live="polite"></small>
+        </label>
         <label>Anything we should know? <small>(optional)</small><textarea name="notes" rows="3" maxlength="600" placeholder="Places you want to visit, special needs, budget…"></textarea></label>
         <button type="submit" class="btn-plan">Send request <i class="fas fa-paper-plane"></i></button>
-        <p class="plan-form-note"><i class="fas fa-lock"></i> No payment now. A Talapo agent will contact you to confirm.</p>
+        <p class="plan-form-note"><i class="fas fa-lock"></i> No payment now. A Talapo agent will answer you in <b>Messages</b> on this site.</p>
       </form>
     </div>`;
   root.appendChild(modal);
@@ -109,10 +124,30 @@ __ready(async () => {
   const today = new Date(); today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
   form.trip_date.min = today.toISOString().slice(0, 10);
 
+  let discount = 0;
+  const couponMsg = () => modal.querySelector('.plan-coupon-msg');
+  function showPrice() {
+    const final = current.price * (100 - discount) / 100;
+    modal.querySelector('.plan-modal-price').innerHTML = discount
+      ? `<s>${money(current.price)}</s> ${money(final)} <span>${esc(current.period || '/ trip')} · per traveler · ${discount}% off</span>`
+      : `${money(current.price)} <span>${esc(current.period || '/ trip')} · per traveler</span>`;
+  }
+  async function checkCoupon() {
+    const code = form.coupon.value.trim().toUpperCase();
+    discount = 0;
+    if (!code) { couponMsg().textContent = ''; showPrice(); return true; }
+    const { data, error } = await T.db.rpc('check_coupon', { p_code: code, p_plan: current.id });
+    const pct = Array.isArray(data) ? data[0] : data;
+    if (error || !pct) { couponMsg().textContent = 'This coupon is not valid.'; couponMsg().className = 'plan-coupon-msg bad'; showPrice(); return false; }
+    discount = Number(pct);
+    couponMsg().textContent = `Coupon applied: ${discount}% off ✓`; couponMsg().className = 'plan-coupon-msg ok';
+    showPrice(); return true;
+  }
   function open(plan) {
     current = plan;
+    discount = 0; form.coupon.value = ''; couponMsg().textContent = '';
     modal.querySelector('h2').textContent = plan.name;
-    modal.querySelector('.plan-modal-price').innerHTML = `${money(plan.price)} <span>${esc(plan.period || '/ trip')} · per traveler</span>`;
+    showPrice();
     modal.hidden = false;
     document.body.style.overflow = 'hidden';
     setTimeout(() => form.travelers.focus(), 50);
@@ -127,9 +162,13 @@ __ready(async () => {
     const plan = plans.find((p) => p.id === btn.dataset.plan);
     if (!plan) return;
     if (!dbReady) { T.toast('Plan requests open soon. Please try again later.', 'info'); return; }
+    if (!requestsOpen) { T.toast('We are not taking new pass requests right now.', 'info'); return; }
     open(plan);
   });
-  __listen(modal, 'click', (e) => { if (e.target === modal || e.target.closest('.plan-modal-x')) close(); });
+  __listen(modal, 'click', (e) => {
+    if (e.target === modal || e.target.closest('.plan-modal-x')) close();
+    if (e.target.closest('.plan-coupon-btn')) checkCoupon();
+  });
   __listen(document, 'keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) close(); });
 
   __listen(form, 'submit', async (e) => {
@@ -137,17 +176,19 @@ __ready(async () => {
     const btn = form.querySelector('button[type="submit"]');
     btn.disabled = true;
     try {
+      if (form.coupon.value.trim() && !(await checkCoupon())) throw new Error('Remove the coupon or use a valid one');
       const row = {
         plan_id: current.id, plan_name: current.name, price: current.price,
         travelers: Math.min(50, Math.max(1, parseInt(form.travelers.value, 10) || 1)),
         trip_date: form.trip_date.value || null,
-        phone: form.phone.value.trim(),
+        phone: form.phone.value.trim() || null,
+        coupon_code: form.coupon.value.trim().toUpperCase() || null,
         notes: form.notes.value.trim() || null,
       };
       const { error } = await T.db.from('plan_requests').insert([row]);
       if (error) throw new Error(error.message);
       close(); form.reset();
-      T.toast('Request sent! A Talapo agent will contact you soon.');
+      T.toast('Request sent! We will answer you in Messages.');
       loadMine();
     } catch (err) {
       T.toast(err.message || 'Could not send the request', 'error');
@@ -171,6 +212,7 @@ __ready(async () => {
       <li class="st-${esc(r.status)}">
         <div><b>${esc(r.plan_name)}</b><small>${r.travelers} traveler${r.travelers > 1 ? 's' : ''}${r.trip_date ? ' · ' + new Date(r.trip_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''} · ${money(r.price * r.travelers)}</small></div>
         <span class="plan-status">${STATUS[r.status] || esc(r.status)}</span>
+        <a class="plan-msg" href="/messages?request=${esc(r.id)}&plan=${encodeURIComponent(r.plan_name)}"><i class="fas fa-comments"></i> Message us</a>
         ${['new', 'contacted'].includes(r.status) ? `<button type="button" class="plan-cancel" data-id="${esc(r.id)}">Cancel</button>` : ''}
       </li>`).join('')}</ul>`;
   }
