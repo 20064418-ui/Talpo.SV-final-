@@ -6,12 +6,25 @@ import { useRoute, useRouter } from 'vue-router';
 import L from '@/lib/leafletSetup';
 import { useItinerariesStore } from '@/stores/itineraries';
 import { toast } from '@/composables/useToast';
+import { insforge } from '@/lib/insforge';
+import { useAuthStore } from '@/stores/auth';
+import TalapoTrips from '@/components/trips/TalapoTrips.vue';
 
 const store = useItinerariesStore();
 const route = useRoute();
 const router = useRouter();
 
-const tab = ref(route.query.tab === 'tours' ? 'tours' : 'plans');
+const auth = useAuthStore();
+const tab = ref(['tours', 'talapo'].includes(route.query.tab) ? route.query.tab : 'plans');
+// Itinerarios armados por el equipo Talapo (tabla trip_plans, solo los enviados)
+const talapoTrips = ref([]);
+async function loadTalapo() {
+  if (!auth.user) return;
+  const { data, error } = await insforge.database.from('trip_plans').select('*').eq('profile_id', auth.user.id).eq('status', 'sent').order('updated_at', { ascending: false });
+  talapoTrips.value = error ? [] : (data || []);
+  // Si Talapo le armó un viaje, se muestra primero
+  if (talapoTrips.value.length && !route.query.tab) tab.value = 'talapo';
+}
 const openId = ref(null);
 const editingId = ref(null);
 const draft = ref('');
@@ -26,7 +39,7 @@ function setTab(t) {
   tab.value = t;
   openId.value = null;
   map?.remove(); map = null;
-  router.replace({ query: t === 'tours' ? { tab: 'tours' } : {} });
+  router.replace({ query: t === 'plans' ? {} : { tab: t } });
 }
 
 /** Puntos del mapa: la ruta de Tours empieza en su partida; el plan por días, en su primera parada. */
@@ -117,7 +130,7 @@ function planPeople(it) {
   return `${a} adult${a > 1 ? 's' : ''}${k ? ` · ${k} child${k > 1 ? 'ren' : ''}` : ''}`;
 }
 
-onMounted(() => store.load(true));
+onMounted(() => { store.load(true); loadTalapo().catch(() => {}); });
 onBeforeUnmount(() => map?.remove());
 </script>
 
@@ -139,6 +152,9 @@ onBeforeUnmount(() => map?.remove());
     <div class="content">
       <!-- Pestañas -->
       <div class="tabs" role="tablist">
+        <button v-if="talapoTrips.length" role="tab" :aria-selected="tab === 'talapo'" :class="{ on: tab === 'talapo' }" @click="setTab('talapo')">
+          <i class="fas fa-feather-pointed"></i> From Talapo <span class="count">{{ talapoTrips.length }}</span>
+        </button>
         <button role="tab" :aria-selected="tab === 'plans'" :class="{ on: tab === 'plans' }" @click="setTab('plans')">
           <i class="fas fa-calendar-days"></i> Itineraries <span class="count">{{ plans.length }}</span>
         </button>
@@ -147,9 +163,11 @@ onBeforeUnmount(() => map?.remove());
         </button>
       </div>
 
-      <p v-if="store.loading && !store.items.length" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading your trips…</p>
+      <TalapoTrips v-if="tab === 'talapo'" :trips="talapoTrips" />
 
-      <Transition name="fade" mode="out-in">
+      <p v-else-if="store.loading && !store.items.length" class="loading"><i class="fas fa-spinner fa-spin"></i> Loading your trips…</p>
+
+      <Transition v-if="tab !== 'talapo'" name="fade" mode="out-in">
         <!-- Vacío -->
         <div v-if="!store.loading && !list.length" :key="`empty-${tab}`" class="empty">
           <div class="empty-icon">{{ tab === 'plans' ? '🗓️' : '🧭' }}</div>
@@ -250,7 +268,7 @@ onBeforeUnmount(() => map?.remove());
 .content { max-width: 1200px; margin: 0 auto; padding: 2rem 5% 4rem; }
 
 /* Pestañas */
-.tabs { display: inline-flex; background: #fff; border: 1px solid rgba(28,110,107,.18); border-radius: 40px; padding: 5px; gap: 4px; box-shadow: 0 10px 25px -15px rgba(0,32,64,.25); margin-bottom: 1.6rem; }
+.tabs { max-width: 100%; overflow-x: auto; display: inline-flex; background: #fff; border: 1px solid rgba(28,110,107,.18); border-radius: 40px; padding: 5px; gap: 4px; box-shadow: 0 10px 25px -15px rgba(0,32,64,.25); margin-bottom: 1.6rem; }
 .tabs button { border: 0; background: none; border-radius: 40px; padding: .65rem 1.2rem; font: inherit; font-weight: 700; color: #1A3A4A; cursor: pointer; display: flex; align-items: center; gap: .5rem; transition: background .25s, color .25s; }
 .tabs button.on { background: linear-gradient(105deg, #1C6E6B, #0A2F44); color: #fff; }
 .count { background: rgba(0,0,0,.08); border-radius: 20px; padding: 0 .5rem; font-size: .8rem; }

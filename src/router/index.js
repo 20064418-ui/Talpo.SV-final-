@@ -51,6 +51,7 @@ const routes = [
   { path: '/messages', name: 'messages', component: () => import('@/views/Messages.vue'), meta: { requiresAuth: true, title: 'Messages' } },
   { path: '/admin/messages', name: 'admin-messages', component: () => import('@/views/AdminMessages.vue'), meta: { requiresAuth: true, title: 'Admin · Messages' } },
   { path: '/admin/site', name: 'admin-site', component: () => import('@/views/AdminSite.vue'), meta: { requiresAuth: true, title: 'Admin · Site' } },
+  { path: '/admin/trip/:request', name: 'admin-trip', component: () => import('@/views/AdminTrip.vue'), meta: { requiresAuth: true, title: 'Admin · Trip builder' } },
   { path: '/admin/plans', name: 'admin-plans', component: () => import('@/views/AdminPlans.vue'), meta: { requiresAuth: true, title: 'Admin · Plans & sales' } },
   { path: '/admin/contests', name: 'admin-contests', component: () => import('@/views/AdminContests.vue'), meta: { requiresAuth: true, title: 'Admin · Contests' } },
   { path: '/travelers', name: 'travelers', component: () => import('@/views/Travelers.vue'), meta: { title: 'Travelers' } },

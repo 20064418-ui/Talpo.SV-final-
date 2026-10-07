@@ -19,6 +19,7 @@ const missing = ref(false);
 const requests = ref([]);
 const plans = ref([]);
 const coupons = ref([]);
+const trips = ref({});        // itinerario armado por solicitud: { [request_id]: 'draft' | 'sent' }
 const couponsMissing = ref(false);
 
 const STATUSES = [
@@ -48,6 +49,9 @@ async function load() {
     plans.value = pls || [];
     missing.value = false;
     loadCoupons();
+    insforge.database.from('trip_plans').select('plan_request_id, status').then(({ data }) => {
+      trips.value = Object.fromEntries((data || []).map((t) => [t.plan_request_id, t.status]));
+    }, () => {});
   } catch (e) {
     if (/plan_requests|travel_plans|does not exist|relation|function/i.test(e.message)) missing.value = true;
     else toast(e.message, 'error');
@@ -354,6 +358,7 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
                   <button v-if="r._note !== (r.admin_note || '')" class="btn-s alt" @click="saveNote(r)">Save note</button>
                 </div>
                 <div class="btns">
+                  <RouterLink class="btn-s trip" :class="trips[r.id]" :to="`/admin/trip/${r.id}`"><i class="fas fa-route"></i> {{ trips[r.id] === 'sent' ? 'Itinerary sent ✓' : trips[r.id] === 'draft' ? 'Itinerary (draft)' : 'Build itinerary' }}</RouterLink>
                   <button class="btn-s" @click="messageUser(r)"><i class="fas fa-comments"></i> Message</button>
                   <a v-if="wa(r.phone)" class="btn-s wa" :href="wa(r.phone)" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> WhatsApp</a>
                   <select :value="r.status" class="st" aria-label="Change status" @change="setStatus(r, $event.target.value)">
@@ -482,6 +487,9 @@ onMounted(async () => { await passport.load(true); if (isAdmin.value) load(); el
 .chk { display: flex; align-items: center; gap: .5rem; font-weight: 700; color: #0A2F44; }
 .tip { margin-top: 1rem; }
 .new-plan { display: flex; align-items: center; gap: .4rem; }
+.tp.admin .btn-s.trip { background: #0A2F44; color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: .4rem; }
+.tp.admin .btn-s.trip.draft { background: #fdf3d9; color: #8a6410; }
+.tp.admin .btn-s.trip.sent { background: #dcfce7; color: #166534; }
 .code { border: 1.5px dashed #1C6E6B; background: #EEF6F6; color: #0A2F44; font: inherit; font-weight: 800; letter-spacing: .05em; border-radius: 10px; padding: .3rem .7rem; cursor: pointer; }
 .mt { margin-top: .6rem; }
 @media (max-width: 900px) { .sum { grid-template-columns: 1fr 1fr; } .grid3 { grid-template-columns: 1fr 1fr; } }

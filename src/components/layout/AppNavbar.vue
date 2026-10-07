@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { usePassportStore } from '@/stores/passport';
 import { unreadMessages } from '@/lib/siteContent';
+import { adminCounts, adminTotal, refreshAdminCounts } from '@/lib/adminCounts';
 
 const route = useRoute();
 const router = useRouter();
@@ -60,7 +61,10 @@ const groups = computed(() => !auth.isAuthenticated ? [] : allGroups.map((g) => 
 
 const photo = () => passport.profile?.photo_url || auth.avatar || '/assets/img/integrantes/daniel.png';
 
-function toggleGroup(label) { openGroup.value = openGroup.value === label ? null : label; }
+function toggleGroup(label) {
+  openGroup.value = openGroup.value === label ? null : label;
+  if (label === 'profile' && isAdmin.value) refreshAdminCounts().catch(() => {});
+}
 async function logout() {
   menuOpen.value = false;
   await auth.signOut();
@@ -115,17 +119,12 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
           <li><RouterLink to="/travelers"><i class="fas fa-user-group"></i> Travelers</RouterLink></li>
           <template v-if="isAdmin">
             <li class="menu-sep" role="separator"></li>
-            <li><RouterLink to="/admin/overview"><i class="fas fa-gauge-high"></i> Admin dashboard</RouterLink></li>
-            <li><RouterLink to="/admin/messages"><i class="fas fa-inbox"></i> Messages inbox</RouterLink></li>
-            <li><RouterLink to="/admin/plans"><i class="fas fa-tags"></i> Plans &amp; sales</RouterLink></li>
-            <li><RouterLink to="/admin/site"><i class="fas fa-sliders"></i> Site &amp; home page</RouterLink></li>
-            <li><RouterLink to="/admin/reports"><i class="fas fa-clipboard-list"></i> Stand reports</RouterLink></li>
-            <li><RouterLink to="/admin/users"><i class="fas fa-users-gear"></i> Users</RouterLink></li>
-            <li><RouterLink to="/admin/announcements"><i class="fas fa-bullhorn"></i> Announcements</RouterLink></li>
-            <li><RouterLink to="/admin/activity"><i class="fas fa-clock-rotate-left"></i> Activity log</RouterLink></li>
+            <li class="menu-label">Admin</li>
+            <li><RouterLink to="/admin/overview"><i class="fas fa-gauge-high"></i> Admin panel<span v-if="adminTotal()" class="msg-count">{{ adminTotal() }}</span></RouterLink></li>
+            <li><RouterLink to="/admin/messages"><i class="fas fa-inbox"></i> Client messages<span v-if="adminCounts.messages" class="msg-count">{{ adminCounts.messages }}</span></RouterLink></li>
             <li><RouterLink to="/kiosk/parque-libertad"><i class="fas fa-tablet-screen-button"></i> Talapo Stand</RouterLink></li>
-            <li class="menu-sep" role="separator"></li>
           </template>
+          <li class="menu-sep" role="separator"></li>
           <li><a href="#" @click.prevent="logout"><i class="fas fa-sign-out-alt"></i> Sign out</a></li>
         </ul>
       </div>
@@ -372,4 +371,8 @@ watch(() => route.fullPath, () => { menuOpen.value = false; openGroup.value = nu
 /* Mensajes sin leer */
 .msg-dot { background: #E46D5C; color: #fff; font-size: .7rem; font-weight: 800; border-radius: 20px; min-width: 18px; padding: 0 .35rem; text-align: center; line-height: 18px; }
 .msg-count { margin-left: auto; background: #E46D5C; color: #fff; font-size: .7rem; font-weight: 800; border-radius: 20px; padding: 0 .45rem; }
+.menu-label { padding: .35rem 1.2rem .1rem; font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #8aa0ab; }
+.profile-dropdown .dropdown-menu { min-width: 230px; }
+.profile-dropdown .dropdown-menu li a { display: flex; align-items: center; gap: .65rem; white-space: nowrap; }
+.profile-dropdown .dropdown-menu li a > i { width: 18px; text-align: center; flex: 0 0 18px; opacity: .85; }
 </style>
